@@ -32,7 +32,6 @@ const area = new Area({
     }
 })
 
-
 owner.save().then(result => {
     area.save().then(result => {
         console.log("Owner and Area saved Succesfully")

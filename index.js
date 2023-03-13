@@ -60,8 +60,10 @@ const typeDefs = `
 
   type Query {
     areasCount: Int!
-    allAreas: [Areas!]!
+    allAreas: [Area!]!
     findAreaByName(name: String!): Area!
+    ownerCount: Int!
+    allOwners: [Owner!]!
   }
 `
 

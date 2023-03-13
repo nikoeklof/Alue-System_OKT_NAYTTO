@@ -10,6 +10,7 @@ const App = () => {
 		<Router>
 			<Container>
 				<NavBar />
+				<Login />
 			</Container>
 
 			<Routes>

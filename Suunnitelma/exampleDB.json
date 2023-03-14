@@ -44,11 +44,11 @@
       "state": {
         "lended": true,
         "lender": 123,
-        "lended_by": 523
-      },
-      "date": {
-        "lended": "4.3.2023",
-        "returned": null
+        "lended_by": 523, 
+        "date": {
+          "lended": "4.3.2023",
+          "returned": null
+        }
       },
       "history": [
         {

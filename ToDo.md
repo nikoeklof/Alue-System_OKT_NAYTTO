@@ -1,5 +1,5 @@
 # ToDo
-- [ ] tietovaraston tiedon muoto
+- [x] tietovaraston tiedon muoto
 - [ ] alueiden lisääminen
 - [ ] Sivun ulkonäkö
 - [ ] alueiden lainaaminen

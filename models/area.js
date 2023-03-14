@@ -1,42 +1,69 @@
 const mongoose = require("mongoose")
 
 const schema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    cordinates: {
-        lan: {
+    info: {
+        type: {
+            type: String,
+            required: true
+        },
+        name: {
             type: String,
             required: true,
         },
-        lon: {
+        quarter: {
             type: String,
-            required: true,
+            required: true
+        },
+        address: {
+            type: String,
+            required: true
+        },
+        asuntoja: {
+            type: Number,
+            required: true
+        },
+        omakotitaloja: {
+            type: Number,
+            required: true
+        },
+        map: {
+            coordinates: {
+                lan: {
+                    type: String,
+                    required: true,
+                },
+                lon: {
+                    type: String,
+                    required: true,
+                }
+            },
+            zone: {
+                type: String
+            }
+        },
+        misc: {
+            type: String,
         }
     },
-    zone: {
-        type: String,
-        required: true,
-    },
-    buildings: {
-        type: Number,
-        required: true,
-    },
-    info: {
-        type: String,
-    },
-    shared: {
-        isTrue: {
+    state: {
+        lainattu: {
             type: Boolean,
-            required: true,
+            required: true
         },
-        ownerId: {
+        lainaaja: {
             type: String,
+            required: true
         },
-        shareDate: {
-            type: String,
+        jaettu: {
+            type: Array
+        }
+    },
+    date: {
+        lainattu: {
+            type: String
+        },
+        palautettu: {
+            type: String
         }
     }
 })

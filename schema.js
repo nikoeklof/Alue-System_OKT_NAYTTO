@@ -1,8 +1,11 @@
 const { gql } = require("apollo-server")
 
-
-//korjaa AREA
 const typeDefs = gql`
+  type Owner {
+    id: ID!
+    email: String!
+  }
+
   type Area {
     id: ID!
     info: {
@@ -10,30 +13,34 @@ const typeDefs = gql`
       name: String!
       quarter: String!
       address: String!
-      buildings: Int!
-      townHouse: Int!
+      asuntoja: Int!
+      omakotitaloja: Int!
       map: {
+        cordinates: {
+          lan: String!,
+          lon: String!
+        }
         zone: String!
-        cordinates: {lan: String!, lon: String!}!
       }
+      misc: String
     }
-    borrowedList: {
-
+    state: {
+      lainattu: Boolean!
+      lainaaja: String!
+      jaettu: Array
     }
-  }
-
-  type User {
-    email
+    Date: {
+      lainattu: String
+      palautettu: String
+    }
   }
   
   type Query {
-    areaCount: Int!
     ownerCount: Int!
     allOwners: [Owner]!
-    allAreas: [Area]!
-  }
-  type Mutation {
 
+    areaCount: Int!
+    allAreas: [Area]!
   }
 `
 

@@ -34,12 +34,12 @@ const styles = {
 		px: 1,
 	},
 	button: {
-		width: '100px',
+		width: '130px',
 		ml: 0.5		
 	}
 }
 
-const Login = () => {
+const Register = () => {
 	return (
 		<FormGroup  sx={styles.form}>
 			
@@ -48,10 +48,18 @@ const Login = () => {
 				noWrap
 				sx={styles.text}
 			>
-				Kirjaudu sisään
+				Rekisteröityminen
 			</Typography>
 			<FormControl>
-				<InputLabel htmlFor='email'>Käyttäjätunnus</InputLabel>
+				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
+				<Input 
+					id='username'
+					variant='filled'
+					sx={styles.input} 
+				/>
+			</FormControl>
+			<FormControl>
+				<InputLabel htmlFor='email'>Sähköposti</InputLabel>
 				<Input 
 					id='email'
 					variant='filled'
@@ -70,7 +78,7 @@ const Login = () => {
 				variant='contained'
 				sx={styles.button}
 			>
-				Kirjaudu
+				Rekisteröidy
 			</Button>
 		
 		</FormGroup>
@@ -78,4 +86,4 @@ const Login = () => {
 	)
 }
 
-export default Login;
+export default Register;

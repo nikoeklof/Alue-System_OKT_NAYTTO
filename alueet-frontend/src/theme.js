@@ -1,6 +1,4 @@
-import { createTheme } from '@mui/system';
-
-const theme = createTheme({
+const theme = {
 	bgColor: {
 		primary: '#e8e8e8',
 		secondary: '#bdbdbd'
@@ -9,6 +7,6 @@ const theme = createTheme({
 		primary: '#454545',
 		secondary: '#666666'
 	}
-})
+}
 
 export default theme;

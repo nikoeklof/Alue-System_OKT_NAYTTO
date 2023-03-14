@@ -30,8 +30,8 @@
         "name": "Mikkeli",
         "quarter": "Kaukola",
         "address": "katu 3",
-        "asuntoja": 10,
-        "omakotitaloja": 1,
+        "apartments": 10,
+        "houses": 1,
         "misc": "Additional information here",
         "map": {
           "coordinates": {

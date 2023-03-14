@@ -1,0 +1,16 @@
+# ToDo
+- [ ] tietovaraston tiedon muoto
+- [ ] alueiden lisääminen
+- [ ] Layout
+- [ ] Sivun ulkonäkö
+- [ ] alueiden lainaaminen
+- [ ] alueiden palautus
+- [ ] tiedon haku tietovarastolta
+- [ ] alueiden filtteröinti
+- [ ] kirjautuminen
+- [ ] Salasanan käyttö
+- [ ] alueiden jakaminen
+- [ ] alueiden poisto
+- [ ] tiedon muokkaus
+- [ ] kartta näkymä
+- [ ] kommunikointi back- ja front-endin kanssa

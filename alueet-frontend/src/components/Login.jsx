@@ -51,9 +51,9 @@ const Login = () => {
 				Kirjaudu sisään
 			</Typography>
 			<FormControl>
-				<InputLabel htmlFor='email'>Käyttäjätunnus</InputLabel>
+				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
 				<Input 
-					id='email'
+					id='username'
 					variant='filled'
 					sx={styles.input} 
 				/>

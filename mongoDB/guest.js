@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-require('dotenv').config()
+require("dotenv").config()
 
 const url = process.env.MONGODB_URI
 
@@ -11,13 +11,14 @@ mongoose.connect(url).then(() => {
     console.log("Error connection to MongoDB:", error.message)
 })
 
-const Owner = require("../models/owner")
+const Quest = require("../models/guest")
 
-const owner = new Owner({
-    email: process.argv[2]
+const quest = new Quest({
+    email: "crookedLawyer@mail.net",
+    name: "Jimmy Mcgill"
 })
 
-owner.save().then(result => {
-    console.log("Owner saved Succesfully")
+quest.save().then(result => {
+    console.log("Quest saved Succesfully")
     mongoose.connection.close()
 })

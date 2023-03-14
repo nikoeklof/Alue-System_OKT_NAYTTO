@@ -6,9 +6,9 @@ const schema = new mongoose.Schema({
             type: String,
             required: true
         },
-        name: {
+        cityName: {
             type: String,
-            required: true,
+            required: true
         },
         quarter: {
             type: String,
@@ -18,11 +18,11 @@ const schema = new mongoose.Schema({
             type: String,
             required: true
         },
-        asuntoja: {
+        buildings: {
             type: Number,
             required: true
         },
-        omakotitaloja: {
+        homes: {
             type: Number,
             required: true
         },
@@ -38,32 +38,40 @@ const schema = new mongoose.Schema({
                 }
             },
             zone: {
-                type: String
+                type: String,
+                required: true
             }
         },
         misc: {
             type: String,
         }
     },
-    state: {
-        lainattu: {
+    shareState: {
+        isShared: {
             type: Boolean,
-            required: true
+            default: false
         },
-        lainaaja: {
+        sharedTo: {
             type: String,
-            required: true
+            default: null
         },
-        jaettu: {
-            type: Array
-        }
-    },
-    date: {
-        lainattu: {
-            type: String
+        sharedBy: {
+            type: String,
+            default: null
         },
-        palautettu: {
-            type: String
+        date: {
+            shareDate: {
+                type: String,
+                default: null
+            },
+            returnDate: {
+                type: String,
+                default: null
+            }
+        },
+        shareHistory: {
+            type: Array,
+            default: []
         }
     }
 })

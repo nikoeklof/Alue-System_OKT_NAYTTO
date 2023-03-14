@@ -1,37 +1,47 @@
 const { gql } = require("apollo-server")
 
 const typeDefs = gql`
-  type Owner {
+  type Guest {
     id: ID!
     email: String!
+    name: String!
+    areas: Array!
+  }
+
+  type User {
+    id: ID!
+    email: String!
+    name: String!
+    admin: Boolean!
+    areas: Array!
   }
 
   type Area {
     id: ID!
     info: {
-      type: String!
-      name: String!
-      quarter: String!
-      address: String!
-      asuntoja: Int!
-      omakotitaloja: Int!
+      type: String
+      cityName: String
+      quarter: String
+      address: String
+      buildings: Int
+      homes: Int
       map: {
-        cordinates: {
-          lan: String!,
-          lon: String!
+        coordinates: {
+          lan: String
+          lon: String
         }
-        zone: String!
+        zone: String
       }
       misc: String
     }
-    state: {
-      lainattu: Boolean!
-      lainaaja: String!
-      jaettu: Array
-    }
-    Date: {
-      lainattu: String
-      palautettu: String
+    shareState: {
+      isShared: Boolean!
+      sharedTo: Guest
+      sharedBy: User
+      date: {
+        shareDate: String
+        returnDate: String
+      }
     }
   }
   
@@ -41,6 +51,13 @@ const typeDefs = gql`
 
     areaCount: Int!
     allAreas: [Area]!
+  }
+
+  type Mutation {
+    addGuest(
+      email: String!
+      name: String!
+    ): Guest
   }
 `
 

@@ -16,29 +16,30 @@ const Area = require("../models/area")
 const area = new Area({
     info: {
         type: "Kaupunki",
-        name: "Mikkeli",
+        cityName: "Mikkeli",
         quarter: "Kaukola",
         address: "katu 3",
-        asuntoja: 10,
-        omakotitaloja: 1,
+        buildings: 10,
+        homes: 1,
         map: {
             coordinates: {
                 lan: "23.324",
                 lon: "1.123"
             },
-            zone: null
+            zone: "103 192 480 183"
         },
         misc: "Kaukolan ympäröivä alue"
     },
-    state: {
-        lainattu: false,
-        lainaaja: 1,
-        jaettu: []
+    shareState: {
+        isShared: false,
+        sharedTo: null,
+        sharedBy: null,
+        date: {
+            shareDate: null,
+            returnDate: null
+        }
     },
-    date: {
-        lainattu: "4.3.2023",
-        palautettu: null
-    }
+    shareHistory: []
 })
 
 area.save().then(result => {

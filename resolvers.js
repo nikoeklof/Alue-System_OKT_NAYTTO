@@ -1,19 +1,43 @@
+//const { UserInputError } = require("apollo-server")
 const Area = require("./models/area")
-const Owner = require("./models/owner")
-
-// Puuttuu ADMIN
+const Guest = require("./models/guest")
+const User = require("./models/user")
 
 const resolvers = {
     Query: {
         areaCount: () => Area.collection.countDocuments(),
-        ownerCount: () => Owner.collection.countDocuments(),
-        allOwners: async () => await Owner.find({}),
+        guestCount: () => Guest.collection.countDocuments(),
+        allGuest: async () => await Guest.find({}),
         allAreas: async () => await Area.find({}),
+        allUsers: async () => await User.find({})
     },
-    Owner: {
+    Guest: {
         email: (root) => {
             return root.email
         },
+        name: (root) => {
+            return root.name
+        },
+        areas: (root) => {
+            return root.areas
+        }
+    },
+    User: {
+        username: (root) => {
+            return root.username
+        },
+        email: (root) => {
+            return root.email
+        },
+        name: (root) => {
+            return root.name
+        },
+        admin: (root) => {
+            return root.admin
+        },
+        areas: (root) => {
+            return root.areas
+        }
     },
     Area: {
         info: (root) => {
@@ -24,6 +48,12 @@ const resolvers = {
         },
         date: (root) => {
             return root.date
+        }
+    },
+    Mutation: {
+        addGuest: (root, args) => {
+            const guest = new Guest({ ...args, areas: [] })
+            return guest.save()
         }
     }
 }

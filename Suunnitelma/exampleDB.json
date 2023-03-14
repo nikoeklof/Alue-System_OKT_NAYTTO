@@ -1,19 +1,21 @@
 {
-  "admins": [
+  "users": [
     {
       "username": "user123",
       "email": "user.123@test.com",
       "passwordHash": "123",
       "id": 123,
+      "admin": true,
       "areas": {
         "1": 3 
       }
     }
   ],
-  "users": [
+  "quests": [
     { 
       "id": 523,
       "email": "user.427@test.com",
+      "name": "Makko",
       "areas": { 
         "1": 1,
         "2": 46
@@ -30,6 +32,7 @@
         "address": "katu 3",
         "asuntoja": 10,
         "omakotitaloja": 1,
+        "misc": "Additional information here",
         "map": {
           "coordinates": {
             "lan": "23.324",
@@ -39,17 +42,24 @@
         }
       },
       "state": {
-        "lainattu": true,
-        "lainaaja": 123,
-        "jaettu": [
-          "user.427@test.com",
-          "user.8361@test.com"
-        ]
+        "lended": true,
+        "lender": 123,
+        "lended_by": 523
       },
       "date": {
-        "lainattu": "4.3.2023",
-        "palautettu": null
-      }
+        "lended": "4.3.2023",
+        "returned": null
+      },
+      "history": [
+        {
+          "date": {
+            "lended": "23.6.1938",
+            "returned": "14.7.1938"
+          },
+          "lender": 123,
+          "lended_by": 523
+        }
+      ]
     }
   ]
 }

@@ -1,7 +1,6 @@
 # ToDo
 - [ ] tietovaraston tiedon muoto
 - [ ] alueiden lisääminen
-- [ ] Layout
 - [ ] Sivun ulkonäkö
 - [ ] alueiden lainaaminen
 - [ ] alueiden palautus

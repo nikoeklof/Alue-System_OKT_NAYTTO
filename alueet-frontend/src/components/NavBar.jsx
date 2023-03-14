@@ -70,18 +70,51 @@ const styles = {
 			my: 1, 
 			display: 'block'
 		}	
+	},
+	user: {
+		box: {
+			flexGrow: 0
+		},
+		button: {
+			my: 1, 
+			display: 'block'
+		},
+		menu: {
+			sx: {
+				mt: '45px'
+			},
+			transform: {
+				vertical: 'top',
+				horizontal: 'right'
+			},
+			anchor: {
+				vertical: 'top',
+				horizontal: 'right'
+			}
+		},
+		link: {
+			textDecoration: 'none', 
+			color: theme.color.secondary
+		}
 	}
 }
 
 const NavBar = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
+	const [anchorElUser, setAnchorElUser] = useState(null);
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	
+	const handleOpenUserMenu = (event) => {
+		setAnchorElUser(event.currentTarget);
+	};
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
+	};
+
+	const handleCloseUserMenu = () => {
+		setAnchorElUser(null);
 	};
 
 	return (
@@ -160,6 +193,30 @@ const NavBar = () => {
 						>
 							<Link style={styles.normal.link}>Käyttäjien hallinta</Link>
 						</Button>
+					</Box>
+					<Box sx={styles.user.box}>
+						<Button onClick={handleOpenUserMenu} sx={styles.user.link}>
+							{/* Kirjautuneen käyttäjän nimi tänne */}
+							Username
+						</Button>
+						<Menu
+							sx={{  }}
+							id="menu-appbar"
+							anchorEl={anchorElUser}
+							anchorOrigin={{
+								
+							}}
+							keepMounted
+							transformOrigin={{
+								
+							}}
+							open={Boolean(anchorElUser)}
+							onClose={handleCloseUserMenu}
+						>
+							<MenuItem >
+								<Typography textAlign="center">Kirjaudu ulos</Typography>
+							</MenuItem>
+						</Menu>
 					</Box>
 				</Toolbar>	
 			</Container>

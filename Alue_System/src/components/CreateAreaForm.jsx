@@ -4,7 +4,7 @@ const CreateAreaForm = () => {
   const [formActive, setFormActive] = useState(true);
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-
+  const [areaOwner, setAreaOwner] = useState("");
   return (
     <>
       {formActive ? (
@@ -29,9 +29,16 @@ const CreateAreaForm = () => {
             type="text"
             placeholder="Asuntojen määrä..."
           />
+          <input
+            onChange={(e) => setAreaOwner(e.target.value)}
+            type="text"
+            placeholder="Alueen omistaja..."
+          />
           <button
             type="button"
-            onClick={() => handleSubmit(areaName, apartmentAmount)}
+            onClick={() =>
+              handleSubmit({ areaName, apartmentAmount, areaOwner })
+            }
           >
             Tallenna
           </button>
@@ -48,8 +55,8 @@ const CreateAreaForm = () => {
   );
 };
 
-const handleSubmit = (areaName, apartmentAmount) => {
-  console.log(areaName, apartmentAmount);
+const handleSubmit = (props) => {
+  console.log(props);
 };
 
 export default CreateAreaForm;

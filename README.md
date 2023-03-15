@@ -2,13 +2,13 @@
 
 Toiminnallisuus:
 
-Käyttäjä voi luoda alueen []
+Käyttäjä voi luoda alueen [ ]
 
-Käyttäjä voi muokata olemassa olevaa aluetta []
+Käyttäjä voi muokata olemassa olevaa aluetta [ ]
 
-Alueen voi merkata lainatuksi []
+Alueen voi merkata lainatuksi [ ]
 
-Alueen voi merkata palautetuksi []
+Alueen voi merkata palautetuksi [ ]
 
 Paketit tällä hetkellä:
 

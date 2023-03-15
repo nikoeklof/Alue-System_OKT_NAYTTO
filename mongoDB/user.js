@@ -14,9 +14,9 @@ mongoose.connect(url).then(() => {
 const User = require("../models/user")
 
 const user = new User({
-    email: "HHM@mail.net",
-    name: "Howard Hamlin",
+    username: "Howard Hamlin",
     password: "HHM",
+    guestId: "641174145ca33dfd80f06ebe",
     admin: true
 })
 

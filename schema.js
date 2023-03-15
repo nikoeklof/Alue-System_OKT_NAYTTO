@@ -5,59 +5,80 @@ const typeDefs = gql`
     id: ID!
     email: String!
     name: String!
-    areas: Array!
+    areas: [String]!
   }
 
   type User {
     id: ID!
-    email: String!
-    name: String!
+    username: String!
     admin: Boolean!
-    areas: Array!
+    guestAccount: Guest
   }
 
   type Area {
     id: ID!
-    info: {
-      type: String
-      cityName: String
-      quarter: String
-      address: String
-      buildings: Int
-      homes: Int
-      map: {
-        coordinates: {
-          lan: String
-          lon: String
-        }
-        zone: String
-      }
-      misc: String
-    }
-    shareState: {
-      isShared: Boolean!
-      sharedTo: Guest
-      sharedBy: User
-      date: {
-        shareDate: String
-        returnDate: String
-      }
-    }
+    info: Info!
+    shareState: ShareState!
+    shareHistory: [Shares]
+  }
+
+  type Shares {
+    shareStartDate: String
+    shareEndDate: String
+  }
+
+  type Info {
+    type: String
+    cityName: String
+    quarter: String
+    address: String
+    buildings: Int
+    homes: Int
+    map: Map!
+    misc: String
+  }
+
+  type Map {
+    coordinates: Coordinates!
+    zone: String!
+  }
+
+  type Coordinates {
+    lan: String!
+    lon: String!
+  }
+
+  type ShareState {
+    isShared: Boolean!
+    sharedTo: Guest
+    sharedBy: User
+    date: ShareDate
+  }
+
+  type ShareDate {
+    shareDate: String
+    returnDate: String
   }
   
   type Query {
-    ownerCount: Int!
-    allOwners: [Owner]!
+    guestCount: Int!
+    allGuests: [Guest]!
 
     areaCount: Int!
     allAreas: [Area]!
+
+    userCount: Int!
+    allUsers: [User]!
+  }
+
+  type Token {
+    value: String!
   }
 
   type Mutation {
-    addGuest(
-      email: String!
-      name: String!
-    ): Guest
+    createGuest (email: String!, name: String!): Guest
+    createUser (username: String!, password: String!, questId: String!): User
+    login (username: String!, password: String!): Token
   }
 `
 

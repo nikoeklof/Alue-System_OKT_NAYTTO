@@ -14,8 +14,8 @@ mongoose.connect(url).then(() => {
 const Quest = require("../models/guest")
 
 const quest = new Quest({
-    email: "crookedLawyer@mail.net",
-    name: "Jimmy Mcgill"
+    email: "HHM@mail.net",
+    name: "Howard Hamlin"
 })
 
 quest.save().then(result => {

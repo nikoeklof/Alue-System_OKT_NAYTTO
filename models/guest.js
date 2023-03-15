@@ -16,4 +16,4 @@ const schema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Quest", schema)
+module.exports = mongoose.model("Guest", schema)

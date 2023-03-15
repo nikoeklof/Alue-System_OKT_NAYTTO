@@ -44,6 +44,7 @@ const schema = new mongoose.Schema({
         },
         misc: {
             type: String,
+            default: null
         }
     },
     shareState: {
@@ -52,11 +53,11 @@ const schema = new mongoose.Schema({
             default: false
         },
         sharedTo: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             default: null
         },
         sharedBy: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             default: null
         },
         date: {

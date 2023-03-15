@@ -29,17 +29,7 @@ const area = new Area({
             zone: "103 192 480 183"
         },
         misc: "Kaukolan ympäröivä alue"
-    },
-    shareState: {
-        isShared: false,
-        sharedTo: null,
-        sharedBy: null,
-        date: {
-            shareDate: null,
-            returnDate: null
-        }
-    },
-    shareHistory: []
+    }
 })
 
 area.save().then(result => {

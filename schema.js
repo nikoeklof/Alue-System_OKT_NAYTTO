@@ -69,6 +69,8 @@ const typeDefs = gql`
 
     userCount: Int!
     allUsers: [User]!
+
+    me: User
   }
 
   type Token {

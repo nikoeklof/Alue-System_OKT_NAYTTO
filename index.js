@@ -2,9 +2,12 @@ const { ApolloServer } = require("@apollo/server")
 const { startStandaloneServer } = require("@apollo/server/standalone")
 const mongoose = require("mongoose")
 require("dotenv").config()
+const jwt = require("jsonwebtoken")
 
 const resolvers = require("./resolvers")
 const typeDefs = require("./schema")
+
+const User = require("./models/user")
 
 const mongoUrl = process.env.MONGODB_URI
 
@@ -26,7 +29,16 @@ const server = new ApolloServer({
 
 
 startStandaloneServer(server, {
-  listen: { port: 4000 },
+  listen: { port: process.env.PORT },
+  context: async ({ req, res }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth) {
+      const decodedToken = jwt.verify(auth, process.env.JWT_SECRET)
+      const user = await User.findById(decodedToken.id)
+      console.log(user)
+      return user
+    }
+  },
 }).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
+  console.log("Server ready at", url)
 })

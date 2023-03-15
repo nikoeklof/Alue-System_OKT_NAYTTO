@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 require("dotenv").config()
+const bcrypt = require("bcrypt")
 
 const url = process.env.MONGODB_URI
 
@@ -13,14 +14,16 @@ mongoose.connect(url).then(() => {
 
 const User = require("../models/user")
 
-const user = new User({
-    username: "Howard Hamlin",
-    password: "HHM",
-    guestId: "641174145ca33dfd80f06ebe",
-    admin: true
-})
+bcrypt.hash("HHM", 10, function (err, hash) {
+    const user = new User({
+        username: "Howard Hamlin",
+        password: hash,
+        guestId: "641174145ca33dfd80f06ebe", // tämä ID saa kun tekee guestin
+        admin: true
+    })
 
-user.save().then(result => {
-    console.log("User saved Succesfully")
-    mongoose.connection.close()
+    user.save().then(result => {
+        console.log("User saved Succesfully")
+        mongoose.connection.close()
+    })
 })

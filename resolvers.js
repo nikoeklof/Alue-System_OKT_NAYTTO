@@ -1,5 +1,6 @@
 const { UserInputError, AuthenticationError } = require("apollo-server")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 const Area = require("./models/area")
 const Guest = require("./models/guest")
@@ -13,6 +14,10 @@ const resolvers = {
         allGuests: async () => await Guest.find({}),
         allAreas: async () => await Area.find({}),
         allUsers: async () => await User.find({}),
+
+        me: (root, args, context) => {
+            return context.currentUser
+        }
     },
     Guest: {
         email: (root) => {
@@ -58,6 +63,12 @@ const resolvers = {
                 })
         },
         createUser: (root, args) => {
+            if (args.username.length < 3)
+                throw new UserInputError("Username is too short! Must have at least minimum 3 letters")
+
+            if (args.password.length < 5)
+                throw new UserInputError("Password is too short Must have at least minimum 5 letters")
+
             bcrypt.hash(args.password, 10, function (err, hash) {
                 const user = new User({ ...args, password: hash })
                 return user.save()
@@ -69,15 +80,28 @@ const resolvers = {
             });
         },
         login: async (root, args) => {
-            const user = await User.find({ username: args.username })
+            const user = await User.findOne({ username: args.username })
 
-            if (user.disabled) {
+            if (!user)
+                throw new AuthenticationError("User not found")
+
+            if (user.disabled)
                 throw new AuthenticationError("User account is disabled")
-            }
 
             bcrypt.compare(args.password, user.password, function (err, result) {
-                if (result)
-                    return { value: "token" }
+                if (!result)
+                    throw new AuthenticationError("Invalid password")
+
+                const userForToken = {
+                    username: user.username,
+                    id: user._id,
+                }
+
+                const token = { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+
+                console.log("log in", userForToken.username, token)
+
+                return token
             });
         }
     }

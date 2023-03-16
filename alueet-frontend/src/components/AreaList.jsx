@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-	TextField,
 	Container,
 	Grid,
 	Typography,
 	FormControl,
 	InputLabel,
 	Select,
-	MenuItem
+	MenuItem,
+	Button
 } from '@mui/material';
 
 import theme from '../theme';
@@ -26,13 +26,7 @@ const styles = {
 			}
 		}
 	},
-	search: {
-		float: 'right',
-		mt: 3,
-		width: '30%',
-		minWidth: '200px'
-	},
-	text: {
+	mainText: {
 		borderBottom: 'solid',
 		borderColor: theme.bgColor.secondary,
 		borderWidth: 1,
@@ -42,11 +36,40 @@ const styles = {
 	},
 	form: {
 		mt: 2,
-		ml: 4, 
+		ml: 2, 
 		width: '90%'
+	},
+	areainfo: {
+		backgroundColor: theme.bgColor.primary,
+		border: 'solid',
+		borderColor: theme.bgColor.secondary,
+		borderWidth: 1,
+		borderRadius: 1,
+		display: 'flex',
+		py: 2,
+		my: 1
+	},
+	info: {
+		flexGrow: 2,
+	},
+	infotext: {
+		mb: 0.5
+	},
+	buttons: {
+		display: 'flex',
+		flexGrow: 0,
+		flexDirection: 'column',		
+	},
+	areaButton: {
+		m: 0.5,
+	},
+	makeAreaBtn: {
+		ml: 2,
+		my: 1
 	}
 }
 
+// data backendistä lopulta
 const areas = [
 	{
 		name: 'Emola-Rouhiala',
@@ -72,25 +95,50 @@ const areas = [
 		name: 'Kirjala-Nuijamies',
 		buildings: 9,
 		ownerId: null
+	},
+	{
+		name: 'Lähemäki',
+		buildings: 25,
+		ownerId: 4
+	},
+	{
+		name: 'Launiala',
+		buildings: 16,
+		ownerId: 5
+	},
+	{
+		name: 'Lehmuskylä',
+		buildings: 4,
+		ownerId: null
 	}
 ]
 
 const AreaInfo = (areaName) => {
-	const [lent, setLent] = useState(''); // aiheuttaa infinite loop
+	let lent = '';
 	const area = areas.find(a => a.name === areaName.areaName);
+
 	if (area) {
 		if (area.ownerId) {
-			setLent('Kyllä') // aiheuttaa infinite loop
+			lent = 'Kyllä';
+		} else {
+			lent = 'Ei';
 		}
+		return (
+			<Container sx={styles.areainfo}>
+				<Grid sx={styles.info}>
+					<Typography sx={styles.infotext}>Asuntoja: {area.buildings}</Typography>
+					<Typography sx={styles.infotext}>Lainattu: {lent} </Typography>
+					<Typography sx={styles.infotext}>Lainaaja?: owner.username/null</Typography>
+				</Grid>
+				<Grid sx={styles.buttons}>
+					<Button variant='contained' sx={styles.areaButton}>Näytä alue</Button>
+					<Button variant='contained' sx={styles.areaButton}>Muokkaa aluetta</Button>
+					<Button variant='contained' sx={styles.areaButton}>Poista alue</Button>
+				</Grid>
+				
+			</Container>
+		)
 	}
-
-	return (
-		<Container>
-			<Typography>Talot: {area.buildings}</Typography>
-			<Typography>Lainattu: {lent}</Typography>
-		</Container>
-		
-	)
 };
 
 const AreaList = () => {
@@ -112,40 +160,35 @@ const AreaList = () => {
 
 	return (
 		<Container>
-			<TextField label='Hae' sx={styles.search}></TextField>
-
-			<Grid container spacing={2}>
-				<Grid item xs={12}>
-					<Typography sx={styles.text} variant='h6'>
-					Alueiden hallinta
-					</Typography>
-
-					<FormControl sx={styles.form}>
-						<InputLabel>Valitse alue</InputLabel>
-						<Select
-							label='Valitse alue'
-							open={open}
-							onClose={handleClose}
-							onOpen={handleOpen}
-							variant='outlined'
-							value={areaName}
-							onChange={handleChange}
-							MenuProps={styles.menuProps}
+			<Typography sx={styles.mainText} variant='h6'>
+				Alueiden hallinta
+			</Typography>
+			<Button variant='contained' sx={styles.makeAreaBtn}>Luo alue</Button>
+			<FormControl sx={styles.form}>
+				
+				<InputLabel>Valitse alue</InputLabel>
+				<Select
+					label='Valitse alue'
+					open={open}
+					onClose={handleClose}
+					onOpen={handleOpen}
+					variant='outlined'
+					value={areaName}
+					onChange={handleChange}
+					MenuProps={styles.menuProps}
+				>
+					{areas.map(area => (
+						<MenuItem
+							key={area.name}
+							value={area.name}
 						>
-							{areas.map(area => (
-								<MenuItem
-									key={area.name}
-									value={area.name}
-								>
-									{area.name}
-								</MenuItem>
-							))}
-
-						</Select>
-						<AreaInfo areaName={areaName}/>
-					</FormControl>
-				</Grid>
-			</Grid>
+							{area.name}
+						</MenuItem>
+					))}
+				</Select>
+				<AreaInfo areaName={areaName}/>
+				
+			</FormControl>
 		</Container>
 
 	)

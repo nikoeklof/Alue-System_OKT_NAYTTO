@@ -16,7 +16,7 @@ const resolvers = {
         allUsers: async () => await User.find({}),
 
         me: (root, args, context) => {
-            return context.currentUser
+            return context.user
         }
     },
     Guest: {
@@ -69,15 +69,59 @@ const resolvers = {
             if (args.password.length < 5)
                 throw new UserInputError("Password is too short Must have at least minimum 5 letters")
 
+            var user = null
+
             bcrypt.hash(args.password, 10, function (err, hash) {
-                const user = new User({ ...args, password: hash })
-                return user.save()
-                    .catch(error => {
-                        throw new UserInputError(error.message, {
-                            invalidArgs: args,
-                        })
-                    })
+                user = new User({ ...args, password: hash })
             });
+
+            return user.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
+        },
+        createArea: (root, args) => {
+            /*
+            const contextUser = context.user
+
+            if (!contextUser) {
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+            }
+            */
+
+            const area = new Area({
+                info: {
+                    type: args.type,
+                    cityName: args.cityName,
+                    quarter: args.quarter,
+                    address: args.address,
+                    buildings: args.buildings,
+                    homes: args.homes,
+                    map: {
+                        coordinates: {
+                            lan: args.lan,
+                            lon: args.lon
+                        },
+                        zone: args.zone
+                    }
+                }
+            })
+
+            if (args.misc)
+                area.info.misc = args.misc
+
+            return area.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
         },
         login: async (root, args) => {
             const user = await User.findOne({ username: args.username })
@@ -91,18 +135,14 @@ const resolvers = {
             bcrypt.compare(args.password, user.password, function (err, result) {
                 if (!result)
                     throw new AuthenticationError("Invalid password")
-
-                const userForToken = {
-                    username: user.username,
-                    id: user._id,
-                }
-
-                const token = { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
-
-                console.log("log in", userForToken.username, token)
-
-                return token
             });
+
+            const userForToken = {
+                username: user.username,
+                id: user._id
+            }
+
+            return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
         }
     }
 }

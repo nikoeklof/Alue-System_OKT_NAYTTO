@@ -11,7 +11,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     username: String!
-    admin: Boolean!
+    admin: Boolean
     guestAccount: Guest
   }
 
@@ -28,12 +28,12 @@ const typeDefs = gql`
   }
 
   type Info {
-    type: String
-    cityName: String
-    quarter: String
-    address: String
-    buildings: Int
-    homes: Int
+    type: String!
+    cityName: String!
+    quarter: String!
+    address: String!
+    buildings: Int!
+    homes: Int!
     map: Map!
     misc: String
   }
@@ -80,6 +80,7 @@ const typeDefs = gql`
   type Mutation {
     createGuest (email: String!, name: String!): Guest
     createUser (username: String!, password: String!, questId: String!): User
+    createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
     login (username: String!, password: String!): Token
   }
 `

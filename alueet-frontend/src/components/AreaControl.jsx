@@ -113,9 +113,11 @@ const areas = [
 	}
 ]
 
-const AreaInfo = (areaName) => {
+const AreaInfo = (values) => {
 	let lent = '';
-	const area = areas.find(a => a.name === areaName.areaName);
+	const area = areas.find(a => a.name === values.areaName);
+	const admin = values.admin;
+	const auntie = values.auntie;
 
 	if (area) {
 		if (area.ownerId) {
@@ -123,19 +125,66 @@ const AreaInfo = (areaName) => {
 		} else {
 			lent = 'Ei';
 		}
+
 		return (
 			<Container sx={styles.areainfo}>
 				<Grid sx={styles.info}>
-					<Typography sx={styles.infotext}>Asuntoja: {area.buildings}</Typography>
-					<Typography sx={styles.infotext}>Lainattu: {lent} </Typography>
-					<Typography sx={styles.infotext}>Lainaaja?: owner.username/null</Typography>
+					<Typography sx={styles.infotext}>
+						Asuntoja: {area.buildings}
+					</Typography>
+					<Typography sx={styles.infotext}>
+						Lainattu: {lent} 
+					</Typography>
+					<Typography sx={styles.infotext}>
+						Lainaaja?: owner.username/null
+					</Typography>
 				</Grid>
-				<Grid sx={styles.buttons}>
-					<Button variant='contained' sx={styles.areaButton}>Näytä alue</Button>
-					<Button variant='contained' sx={styles.areaButton}>Muokkaa aluetta</Button>
-					<Button variant='contained' sx={styles.areaButton}>Poista alue</Button>
-				</Grid>
-				
+				{admin ? 
+					<Grid sx={styles.buttons}>
+						<Button 
+							variant='contained' 
+							sx={styles.areaButton}
+						>
+							Näytä alue
+						</Button>
+						<Button 
+							variant='contained' 
+							sx={styles.areaButton}
+						>
+							Muokkaa aluetta
+						</Button>
+						<Button 
+							variant='contained' 
+							sx={styles.areaButton}
+						>
+							Poista alue
+						</Button>
+					</Grid> :
+					''
+				}
+				{auntie ?
+					<Grid sx={styles.buttons}>
+						<Button 
+							variant='contained' 
+							sx={styles.areaButton}
+						>
+							Näytä alue
+						</Button>
+						<Button 
+							variant='contained' 
+							sx={styles.areaButton}
+						>
+								Lainaa alue
+						</Button>
+						<Button 
+							variant='contained' 
+							sx={styles.areaButton}
+						>
+							Palauta alue
+						</Button>
+					</Grid> :
+					''
+				}
 			</Container>
 		)
 	}
@@ -144,6 +193,10 @@ const AreaInfo = (areaName) => {
 const AreaList = () => {
 	const [areaName, setAreaName] = useState('');
 	const [open, setOpen] = useState(false);
+
+	// find the actual values from logged user from backend
+	const admin = false;
+	const auntie = true;
 
 	const handleChange = (event) => {
 		setAreaName(event.target.value);
@@ -163,7 +216,10 @@ const AreaList = () => {
 			<Typography sx={styles.mainText} variant='h6'>
 				Alueiden hallinta
 			</Typography>
-			<Button variant='contained' sx={styles.makeAreaBtn}>Luo alue</Button>
+			{admin ? 
+				<Button variant='contained' sx={styles.makeAreaBtn}>Luo alue</Button> : 
+				''
+			}
 			<FormControl sx={styles.form}>
 				
 				<InputLabel>Valitse alue</InputLabel>
@@ -186,7 +242,7 @@ const AreaList = () => {
 						</MenuItem>
 					))}
 				</Select>
-				<AreaInfo areaName={areaName}/>
+				<AreaInfo areaName={areaName} admin={admin} auntie={auntie}/>
 				
 			</FormControl>
 		</Container>

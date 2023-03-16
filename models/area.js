@@ -52,6 +52,10 @@ const schema = new mongoose.Schema({
             type: Boolean,
             default: false
         },
+        shareRequests: {
+            type: [mongoose.Types.ObjectId],
+            default: []
+        },
         sharedTo: {
             type: mongoose.Types.ObjectId,
             default: null
@@ -60,20 +64,14 @@ const schema = new mongoose.Schema({
             type: mongoose.Types.ObjectId,
             default: null
         },
-        date: {
-            shareDate: {
-                type: String,
-                default: null
-            },
-            returnDate: {
-                type: String,
-                default: null
-            }
-        },
-        shareHistory: {
-            type: Array,
-            default: []
+        shareStartDate: {
+            type: Date,
+            default: null
         }
+    },
+    shareHistory: {
+        type: Array,
+        default: []
     }
 })
 

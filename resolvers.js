@@ -62,6 +62,7 @@ const resolvers = {
                     })
                 })
         },
+
         createUser: (root, args) => {
             if (args.username.length < 3)
                 throw new UserInputError("Username is too short! Must have at least minimum 3 letters")
@@ -82,6 +83,7 @@ const resolvers = {
                     })
                 })
         },
+
         createArea: (root, args) => {
             /*
             const contextUser = context.user
@@ -123,6 +125,7 @@ const resolvers = {
                     })
                 })
         },
+
         login: async (root, args) => {
             const user = await User.findOne({ username: args.username })
 
@@ -143,7 +146,21 @@ const resolvers = {
             }
 
             return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
-        }
+        },
+
+        makeRequest: async (root, args) => {
+            const requestee = await Guest.findOne({ email: args.guestEmail })
+
+            if (!requestee)
+                throw new AuthenticationError("Email not found")
+
+            const requestedArea = await Area.updateOne({ _id: args.areaId }, { $push: { "shareState.shareRequests": requestee._id } })
+
+            if (!requestedArea)
+                throw new AuthenticationError("Area not found")
+
+            return "Request succesful"
+        },
     }
 }
 

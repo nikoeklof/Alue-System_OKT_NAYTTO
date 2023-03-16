@@ -23,6 +23,8 @@ const typeDefs = gql`
   }
 
   type Shares {
+    sharedTo: Guest
+    sharedBy: User
     shareStartDate: String
     shareEndDate: String
   }
@@ -50,14 +52,10 @@ const typeDefs = gql`
 
   type ShareState {
     isShared: Boolean!
+    sharedRequests: [Guest]
     sharedTo: Guest
     sharedBy: User
-    date: ShareDate
-  }
-
-  type ShareDate {
-    shareDate: String
-    returnDate: String
+    shareStartDate: String
   }
   
   type Query {
@@ -79,8 +77,11 @@ const typeDefs = gql`
 
   type Mutation {
     createGuest (email: String!, name: String!): Guest
-    createUser (username: String!, password: String!, questId: String!): User
+    createUser (username: String!, password: String!, guestId: String!): User
     createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
+    
+    makeRequest (areaId: ID!, guestEmail: String!): String
+
     login (username: String!, password: String!): Token
   }
 `

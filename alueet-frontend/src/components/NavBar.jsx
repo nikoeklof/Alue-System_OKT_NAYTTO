@@ -125,7 +125,7 @@ const NavBar = () => {
 						variant='h5'
 						noWrap
 						component='a'
-						href='/'
+						href=''
 						sx={styles.normal.logoText}
 					>
 						Aluepöytä
@@ -152,7 +152,7 @@ const NavBar = () => {
 								<Link style={styles.responsive.link}>Palauta</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link style={styles.responsive.link}>Alueiden hallinta</Link>
+								<Link to={'/arealist'} style={styles.responsive.link}>Alueiden hallinta</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
 								<Link style={styles.responsive.link}>Käyttäjien hallinta</Link>
@@ -173,7 +173,7 @@ const NavBar = () => {
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link to='' style={styles.normal.link}>Lainaa</Link>
+							<Link style={styles.normal.link}>Lainaa</Link>
 						</Button>
 						<Button
 							onClick={handleCloseNavMenu}
@@ -185,7 +185,7 @@ const NavBar = () => {
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link style={styles.normal.link}>Alueiden hallinta</Link>
+							<Link to='/areaControl' style={styles.normal.link}>Alueiden hallinta</Link>
 						</Button>
 						<Button
 							onClick={handleCloseNavMenu}

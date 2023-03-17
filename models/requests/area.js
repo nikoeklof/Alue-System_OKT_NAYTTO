@@ -11,7 +11,7 @@ mongoose.connect(url).then(() => {
     console.log("Error connection to MongoDB:", error.message)
 })
 
-const Area = require("../models/area")
+const Area = require("../area")
 
 const area = new Area({
     info: {

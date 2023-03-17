@@ -37,7 +37,7 @@ const typeDefs = gql`
     buildings: Int!
     homes: Int!
     map: Map!
-    misc: String
+    misc: Strings
   }
 
   type Map {

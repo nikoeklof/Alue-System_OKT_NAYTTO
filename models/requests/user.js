@@ -12,7 +12,7 @@ mongoose.connect(url).then(() => {
     console.log("Error connection to MongoDB:", error.message)
 })
 
-const User = require("../models/user")
+const User = require("../user")
 
 bcrypt.hash("HHM", 10, function (err, hash) {
     const user = new User({

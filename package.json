@@ -7,9 +7,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "area": "node mongoDB/area.js",
-    "guest": "node mongoDB/guest.js",
-    "user": "node mongoDB/user.js"
+    "area": "node requests/mongoDB/area.js",
+    "guest": "node requests/mongoDB/guest.js",
+    "user": "node requests/mongoDB/user.js"
   },
   "author": "J,J,M,N,S",
   "license": "ISC",

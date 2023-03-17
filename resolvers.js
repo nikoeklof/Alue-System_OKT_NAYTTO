@@ -70,6 +70,11 @@ const resolvers = {
             if (args.password.length < 5)
                 throw new UserInputError("Password is too short Must have at least minimum 5 letters")
 
+            const guest = Guest.findById(args.guestId)
+
+            if (!guest)
+                throw new UserInputError("Guest not found")
+
             var user = null
 
             bcrypt.hash(args.password, 10, function (err, hash) {
@@ -130,7 +135,7 @@ const resolvers = {
             const user = await User.findOne({ username: args.username })
 
             if (!user)
-                throw new AuthenticationError("User not found")
+                throw new UserInputError("User not found")
 
             if (user.disabled)
                 throw new AuthenticationError("User account is disabled")

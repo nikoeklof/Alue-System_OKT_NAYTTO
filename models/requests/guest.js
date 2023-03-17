@@ -11,7 +11,7 @@ mongoose.connect(url).then(() => {
     console.log("Error connection to MongoDB:", error.message)
 })
 
-const Quest = require("../models/guest")
+const Quest = require("../guest")
 
 const quest = new Quest({
     email: "HHM@mail.net",

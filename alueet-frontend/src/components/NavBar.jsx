@@ -97,7 +97,7 @@ const styles = {
 			color: theme.color.secondary
 		}
 	}
-}
+};
 
 const NavBar = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
@@ -152,10 +152,10 @@ const NavBar = () => {
 								<Link style={styles.responsive.link}>Palauta</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link to={'/arealist'} style={styles.responsive.link}>Alueiden hallinta</Link>
+								<Link to={'/areaControl'} style={styles.responsive.link}>Alueiden hallinta</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link style={styles.responsive.link}>Käyttäjien hallinta</Link>
+								<Link to={'/userControl'} style={styles.responsive.link}>Käyttäjien hallinta</Link>
 							</MenuItem>
 						</Menu>
 					</Box>
@@ -185,13 +185,13 @@ const NavBar = () => {
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link to='/areaControl' style={styles.normal.link}>Alueiden hallinta</Link>
+							<Link to={'/areaControl'} style={styles.normal.link}>Alueiden hallinta</Link>
 						</Button>
 						<Button
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link style={styles.normal.link}>Käyttäjien hallinta</Link>
+							<Link to={'/userControl'} style={styles.normal.link}>Käyttäjien hallinta</Link>
 						</Button>
 					</Box>
 					<Box sx={styles.user.box}>
@@ -222,6 +222,6 @@ const NavBar = () => {
 			</Container>
 		</AppBar>
 	);
-}
+};
 
 export default NavBar;

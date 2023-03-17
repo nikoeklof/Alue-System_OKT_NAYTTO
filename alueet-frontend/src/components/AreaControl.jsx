@@ -67,7 +67,7 @@ const styles = {
 		ml: 2,
 		my: 1
 	}
-}
+};
 
 // data backendistä lopulta
 const areas = [
@@ -111,7 +111,7 @@ const areas = [
 		buildings: 4,
 		ownerId: null
 	}
-]
+];
 
 const AreaInfo = (values) => {
 	let lent = '';

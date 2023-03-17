@@ -56,6 +56,7 @@ const CreateAreaForm = () => {
 };
 
 const handleSubmit = (props) => {
+  //
   console.log(props);
 };
 

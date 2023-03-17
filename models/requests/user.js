@@ -18,7 +18,7 @@ bcrypt.hash("HHM", 10, function (err, hash) {
     const user = new User({
         username: "Howard Hamlin",
         password: hash,
-        guestId: "641174145ca33dfd80f06ebe", // tämä ID saa kun tekee guestin
+        guestId: "641471b7fc8a109db113b578", // tämä ID saa kun tekee guestin
         admin: true
     })
 

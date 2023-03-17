@@ -89,19 +89,20 @@ const resolvers = {
                 })
         },
 
-        createArea: (root, args) => {
-            /*
-            const contextUser = context.user
+        toggleUserDisabled: (root, args) => {
+            const user = User.findById(args.userId)
 
-            if (!contextUser) {
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
+            user.disabled = !user.disabled
+
+            return user.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
                 })
-            }
-            */
+        },
 
+        createArea: (root, args) => {
             const area = new Area({
                 info: {
                     type: args.type,
@@ -119,6 +120,50 @@ const resolvers = {
                     }
                 }
             })
+
+            if (args.misc)
+                area.info.misc = args.misc
+
+            return area.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
+        },
+
+        editArea: async (root, args) => { //Pystyykö tekee paremmin?
+            const area = await Area.findById(args.areaId)
+
+            if (!area)
+                throw new UserInputError("Area not found")
+
+            if (args.type)
+                area.info.type = args.type
+
+            if (args.cityName)
+                area.info.cityName = args.cityName
+
+            if (args.quarter)
+                area.info.quarter = args.quarter
+
+            if (args.address)
+                area.info.address = args.address
+
+            if (args.buildings)
+                area.info.buildings = args.buildings
+
+            if (args.homes)
+                area.info.homes = args.homes
+
+            if (args.lan)
+                area.info.map.coordinates.lan = args.lan
+
+            if (args.lon)
+                area.info.map.coordinates.lon = args.lon
+
+            if (args.zone)
+                area.info.map.zone = args.zone
 
             if (args.misc)
                 area.info.misc = args.misc
@@ -165,6 +210,37 @@ const resolvers = {
                 throw new AuthenticationError("Area not found")
 
             return "Request succesful"
+        },
+
+        allowAreaRequest: async (root, args) => {
+            /*
+            const contextUser = context.user
+
+            console.log(contextUser)
+
+            if (!contextUser)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+            */
+
+            const area = await Area.findById(args.areaId)
+
+            let requestedArea
+
+            if (!area.shareState.shareRequests.includes(args.guestId))
+                requestedArea = await Area.updateOne({ _id: args.areaId },
+                    { $set: { "shareState.sharedTo": args.guestId } },
+                    { $set: { "shareState.sharedBy": "1" } })
+            else
+                requestedArea = await Area.updateOne({ _id: args.areaId },
+                    { $pull: { "shareState.shareRequests": args.guestId } },
+                    { $set: { "shareState.sharedTo": args.guestId } },
+                    { $set: { "shareState.sharedBy": "1" } })
+
+            return "Area approved"
         },
     }
 }

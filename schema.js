@@ -37,7 +37,7 @@ const typeDefs = gql`
     buildings: Int!
     homes: Int!
     map: Map!
-    misc: Strings
+    misc: String
   }
 
   type Map {
@@ -77,10 +77,14 @@ const typeDefs = gql`
 
   type Mutation {
     createGuest (email: String!, name: String!): Guest
-    createUser (username: String!, password: String!, guestId: String!): User
-    createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
-    
     makeRequest (areaId: ID!, guestEmail: String!): String
+
+    createUser (username: String!, password: String!, guestId: String!): User
+    toggleUserDisabled (userId: ID!): User
+    allowAreaRequest (areaId: ID!, guestId: ID!): String
+
+    createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
+    editArea (areaId: ID!, type: String, cityName: String, quarter: String, address: String, buildings: Int, homes: Int, zone: String, lan: String, lon: String, misc: String): Area
 
     login (username: String!, password: String!): Token
   }

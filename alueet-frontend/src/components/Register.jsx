@@ -37,7 +37,7 @@ const styles = {
 		width: '130px',
 		ml: 0.5		
 	}
-}
+};
 
 const Register = () => {
 	return (
@@ -84,6 +84,6 @@ const Register = () => {
 		</FormGroup>
 		
 	)
-}
+};
 
 export default Register;

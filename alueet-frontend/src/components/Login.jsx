@@ -37,7 +37,7 @@ const styles = {
 		width: '100px',
 		ml: 0.5		
 	}
-}
+};
 
 const Login = () => {
 	return (
@@ -76,6 +76,6 @@ const Login = () => {
 		</FormGroup>
 		
 	)
-}
+};
 
 export default Login;

@@ -75,10 +75,10 @@ const Row = (values) => {
 	}
 
 	return (
-		<Fragment key={user.id}>
+		<Fragment>
 			<TableRow 
 				hover 
-				key={user.id}
+				key={user.email}
 				sx={{ '& > *': { borderBottom: 'unset' } }}
 			>
 				<TableCell>

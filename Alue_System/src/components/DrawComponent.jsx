@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { FeatureGroup } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
+import { setCoordinates } from "./Coordinates";
 
 const DrawComponent = () => {
-  const [coordinates, setCoordinates] = useState([]);
-  const [leafletId, setLeafletId] = useState();
-
-  useEffect(() => {
-    console.log(coordinates, leafletId);
-  }, [coordinates]);
+  const [areaCoordinates, setAreaCoordinates] = useState([]);
 
   return (
     <FeatureGroup>
@@ -34,9 +30,7 @@ const DrawComponent = () => {
           latlngObject.forEach((obj) => {
             parsedCoords.push([obj.lat, obj.lng]);
           });
-
           setCoordinates(parsedCoords);
-          setLeafletId(layer._leaflet_id);
         }}
         onEdited={function (e) {
           //I need to do some janky parsing in order to extract the edited polygons position coordinates
@@ -48,12 +42,17 @@ const DrawComponent = () => {
           latlngObject.forEach((obj) => {
             parsedCoords.push([obj.lat, obj.lng]);
           });
-          console.log(parsedCoords);
+
           setCoordinates(parsedCoords);
         }}
       />
     </FeatureGroup>
   );
+};
+
+export const coordinates = (coords) => {
+  const areaCoordinates = coords;
+  return areaCoordinates;
 };
 
 export default DrawComponent;

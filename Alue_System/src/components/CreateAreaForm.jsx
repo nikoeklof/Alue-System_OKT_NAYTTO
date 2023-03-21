@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { GetCoordinates } from "./Coordinates";
+import { useMap } from "react-leaflet";
 
 const CreateAreaForm = () => {
   const [formActive, setFormActive] = useState(true);
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
   const [areaOwner, setAreaOwner] = useState("");
+
   return (
     <>
       {formActive ? (
@@ -12,9 +15,10 @@ const CreateAreaForm = () => {
           <button
             onClick={() => {
               setFormActive(!formActive);
+              console.log(GetCoordinates());
             }}
           >
-            Luo alue
+            Luo uusi alue
           </button>
         </div>
       ) : (
@@ -37,7 +41,12 @@ const CreateAreaForm = () => {
           <button
             type="button"
             onClick={() =>
-              handleSubmit({ areaName, apartmentAmount, areaOwner })
+              handleSubmit({
+                areaName,
+                apartmentAmount,
+                areaOwner,
+                coords: GetCoordinates(),
+              })
             }
           >
             Tallenna

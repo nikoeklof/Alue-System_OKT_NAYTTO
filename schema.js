@@ -77,14 +77,16 @@ const typeDefs = gql`
 
   type Mutation {
     createGuest (email: String!, name: String!): Guest
-    makeRequest (areaId: ID!, guestEmail: String!): String
+    makeRequest (areaId: ID!, guestEmail: String!): Area
 
     createUser (username: String!, password: String!, guestId: String!): User
     toggleUserDisabled (userId: ID!): User
-    allowAreaRequest (areaId: ID!, guestId: ID!): String
+    allowAreaRequest (areaId: ID!, guestId: ID!): Area
+    returnSharedArea (areaId: ID!): Area
 
     createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
     editArea (areaId: ID!, type: String, cityName: String, quarter: String, address: String, buildings: Int, homes: Int, zone: String, lan: String, lon: String, misc: String): Area
+    deleteArea (areaId: ID!): Area
 
     login (username: String!, password: String!): Token
   }

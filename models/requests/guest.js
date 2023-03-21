@@ -11,14 +11,14 @@ mongoose.connect(url).then(() => {
     console.log("Error connection to MongoDB:", error.message)
 })
 
-const Quest = require("../guest")
+const Guest = require("../guest")
 
-const quest = new Quest({
+const guest = new Guest({
     email: "HHM@mail.net",
     name: "Howard Hamlin"
 })
 
-quest.save().then(result => {
-    console.log("Quest saved Succesfully")
+guest.save().then(result => {
+    console.log("Guest saved Succesfully")
     mongoose.connection.close()
 })

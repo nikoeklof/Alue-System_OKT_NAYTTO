@@ -14,7 +14,7 @@ mongoose.connect(url).then(() => {
 
 const User = require("../user")
 
-bcrypt.hash("HHM", 10, function (err, hash) {
+bcrypt.hash("NAMAST3", 10, function (err, hash) {
     const user = new User({
         username: "Howard Hamlin",
         password: hash,

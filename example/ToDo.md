@@ -1,12 +1,13 @@
 # ToDo
 - [X] tietovaraston tiedon muoto
 - [X] alueiden lisääminen
-- [1/2] alueiden lainaaminen
-- [ ] alueiden palautus
+- [X] alueiden lainaaminen
+- [X] alueiden palautus
 - [X] tiedon haku tietovarastolta
 - [ ] alueiden filtteröinti
 - [X] kirjautuminen
-- [ ] alueiden poisto
+- [X] alueiden poisto
 - [1/2] tiedon muokkaus
 - [ ] kartta näkymä
 - [ ] kommunikointi back- ja front-endin kanssa
+- [ ] Email pyynnön aikana

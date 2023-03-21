@@ -16,7 +16,7 @@ const resolvers = {
         allUsers: async () => await User.find({}),
 
         me: (root, args, context) => {
-            return context.user
+            return context.authUser
         }
     },
     Guest: {
@@ -63,23 +63,22 @@ const resolvers = {
                 })
         },
 
-        createUser: (root, args) => {
+        createUser: async (root, args) => {
             if (args.username.length < 3)
                 throw new UserInputError("Username is too short! Must have at least minimum 3 letters")
 
             if (args.password.length < 5)
                 throw new UserInputError("Password is too short Must have at least minimum 5 letters")
 
-            const guest = Guest.findById(args.guestId)
+            const guest = await Guest.findById(args.guestId)
 
             if (!guest)
                 throw new UserInputError("Guest not found")
 
-            var user = null
-
-            bcrypt.hash(args.password, 10, function (err, hash) {
-                user = new User({ ...args, password: hash })
-            });
+            const user = new User({
+                ...args,
+                password: await bcrypt.hash(args.password, 10)
+            })
 
             return user.save()
                 .catch(error => {
@@ -89,8 +88,8 @@ const resolvers = {
                 })
         },
 
-        toggleUserDisabled: (root, args) => {
-            const user = User.findById(args.userId)
+        toggleUserDisabled: async (root, args) => {
+            const user = await User.findById(args.userId)
 
             user.disabled = !user.disabled
 
@@ -125,6 +124,15 @@ const resolvers = {
                 area.info.misc = args.misc
 
             return area.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
+        },
+
+        deleteArea: async (root, args) => {
+            return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,
@@ -198,27 +206,32 @@ const resolvers = {
             return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
         },
 
+        //({ _id: args.areaId }, { $push: { "shareState.shareRequests": requestee._id } })
         makeRequest: async (root, args) => {
             const requestee = await Guest.findOne({ email: args.guestEmail })
 
             if (!requestee)
-                throw new AuthenticationError("Email not found")
+                throw new UserInputError("Guest not found")
 
-            const requestedArea = await Area.updateOne({ _id: args.areaId }, { $push: { "shareState.shareRequests": requestee._id } })
+            const requestedArea = await Area.findById(args.areaId)
 
             if (!requestedArea)
-                throw new AuthenticationError("Area not found")
+                throw new UserInputError("Area not found")
 
-            return "Request succesful"
+            if (requestedArea.shareState.shareRequests.includes(requestee._id))
+                throw new UserInputError("You have already reguested this area")
+
+            if (requestedArea.shareState.sharedTo == requestee._id)
+                throw new UserInputError("Area is already being shared to you")
+
+            return requestedArea
         },
 
         allowAreaRequest: async (root, args) => {
             /*
-            const contextUser = context.user
+            const authUser = context.authUser
 
-            console.log(contextUser)
-
-            if (!contextUser)
+            if (!authUser)
                 throw new GraphQLError("Not authenticated", {
                     extensions: {
                         code: "BAD_USER_INPUT",
@@ -226,21 +239,66 @@ const resolvers = {
                 })
             */
 
+            const guest = await Guest.findById(args.guestId)
+
+            if (!guest)
+                throw new UserInputError("Guest not found")
+
             const area = await Area.findById(args.areaId)
 
-            let requestedArea
+            if (!area)
+                throw new UserInputError("Area not found")
 
-            if (!area.shareState.shareRequests.includes(args.guestId))
-                requestedArea = await Area.updateOne({ _id: args.areaId },
-                    { $set: { "shareState.sharedTo": args.guestId } },
-                    { $set: { "shareState.sharedBy": "1" } })
-            else
-                requestedArea = await Area.updateOne({ _id: args.areaId },
-                    { $pull: { "shareState.shareRequests": args.guestId } },
-                    { $set: { "shareState.sharedTo": args.guestId } },
-                    { $set: { "shareState.sharedBy": "1" } })
+            if (area.shareState.isShared == true)
+                throw new UserInputError("Area is currently being shared")
 
-            return "Area approved"
+            if (area.shareState.shareRequests.includes(args.guestId))
+                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(args.guestId), 1)
+
+            area.shareState.isShared = true
+            area.shareState.sharedBy = "64181f6f68ff199383d6f9e0"//authUser.id
+            area.shareState.sharedTo = args.guestId
+            area.shareState.shareStartDate = new Date().toJSON()
+
+            return area.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
+        },
+        returnSharedArea: async (root, args) => {
+            const area = await Area.findById(args.areaId)
+
+            if (!area)
+                throw new UserInputError("Area not found")
+
+            if (area.shareState.isShared == false)
+                throw new UserInputError("Area is not currently being shared")
+
+            const shareEnd = {
+                sharedTo: area.shareState.sharedTo,
+                sharedBy: area.shareState.sharedBy,
+                shareStartDate: area.shareState.shareStartDate,
+                shareEndDate: new Date().toJSON()
+            }
+            console.log(shareEnd)
+
+            area.shareHistory.push(shareEnd)
+
+            area.shareState = {
+                isShared: false,
+                sharedBy: null,
+                sharedTo: null,
+                shareStartDate: null
+            }
+
+            return area.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
         },
     }
 }

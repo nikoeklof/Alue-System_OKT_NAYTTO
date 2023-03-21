@@ -14,7 +14,9 @@ const users = [
 		id: 2,
 		admin: false,
 		areas: {
-			1: 2
+			1: 2,
+			2: 4,
+			3: 9
 		}
 	},
 	{

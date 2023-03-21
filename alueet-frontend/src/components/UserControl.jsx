@@ -38,7 +38,7 @@ const columns = [
 	{
 		id: 'name',
 		label: 'Nimi',
-		minWidth: 170
+		minWidth: 120
 	},
 	{
 		id: 'email',
@@ -65,9 +65,14 @@ const columns = [
 	},
 ];
 
-const Row = (value) => {
+const Row = (values) => {
+	const user = values.user;
 	const [open, setOpen] = useState(false);
-	const user = value.user;
+	const areaArray = [];
+
+	for (const area in user.areas) {
+		areaArray.push(user.areas[area]);
+	}
 
 	return (
 		<Fragment key={user.id}>
@@ -114,26 +119,27 @@ const Row = (value) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{/* fix to have actual info from the object user.areas */}
-									<TableRow key={user.areas.id}>
-										<TableCell 
-											component='th' 
-											scope='row'
-										>
-											Fetch from backend
-										</TableCell>
-										<TableCell>
-											{user.areas.id}
-										</TableCell>
-									</TableRow>
+									{areaArray.map((area => (
+										<TableRow key={user.areas.id}>
+											<TableCell 
+												component='th' 
+												scope='row'
+											>
+												Fetch from backend
+											</TableCell>
+											<TableCell>
+												{area}
+											</TableCell>
+										</TableRow>
+									)))}
 								</TableBody>
 							</Table>
 							<Button 
 								variant='contained'
 								sx={styles.button}
 							>
-								Muokkaa
-							</Button> 
+								Muokkaa Käyttäjää
+							</Button>
 						</Box>
 					</Collapse>
 				</TableCell>

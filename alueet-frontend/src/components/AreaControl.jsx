@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import theme from '../theme';
+import { areas } from '../db';
 
 const styles = {
 	selectMenu: {
@@ -68,50 +69,6 @@ const styles = {
 		my: 1
 	}
 };
-
-// data backendistä lopulta
-const areas = [
-	{
-		name: 'Emola-Rouhiala',
-		buildings: 12,
-		ownerId: 1
-	},
-	{
-		name: 'Graani',
-		buildings: 3,
-		ownerId: null
-	},
-	{
-		name: 'Kattilansilta-Laajalampi',
-		buildings: 30,
-		ownerId: 2
-	},
-	{
-		name: 'Keskusta',
-		buildings: 19,
-		ownerId: 3
-	},
-	{
-		name: 'Kirjala-Nuijamies',
-		buildings: 9,
-		ownerId: null
-	},
-	{
-		name: 'Lähemäki',
-		buildings: 25,
-		ownerId: 4
-	},
-	{
-		name: 'Launiala',
-		buildings: 16,
-		ownerId: 5
-	},
-	{
-		name: 'Lehmuskylä',
-		buildings: 4,
-		ownerId: null
-	}
-];
 
 const AreaInfo = (values) => {
 	let lent = '';

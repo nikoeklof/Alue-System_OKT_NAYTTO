@@ -69,6 +69,19 @@ const styles = {
 		button: {
 			my: 1, 
 			display: 'block'
+		},
+		menu: {
+			anchor: {
+				vertical: 'top',
+				horizontal: 'right'
+			},
+			transform: {
+				vertical: 'top',
+				horizontal: 'right'
+			},
+			sx: {
+				mt: '45px'
+			}
 		}	
 	},
 	user: {
@@ -173,18 +186,6 @@ const NavBar = () => {
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link style={styles.normal.link}>Lainaa</Link>
-						</Button>
-						<Button
-							onClick={handleCloseNavMenu}
-							sx={styles.normal.button}
-						>
-							<Link style={styles.normal.link}>Palauta</Link>
-						</Button>
-						<Button
-							onClick={handleCloseNavMenu}
-							sx={styles.normal.button}
-						>
 							<Link to={'/areaControl'} style={styles.normal.link}>Alueiden hallinta</Link>
 						</Button>
 						<Button
@@ -200,16 +201,12 @@ const NavBar = () => {
 							Username
 						</Button>
 						<Menu
-							sx={{  }}
+							sx={styles.normal.menu.sx}
 							id="menu-appbar"
 							anchorEl={anchorElUser}
-							anchorOrigin={{
-								
-							}}
+							anchorOrigin={styles.normal.menu.anchor}
 							keepMounted
-							transformOrigin={{
-								
-							}}
+							transformOrigin={styles.normal.menu.transform}
 							open={Boolean(anchorElUser)}
 							onClose={handleCloseUserMenu}
 						>

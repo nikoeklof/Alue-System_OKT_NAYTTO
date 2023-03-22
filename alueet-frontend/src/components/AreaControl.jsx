@@ -12,7 +12,9 @@ import {
 
 import theme from '../theme';
 import { areas } from '../db';
+
 import DeleteAreaModal from './DeleteAreaModal';
+import EditAreaModal from './EditAreaModal';
 
 const styles = {
 	selectMenu: {
@@ -73,6 +75,7 @@ const styles = {
 
 const AreaInfo = (values) => {
 	const [openDel, setOpenDel] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
 	let lent = '';
 	const area = areas.find(a => a.name === values.areaName);
 	const admin = values.admin;
@@ -80,6 +83,10 @@ const AreaInfo = (values) => {
 
 	const handleCloseDelModal = () => {
 		setOpenDel(false);
+	};
+
+	const handleCloseEditModal = () => {
+		setOpenEdit(false);
 	};
 
 	if (area) {
@@ -113,6 +120,7 @@ const AreaInfo = (values) => {
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenEdit(true)}
 						>
 							Muokkaa aluetta
 						</Button>
@@ -128,7 +136,11 @@ const AreaInfo = (values) => {
 				}
 				<DeleteAreaModal 
 					openDel={openDel} 
-					handleCloseDelModal={handleCloseDelModal} 
+					handleClose={handleCloseDelModal} 
+				/>
+				<EditAreaModal
+					openEdit={openEdit}
+					handleClose={handleCloseEditModal}
 				/>
 				{auntie ?
 					<Grid sx={styles.buttons}>
@@ -163,8 +175,8 @@ const AreaList = () => {
 	const [open, setOpen] = useState(false);
 
 	// find the actual values from logged user from backend
-	const admin = true;
-	const auntie = false;
+	const admin = false;
+	const auntie = true;
 
 	const handleChange = (event) => {
 		setAreaName(event.target.value);

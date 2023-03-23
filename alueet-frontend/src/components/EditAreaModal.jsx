@@ -43,15 +43,14 @@ const styles = {
 	}
 };
 
-const EditAreaModal = (values) => {
-	const {openEdit, handleCloseEditModal} = values;
+const EditAreaModal = ({...editProps}) => {
 
-	const handleClose = () => handleCloseEditModal();
+	const handleClose = () => editProps.handleCloseEditModal();
 
 	return (
 		<Modal
 			component='div'
-			open={openEdit}
+			open={editProps.openEdit}
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
@@ -89,6 +88,7 @@ const EditAreaModal = (values) => {
 				<Button 
 					sx={styles.button} 
 					variant='contained'
+					onClick={() => editProps.handleCloseEditModal()}
 				>
 					Peruuta
 				</Button>

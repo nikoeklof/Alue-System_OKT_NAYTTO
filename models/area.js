@@ -70,8 +70,28 @@ const schema = new mongoose.Schema({
         }
     },
     shareHistory: {
-        type: Array,
-        default: []
+        type: [
+            {
+                sharedTo: {
+                    type: mongoose.Types.ObjectId,
+                    required: true
+                },
+                sharedBy: {
+                    type: mongoose.Types.ObjectId,
+                    required: true
+                },
+                shareStartDate: {
+                    type: Date,
+                    required: true
+                },
+                shareEndDate: {
+                    type: Date,
+                    required: true
+                }
+            }
+        ],
+        default: [],
+        _id: false
     }
 })
 

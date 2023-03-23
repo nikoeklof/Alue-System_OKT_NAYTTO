@@ -6,6 +6,8 @@ const Area = require("./models/area")
 const Guest = require("./models/guest")
 const User = require("./models/user")
 
+const mailer = require("./util/mail")
+
 const resolvers = {
     Query: {
         areaCount: () => Area.collection.countDocuments(),
@@ -90,15 +92,8 @@ const resolvers = {
 
         toggleUserDisabled: async (root, args) => {
             const user = await User.findById(args.userId)
-
             user.disabled = !user.disabled
-
             return user.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
         },
 
         createArea: (root, args) => {
@@ -206,25 +201,30 @@ const resolvers = {
             return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
         },
 
-        //({ _id: args.areaId }, { $push: { "shareState.shareRequests": requestee._id } })
         makeRequest: async (root, args) => {
-            const requestee = await Guest.findOne({ email: args.guestEmail })
+            const guest = await Guest.findOne({ email: args.guestEmail })
 
-            if (!requestee)
+            if (!guest)
                 throw new UserInputError("Guest not found")
 
-            const requestedArea = await Area.findById(args.areaId)
+            const area = await Area.findById(args.areaId)
 
-            if (!requestedArea)
+            if (!area)
                 throw new UserInputError("Area not found")
 
-            if (requestedArea.shareState.shareRequests.includes(requestee._id))
+            if (area.shareState.shareRequests.includes(guest._id))
                 throw new UserInputError("You have already reguested this area")
 
-            if (requestedArea.shareState.sharedTo == requestee._id)
+            if (area.shareState.sharedTo == guest._id)
                 throw new UserInputError("Area is already being shared to you")
 
-            return requestedArea
+            area.shareState.shareRequests.push(guest._id)
+
+            area.save()
+
+            mailer(guest.email, 0)
+
+            return area
         },
 
         allowAreaRequest: async (root, args) => {
@@ -260,12 +260,16 @@ const resolvers = {
             area.shareState.sharedTo = args.guestId
             area.shareState.shareStartDate = new Date().toJSON()
 
-            return area.save()
+            area.save()
                 .catch(error => {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,
                     })
                 })
+
+            mailer(requestee.email, 1)
+
+            return area
         },
         returnSharedArea: async (root, args) => {
             const area = await Area.findById(args.areaId)
@@ -282,7 +286,6 @@ const resolvers = {
                 shareStartDate: area.shareState.shareStartDate,
                 shareEndDate: new Date().toJSON()
             }
-            console.log(shareEnd)
 
             area.shareHistory.push(shareEnd)
 
@@ -293,12 +296,23 @@ const resolvers = {
                 shareStartDate: null
             }
 
-            return area.save()
+            area.save()
                 .catch(error => {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,
                     })
                 })
+
+            const guest = await Guest.findById(shareEnd.sharedTo)
+
+            mailer(guest.email, 2)
+
+            return area
+        },
+
+        sendTestMail: async (root, args) => {
+            mailer(args.email, 3)
+            return true
         },
     }
 }

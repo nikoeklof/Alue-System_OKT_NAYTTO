@@ -14,7 +14,7 @@ mongoose.connect(url).then(() => {
 const Guest = require("../guest")
 
 const guest = new Guest({
-    email: "HHM@mail.net",
+    email: process.env.EMAIL_RECEIVER_TEST,
     name: "Howard Hamlin"
 })
 

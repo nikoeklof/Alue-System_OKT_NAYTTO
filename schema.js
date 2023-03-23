@@ -89,6 +89,7 @@ const typeDefs = gql`
     deleteArea (areaId: ID!): Area
 
     login (username: String!, password: String!): Token
+    sendTestMail (email: String!): Boolean
   }
 `
 

@@ -84,29 +84,17 @@ const AreaInfo = (values) => {
 	const admin = values.admin;
 	const auntie = values.auntie;
 
-	const handleCloseDelModal = () => {
-		setOpenDel(false);
-	};
-
-	const handleCloseEditModal = () => {
-		setOpenEdit(false);
-	};
-
-	const handleCloseLendModal = () => {
-		setOpenLend(false);
-	};
-
 	const delProps = {
 		openDel,
-		handleCloseDelModal
+		handleCloseDelModal: () => setOpenDel(false)
 	};
 	const editProps = {
 		openEdit,
-		handleCloseEditModal
+		handleCloseEditModal: () => setOpenEdit(false)
 	};
 	const lendProps = {
 		openLend,
-		handleCloseLendModal
+		handleCloseLendModal: () => setOpenLend(false)
 	};
 
 	if (area) {

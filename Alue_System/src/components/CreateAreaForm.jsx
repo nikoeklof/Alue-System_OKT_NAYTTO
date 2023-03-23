@@ -4,7 +4,6 @@ import { GetCoordinates } from "./Variables";
 import { getArea } from "./Variables";
 
 const CreateAreaForm = ({ newArea }) => {
-  console.log(newArea);
   const [formActive, setFormActive] = useState(true);
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");

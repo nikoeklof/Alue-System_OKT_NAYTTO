@@ -32,15 +32,14 @@ const styles = {
 	}
 };
 
-const DeleteAreaModal = (values) => {
-	const {openDel, handleCloseDelModal} = values;
+const DeleteAreaModal = (delProps) => {
 
-	const handleClose = () => handleCloseDelModal();
+	const handleClose = () => delProps.handleCloseDelModal();
 
 	return (
 		<Modal
 			component='div'
-			open={openDel}
+			open={delProps.openDel}
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
@@ -48,18 +47,22 @@ const DeleteAreaModal = (values) => {
 					Haluatko varmasti poistaa alueen?
 				</Typography>
 				<div>
-					<Button sx={styles.button} variant='contained'>
-					Peruuta
+					<Button 
+						sx={styles.button} 
+						variant='contained'
+						onClick={() => delProps.handleCloseDelModal()}
+					>
+						Peruuta
 					</Button>
-					<Button sx={styles.button} variant='contained'>
+					<Button 
+						sx={styles.button} 
+						variant='contained'
+					>
 						Poista
 					</Button>
 				</div>
-				
-				
 			</Box>
-		</Modal>
-		
+		</Modal>		
 	)
 };
 

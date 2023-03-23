@@ -2,7 +2,7 @@
 
 Toiminnallisuus:
 
-Käyttäjä voi luoda alueen [ ]
+Käyttäjä voi luoda alueen [X]
 
 Käyttäjä voi muokata olemassa olevaa aluetta [ ]
 

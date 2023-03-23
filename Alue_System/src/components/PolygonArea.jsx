@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Polygon } from "react-leaflet";
 
-
 // Blueprint for the areas drawn to the map, still needs functionality
-const PolygonArea = ({ props }) => {
+const PolygonArea = ({ props, onClick, positions }) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -14,11 +13,11 @@ const PolygonArea = ({ props }) => {
       }}
       fill="true"
       id={props.id}
-      positions={props.positions}
+      positions={positions}
       eventHandlers={{
         click: () => {
-          console.log(props.id, selected);
           setSelected(!selected);
+          onClick();
         },
       }}
     />

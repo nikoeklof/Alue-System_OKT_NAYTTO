@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { GetCoordinates } from "./Coordinates";
-import { useMap } from "react-leaflet";
 
-const CreateAreaForm = () => {
+import { GetCoordinates } from "./Variables";
+import { getArea } from "./Variables";
+
+const CreateAreaForm = ({ newArea }) => {
+  console.log(newArea);
   const [formActive, setFormActive] = useState(true);
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-  const [areaOwner, setAreaOwner] = useState("");
 
   return (
     <>
@@ -40,14 +41,19 @@ const CreateAreaForm = () => {
           />
           <button
             type="button"
-            onClick={() =>
-              handleSubmit({
-                areaName,
-                apartmentAmount,
-                areaOwner,
-                coords: GetCoordinates(),
-              })
-            }
+            onClick={() => {
+              const layer = getArea();
+              console.log(layer);
+              layer.oldLayer.remove();
+
+              newArea({
+                id: layer.oldLayer._leaflet_id,
+                areaName: areaName,
+                apartmentAmount: parseInt(apartmentAmount),
+
+                latlngs: layer.coords,
+              });
+            }}
           >
             Tallenna
           </button>
@@ -62,11 +68,6 @@ const CreateAreaForm = () => {
       )}
     </>
   );
-};
-
-const handleSubmit = (props) => {
-  //
-  console.log(props);
 };
 
 export default CreateAreaForm;

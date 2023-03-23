@@ -15,6 +15,7 @@ import { areas } from '../db';
 
 import DeleteAreaModal from './DeleteAreaModal';
 import EditAreaModal from './EditAreaModal';
+import LendAreaModal from './LendAreaModal';
 
 const styles = {
 	selectMenu: {
@@ -76,6 +77,8 @@ const styles = {
 const AreaInfo = (values) => {
 	const [openDel, setOpenDel] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
+	const [openLend, setOpenLend] = useState(false);
+
 	let lent = '';
 	const area = areas.find(a => a.name === values.areaName);
 	const admin = values.admin;
@@ -87,6 +90,23 @@ const AreaInfo = (values) => {
 
 	const handleCloseEditModal = () => {
 		setOpenEdit(false);
+	};
+
+	const handleCloseLendModal = () => {
+		setOpenLend(false);
+	};
+
+	const delProps = {
+		openDel,
+		handleCloseDelModal
+	};
+	const editProps = {
+		openEdit,
+		handleCloseEditModal
+	};
+	const lendProps = {
+		openLend,
+		handleCloseLendModal
 	};
 
 	if (area) {
@@ -134,14 +154,9 @@ const AreaInfo = (values) => {
 					</Grid> :
 					''
 				}
-				<DeleteAreaModal 
-					openDel={openDel} 
-					handleClose={handleCloseDelModal} 
-				/>
-				<EditAreaModal
-					openEdit={openEdit}
-					handleClose={handleCloseEditModal}
-				/>
+				<DeleteAreaModal {...delProps}/>
+				<EditAreaModal {...editProps}/>
+				<LendAreaModal {...lendProps}/>
 				{auntie ?
 					<Grid sx={styles.buttons}>
 						<Button 
@@ -153,6 +168,7 @@ const AreaInfo = (values) => {
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenLend(true)}
 						>
 							Lainaa alue
 						</Button>
@@ -175,7 +191,7 @@ const AreaList = () => {
 	const [open, setOpen] = useState(false);
 
 	// find the actual values from logged user from backend
-	const admin = false;
+	const admin = true;
 	const auntie = true;
 
 	const handleChange = (event) => {

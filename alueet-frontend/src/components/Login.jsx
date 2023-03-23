@@ -37,7 +37,7 @@ const styles = {
 		width: '100px',
 		ml: 0.5		
 	}
-}
+};
 
 const Login = () => {
 	return (
@@ -51,9 +51,9 @@ const Login = () => {
 				Kirjaudu sisään
 			</Typography>
 			<FormControl>
-				<InputLabel htmlFor='email'>Käyttäjätunnus</InputLabel>
+				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
 				<Input 
-					id='email'
+					id='username'
 					variant='filled'
 					sx={styles.input} 
 				/>
@@ -76,6 +76,6 @@ const Login = () => {
 		</FormGroup>
 		
 	)
-}
+};
 
 export default Login;

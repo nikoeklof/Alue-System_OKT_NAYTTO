@@ -69,19 +69,65 @@ const styles = {
 		button: {
 			my: 1, 
 			display: 'block'
+		},
+		menu: {
+			anchor: {
+				vertical: 'top',
+				horizontal: 'right'
+			},
+			transform: {
+				vertical: 'top',
+				horizontal: 'right'
+			},
+			sx: {
+				mt: '45px'
+			}
 		}	
+	},
+	user: {
+		box: {
+			flexGrow: 0
+		},
+		button: {
+			my: 1, 
+			display: 'block'
+		},
+		menu: {
+			sx: {
+				mt: '45px'
+			},
+			transform: {
+				vertical: 'top',
+				horizontal: 'right'
+			},
+			anchor: {
+				vertical: 'top',
+				horizontal: 'right'
+			}
+		},
+		link: {
+			textDecoration: 'none', 
+			color: theme.color.secondary
+		}
 	}
-}
+};
 
 const NavBar = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
+	const [anchorElUser, setAnchorElUser] = useState(null);
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	
+	const handleOpenUserMenu = (event) => {
+		setAnchorElUser(event.currentTarget);
+	};
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
+	};
+
+	const handleCloseUserMenu = () => {
+		setAnchorElUser(null);
 	};
 
 	return (
@@ -92,7 +138,7 @@ const NavBar = () => {
 						variant='h5'
 						noWrap
 						component='a'
-						href='/'
+						href=''
 						sx={styles.normal.logoText}
 					>
 						Aluepöytä
@@ -119,10 +165,10 @@ const NavBar = () => {
 								<Link style={styles.responsive.link}>Palauta</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link style={styles.responsive.link}>Alueiden hallinta</Link>
+								<Link to={'/areaControl'} style={styles.responsive.link}>Alueiden hallinta</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link style={styles.responsive.link}>Käyttäjien hallinta</Link>
+								<Link to={'/userControl'} style={styles.responsive.link}>Käyttäjien hallinta</Link>
 							</MenuItem>
 						</Menu>
 					</Box>
@@ -140,31 +186,39 @@ const NavBar = () => {
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link to='' style={styles.normal.link}>Lainaa</Link>
+							<Link to={'/areaControl'} style={styles.normal.link}>Alueiden hallinta</Link>
 						</Button>
 						<Button
 							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link style={styles.normal.link}>Palauta</Link>
+							<Link to={'/userControl'} style={styles.normal.link}>Käyttäjien hallinta</Link>
 						</Button>
-						<Button
-							onClick={handleCloseNavMenu}
-							sx={styles.normal.button}
+					</Box>
+					<Box sx={styles.user.box}>
+						<Button onClick={handleOpenUserMenu} sx={styles.user.link}>
+							{/* Kirjautuneen käyttäjän nimi tänne */}
+							Username
+						</Button>
+						<Menu
+							sx={styles.normal.menu.sx}
+							id="menu-appbar"
+							anchorEl={anchorElUser}
+							anchorOrigin={styles.normal.menu.anchor}
+							keepMounted
+							transformOrigin={styles.normal.menu.transform}
+							open={Boolean(anchorElUser)}
+							onClose={handleCloseUserMenu}
 						>
-							<Link style={styles.normal.link}>Alueiden hallinta</Link>
-						</Button>
-						<Button
-							onClick={handleCloseNavMenu}
-							sx={styles.normal.button}
-						>
-							<Link style={styles.normal.link}>Käyttäjien hallinta</Link>
-						</Button>
+							<MenuItem >
+								<Typography textAlign="center">Kirjaudu ulos</Typography>
+							</MenuItem>
+						</Menu>
 					</Box>
 				</Toolbar>	
 			</Container>
 		</AppBar>
 	);
-}
+};
 
 export default NavBar;

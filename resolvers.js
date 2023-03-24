@@ -90,7 +90,16 @@ const resolvers = {
                 })
         },
 
-        toggleUserDisabled: async (root, args) => {
+        toggleUserDisabled: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser || !authUser.admin)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
             const user = await User.findById(args.userId)
             user.disabled = !user.disabled
             return user.save()
@@ -227,9 +236,8 @@ const resolvers = {
             return area
         },
 
-        allowAreaRequest: async (root, args) => {
-            /*
-            const authUser = context.authUser
+        allowAreaRequest: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
 
             if (!authUser)
                 throw new GraphQLError("Not authenticated", {
@@ -237,7 +245,6 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
-            */
 
             const guest = await Guest.findById(args.guestId)
 
@@ -256,7 +263,7 @@ const resolvers = {
                 area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(args.guestId), 1)
 
             area.shareState.isShared = true
-            area.shareState.sharedBy = "64181f6f68ff199383d6f9e0"//authUser.id
+            area.shareState.sharedBy = authUser.id
             area.shareState.sharedTo = args.guestId
             area.shareState.shareStartDate = new Date().toJSON()
 
@@ -271,7 +278,16 @@ const resolvers = {
 
             return area
         },
-        returnSharedArea: async (root, args) => {
+        returnSharedArea: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
             const area = await Area.findById(args.areaId)
 
             if (!area)

@@ -16,6 +16,7 @@ import { areas } from '../db';
 import DeleteAreaModal from './DeleteAreaModal';
 import EditAreaModal from './EditAreaModal';
 import LendAreaModal from './LendAreaModal';
+import ReturnAreaModal from './ReturnAreaModal';
 
 const styles = {
 	selectMenu: {
@@ -78,6 +79,7 @@ const AreaInfo = (values) => {
 	const [openDel, setOpenDel] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openLend, setOpenLend] = useState(false);
+	const [openReturn, setOpenReturn] = useState(false);
 
 	let lent = '';
 	const area = areas.find(a => a.name === values.areaName);
@@ -96,6 +98,10 @@ const AreaInfo = (values) => {
 		openLend,
 		handleCloseLendModal: () => setOpenLend(false)
 	};
+	const returnProps = {
+		openReturn,
+		handleCloseReturnModal: () => setOpenReturn(false)
+	}
 
 	if (area) {
 		if (area.ownerId) {
@@ -142,9 +148,6 @@ const AreaInfo = (values) => {
 					</Grid> :
 					''
 				}
-				<DeleteAreaModal {...delProps}/>
-				<EditAreaModal {...editProps}/>
-				<LendAreaModal {...lendProps}/>
 				{auntie ?
 					<Grid sx={styles.buttons}>
 						<Button 
@@ -163,12 +166,17 @@ const AreaInfo = (values) => {
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenReturn(true)}
 						>
 							Palauta alue
 						</Button>
 					</Grid> :
 					''
 				}
+				<DeleteAreaModal {...delProps}/>
+				<EditAreaModal {...editProps}/>
+				<LendAreaModal {...lendProps}/>
+				<ReturnAreaModal {...returnProps} />
 			</Container>
 		)
 	}
@@ -180,7 +188,7 @@ const AreaList = () => {
 
 	// find the actual values from logged user from backend
 	const admin = true;
-	const auntie = true;
+	const auntie = false;
 
 	const handleChange = (event) => {
 		setAreaName(event.target.value);

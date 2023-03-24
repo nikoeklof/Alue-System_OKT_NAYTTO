@@ -20,6 +20,7 @@ const styles = {
 		width: '50%',
 		backgroundColor: theme.bgColor.default,
 		boxShadow: 24,
+		borderRadius: 2,
 		px: 4,
 		py: 3
 	},
@@ -88,7 +89,7 @@ const EditAreaModal = ({...editProps}) => {
 				<Button 
 					sx={styles.button} 
 					variant='contained'
-					onClick={() => editProps.handleCloseEditModal()}
+					onClick={() => handleClose()}
 				>
 					Peruuta
 				</Button>

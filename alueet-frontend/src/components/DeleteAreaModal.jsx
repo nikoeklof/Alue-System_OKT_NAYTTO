@@ -20,6 +20,7 @@ const styles = {
 		width: '40%',
 		backgroundColor: theme.bgColor.default,
 		boxShadow: 24,
+		borderRadius: 2,
 		px: 4,
 		py: 3
 	},
@@ -43,14 +44,18 @@ const DeleteAreaModal = (delProps) => {
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
-				<Typography variant='h6' component='h2' sx={styles.header}>
+				<Typography 
+					variant='h6' 
+					component='h2' 
+					sx={styles.header}
+				>
 					Haluatko varmasti poistaa alueen?
 				</Typography>
-				<div>
+				<Box>
 					<Button 
 						sx={styles.button} 
 						variant='contained'
-						onClick={() => delProps.handleCloseDelModal()}
+						onClick={() => handleClose()}
 					>
 						Peruuta
 					</Button>
@@ -60,7 +65,7 @@ const DeleteAreaModal = (delProps) => {
 					>
 						Poista
 					</Button>
-				</div>
+				</Box>
 			</Box>
 		</Modal>		
 	)

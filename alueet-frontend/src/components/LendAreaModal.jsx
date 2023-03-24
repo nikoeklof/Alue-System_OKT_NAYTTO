@@ -20,6 +20,7 @@ const styles = {
 		width: '50%',
 		backgroundColor: theme.bgColor.default,
 		boxShadow: 24,
+		borderRadius: 2,
 		px: 4,
 		py: 3
 	},
@@ -70,7 +71,7 @@ const LendAreaModal = ({...lendProps}) => {
 				<Button 
 					sx={styles.button} 
 					variant='contained'
-					onClick={() => lendProps.handleCloseLendModal()}
+					onClick={() => handleClose()}
 				>
 					Peruuta
 				</Button>

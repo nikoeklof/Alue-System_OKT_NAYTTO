@@ -13,6 +13,11 @@ import {
 import theme from '../theme';
 import { areas } from '../db';
 
+import DeleteAreaModal from './DeleteAreaModal';
+import EditAreaModal from './EditAreaModal';
+import LendAreaModal from './LendAreaModal';
+import ReturnAreaModal from './ReturnAreaModal';
+
 const styles = {
 	selectMenu: {
 		display: 'flex',
@@ -71,10 +76,32 @@ const styles = {
 };
 
 const AreaInfo = (values) => {
+	const [openDel, setOpenDel] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
+	const [openLend, setOpenLend] = useState(false);
+	const [openReturn, setOpenReturn] = useState(false);
+
 	let lent = '';
 	const area = areas.find(a => a.name === values.areaName);
 	const admin = values.admin;
 	const auntie = values.auntie;
+
+	const delProps = {
+		openDel,
+		handleCloseDelModal: () => setOpenDel(false)
+	};
+	const editProps = {
+		openEdit,
+		handleCloseEditModal: () => setOpenEdit(false)
+	};
+	const lendProps = {
+		openLend,
+		handleCloseLendModal: () => setOpenLend(false)
+	};
+	const returnProps = {
+		openReturn,
+		handleCloseReturnModal: () => setOpenReturn(false)
+	}
 
 	if (area) {
 		if (area.ownerId) {
@@ -107,12 +134,14 @@ const AreaInfo = (values) => {
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenEdit(true)}
 						>
 							Muokkaa aluetta
 						</Button>
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenDel(true)}
 						>
 							Poista alue
 						</Button>
@@ -130,18 +159,24 @@ const AreaInfo = (values) => {
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenLend(true)}
 						>
-								Lainaa alue
+							Lainaa alue
 						</Button>
 						<Button 
 							variant='contained' 
 							sx={styles.areaButton}
+							onClick={() => setOpenReturn(true)}
 						>
 							Palauta alue
 						</Button>
 					</Grid> :
 					''
 				}
+				<DeleteAreaModal {...delProps}/>
+				<EditAreaModal {...editProps}/>
+				<LendAreaModal {...lendProps}/>
+				<ReturnAreaModal {...returnProps} />
 			</Container>
 		)
 	}
@@ -152,8 +187,8 @@ const AreaList = () => {
 	const [open, setOpen] = useState(false);
 
 	// find the actual values from logged user from backend
-	const admin = false;
-	const auntie = true;
+	const admin = true;
+	const auntie = false;
 
 	const handleChange = (event) => {
 		setAreaName(event.target.value);

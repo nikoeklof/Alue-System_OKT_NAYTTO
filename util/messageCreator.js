@@ -1,5 +1,5 @@
-function main(values, type) {
-return `
+function main(area, header) {
+    return `
 <body style="background-color: #e8e8e8; padding: 25">
     <Container style="width: 85%; display:block; text-align: center; margin: 0 auto">
         <Box
@@ -8,98 +8,89 @@ return `
         </Box>
         <div style="padding:20px"></div>
         <p style="color: #454545;font-size: 25px; padding: 5px;font-family: monospace;font-weight: bold">
-            Alueen lainaus pyyntö - Alue tiedot</p>
+            ${header} - Alue tiedot</p>
         <Box style="display: block;border: 1px solid #666666;box-shadow: 1px 3px #bdbdbd">
             <Box style="width: 100%;flex-grow: 1;display: flex;border-radius: 5px;">
                 <Table style="flex-grow: 1;font-size: 18px;">
                     <tbody>
                         <tr>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;font-weight: bold;text-align: right">
                                 Alueen tyyppi:
                             </td>
-                            <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px;text-align: left">
-                                Kaupunki
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px;text-align: left">
+                                ${area.type}
                             </td>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
                                 Kaupunkin nimi:
                             </td>
-                            <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: left">
-                                Mikkeli
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: left">
+                                ${area.cityName}
                             </td>
                         </tr>
                         <tr>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
                                 Kaupungin osa:
                             </td>
-                            <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px;text-align: left">
-                                Kaukola
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px;text-align: left">
+                                ${area.quarter}
                             </td>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
                                 Katuosoite:
                             </td>
-                            <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: left">
-                                Katu 3
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: left">
+                                ${area.address}
                             </td>
                         </tr>
                         <tr>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
                                 Rakennusten määrä:
                             </td>
-                            <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px;text-align: left">
-                                10
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px;text-align: left">
+                                ${area.buildings}
                             </td>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
                                 Omakotitaloja:
                             </td>
-                            <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: left">
-                                1
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: left">
+                                ${area.homes}
                             </td>
                         </tr>
                         <tr>
                             <td
-                                style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0; font-weight: bold;text-align: right">
                                 Kordinaatit:
                             </td>
                             <td
-                                style="padding: 5 0 5 0;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px; font-weight: bold;text-align: right">
+                                style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 1px 1px 1px; font-weight: bold;text-align: right">
                                 (lan / lon):
                             </td>
-                            <td style="padding: 5 0 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: center">
-                                20
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: center">
+                                ${area.map.coordinates.lan}
                             </td>
-                            <td style="padding: 5 0 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: center">
-                                10
+                            <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 1px;text-align: center">
+                                ${area.map.coordinates.lon}
                             </td>
                         </tr>
                     </tbody>
                 </Table>
             </Box>
             <Box style="display:contents">
-                <p
-                    style="font-weight: bold; font-size: 20px;font-family: monospace;text-decoration:underline;text-decoration-thickness: 2px;text-decoration-color: #bdbdbd;">
+                <p style="color: #454545;font-size: 20px; padding: 5px;font-family: monospace;font-weight: bold">
                     Muut tiedot
                 </p>
                 <p style="font-size: 18px;padding: 0 10 0 10">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged.
-                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
-                    passages,
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of
-                    Lorem Ipsum.</p>
+                ${area.misc}</p>
             </Box>
         </Box>
-        <p style="color: #454545;font-size: 25px; padding: 5px;font-family: monospace;font-weight: bold">
-            Huom!</p>
+        <p style="font-weight: bold; font-size: 25px;font-family: monospace;text-decoration:underline;text-decoration-thickness: 2px;text-decoration-color: #bdbdbd">
+            Huom!
+        </p>
         <Box style="display:contents">
             <p style="font-size: 18px;padding: 0 10 0 10">
                 Jos et pyytänyt tätä aluetta lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -114,17 +105,19 @@ return `
             <Table style="flex-grow: 1;font-size: 18px; font-family: monospace">
                 <tr>
                     <td
-                        style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: right;font-weight: bold">
+                        style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: right;font-weight: bold">
                         Puhelinnumero:
                     </td>
-                    <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: left">
+                    <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: left">
                         +000 000 000 0000
                     </td>
+                </tr>
+                <tr>
                     <td
-                        style="padding: 5 5 5 0;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: right;font-weight: bold">
+                        style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: right;font-weight: bold">
                         Sähköpostiosoite:
                     </td>
-                    <td style="padding: 5 0 5 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: left">
+                    <td style="padding: 5;border: 1px solid #bdbdbd;border-width: 0 0 1px 0;text-align: left">
                         loremipsum@mail.net
                     </td>
                 </tr>

@@ -222,7 +222,7 @@ const resolvers = {
 
             area.save()
 
-            mailer(guest.email, 0)
+            mailer(guest.email, area.info, 0)
 
             return area
         },
@@ -267,7 +267,7 @@ const resolvers = {
                     })
                 })
 
-            mailer(requestee.email, 1)
+            mailer(guest.email, area.info, 1)
 
             return area
         },
@@ -305,7 +305,7 @@ const resolvers = {
 
             const guest = await Guest.findById(shareEnd.sharedTo)
 
-            mailer(guest.email, 2)
+            mailer(guest.email, area.info, 2)
 
             return area
         },

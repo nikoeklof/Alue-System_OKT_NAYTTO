@@ -28,12 +28,10 @@ function auth() {
     })
 }
 
-async function main(receiverEmail, values, type) {
+async function main(receiverEmail, area, type) {
     const transporter = auth()
 
     let subject
-    //const html = messageCreator(values, type)
-    const html = `<p>Väliaikainen testi teksti</p>`
 
     switch (type) {
         case 0:
@@ -51,6 +49,8 @@ async function main(receiverEmail, values, type) {
         default:
             return
     }
+    
+    const html = messageCreator(area, subject)
 
     const info = transporter.sendMail({
         from: "Alueet - jako huomautus <" + process.env.EMAIL_SENDER + ">",
@@ -59,7 +59,6 @@ async function main(receiverEmail, values, type) {
         html: html
     })
 
-    console.log("Message sent:", info.messageId)
     transporter.close()
 }
 

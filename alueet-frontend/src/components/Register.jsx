@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import Notification from './Notification';
+import { useNavigate } from 'react-router-dom';
 import { 
 	FormControl, 
 	Input, 
@@ -7,9 +9,8 @@ import {
 	InputLabel,
 	FormGroup
 } from '@mui/material';
-
 import theme from '../theme';
-import { useState } from 'react';
+
 
 
 const styles = {
@@ -46,76 +47,41 @@ const Register = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [message, setMessage] = useState(null);
+	const navigate = useNavigate();
    
-  
-	const [submitted, setSubmitted] = useState(false);
-	const [error, setError] = useState(false);
-   
-  
+	useEffect(() => {
+		setTimeout(() => {
+		  setMessage(null);
+		}, 8000);
+	  }, [message]);
+
 	const handleName = (e) => {
 	  setName(e.target.value);
-	  setSubmitted(false);
 	};
    
-  
 	const handleEmail = (e) => {
 	  setEmail(e.target.value);
-	  setSubmitted(false);
 	};
   
 	const handlePassword = (e) => {
 	  setPassword(e.target.value);
-	  setSubmitted(false);
 	};
    
-  
 	const handleSubmit = (e) => {
 	  e.preventDefault();
 	  if (name === '' || email === '' || password === '') {
-		setError(true);
+		 setMessage({ text:`Tarkista että täytit kaikki kentät.`});
 		console.log("tyhjiä kenttiä")
 	  } else {
-		setSubmitted(true);
-		setError(false);
 		console.log("rekisteröinti onnistui. käyttäjätunnus: "+name+" sposti: "+email+" salasana: "+password)
+		setMessage({ text:`Kirjautuminen onnistui. Siirrytään kirjautumissivulle.`});
+		setTimeout(() => {
+			navigate("/Login");
+		}, 3000);
 	  }
 	};
    
-  
-	const successMessage = () => {
-	  return (
-		<div  style={{
-			display: submitted ? '' : 'none',
-		  }}>
-		<Typography 
-				variant='h9'
-				noWrap
-				sx={styles.text}
-			>
-				Käyttäjä {name} lisätty onnistuneesti.
-			</Typography>
-			</div>	
-	  );
-	};
-   
-  
-	const errorMessage = () => {
-	  return (
-		<div  style={{
-			display: error ? '' : 'none',
-		  }}>
-		<Typography 
-				variant='h9'
-				noWrap
-				sx={styles.text}
-			>
-				Tyhjiä kenttiä
-		</Typography>
-		</div>
-	  );
-	};
-
-
 	return (
 		
 		<FormGroup  sx={styles.form}>
@@ -157,8 +123,7 @@ const Register = () => {
 			>
 				Rekisteröidy
 			</Button>
-			{errorMessage()}
-        	{successMessage()}  		
+			<Notification message={message}/>				
 		</FormGroup>
 		
 	)

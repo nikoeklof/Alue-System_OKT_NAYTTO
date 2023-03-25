@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import Notification from './Notification';
+import { useNavigate } from 'react-router-dom';
 import { 
 	FormControl, 
 	Input, 
@@ -7,8 +9,9 @@ import {
 	InputLabel,
 	FormGroup
 } from '@mui/material';
-
 import theme from '../theme';
+
+
 
 const styles = {
 	form: {
@@ -39,10 +42,45 @@ const styles = {
 	}
 };
 
+
 const Login = () => {
+	const [username, setUserName] = useState('');
+	const [password, setPassword] = useState('');
+	const [message, setMessage] = useState(null);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		setTimeout(() => {
+		  setMessage(null);
+		}, 8000);
+	  }, [message]);
+
+	const handleUserName = (e) => {
+		setUserName(e.target.value);
+	  };
+	
+	const handlePassword = (e) => {
+		setPassword(e.target.value);
+	  };
+	
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (username === '' || password === '') {
+		  setMessage({ text:`Virheellinen käyttäjätunnus tai salasana.`});
+		  console.log("tyhjiä kenttiä")
+		} else {
+		  console.log("kirjautuminen onnistui. käyttäjätunnus: "+username+" salasana: "+password)
+		  setMessage({ text:`Kirjautuminen onnistui. Siirrytään alueiden hallintaan.`});
+		  setTimeout(() => {
+			navigate("/AreaControl");
+		}, 3000);
+		}
+	};
+	
+	
+	  
 	return (
 		<FormGroup  sx={styles.form}>
-			
 			<Typography 
 				variant='h5'
 				noWrap
@@ -52,7 +90,7 @@ const Login = () => {
 			</Typography>
 			<FormControl>
 				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
-				<Input 
+				<Input onChange={handleUserName}
 					id='username'
 					variant='filled'
 					sx={styles.input} 
@@ -60,19 +98,19 @@ const Login = () => {
 			</FormControl>
 			<FormControl>
 				<InputLabel htmlFor='password'>Salasana</InputLabel>
-				<Input
+				<Input onChange={handlePassword} 
 					id='password'
 					variant='filled'
 					sx={styles.input}
 				/>
 			</FormControl>
-			<Button
+			<Button onClick={handleSubmit}
 				variant='contained'
 				sx={styles.button}
 			>
 				Kirjaudu
 			</Button>
-		
+			<Notification message={message}/>	 	
 		</FormGroup>
 		
 	)

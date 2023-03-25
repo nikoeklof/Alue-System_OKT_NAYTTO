@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 
 import theme from '../theme';
+import { useState } from 'react';
+
 
 const styles = {
 	form: {
@@ -39,10 +41,85 @@ const styles = {
 	}
 };
 
+
 const Register = () => {
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+   
+  
+	const [submitted, setSubmitted] = useState(false);
+	const [error, setError] = useState(false);
+   
+  
+	const handleName = (e) => {
+	  setName(e.target.value);
+	  setSubmitted(false);
+	};
+   
+  
+	const handleEmail = (e) => {
+	  setEmail(e.target.value);
+	  setSubmitted(false);
+	};
+  
+	const handlePassword = (e) => {
+	  setPassword(e.target.value);
+	  setSubmitted(false);
+	};
+   
+  
+	const handleSubmit = (e) => {
+	  e.preventDefault();
+	  if (name === '' || email === '' || password === '') {
+		setError(true);
+		console.log("tyhjiä kenttiä")
+	  } else {
+		setSubmitted(true);
+		setError(false);
+		console.log("rekisteröinti onnistui. käyttäjätunnus: "+name+" sposti: "+email+" salasana: "+password)
+	  }
+	};
+   
+  
+	const successMessage = () => {
+	  return (
+		<div  style={{
+			display: submitted ? '' : 'none',
+		  }}>
+		<Typography 
+				variant='h9'
+				noWrap
+				sx={styles.text}
+			>
+				Käyttäjä {name} lisätty onnistuneesti.
+			</Typography>
+			</div>	
+	  );
+	};
+   
+  
+	const errorMessage = () => {
+	  return (
+		<div  style={{
+			display: error ? '' : 'none',
+		  }}>
+		<Typography 
+				variant='h9'
+				noWrap
+				sx={styles.text}
+			>
+				Tyhjiä kenttiä
+		</Typography>
+		</div>
+	  );
+	};
+
+
 	return (
+		
 		<FormGroup  sx={styles.form}>
-			
+		
 			<Typography 
 				variant='h5'
 				noWrap
@@ -52,7 +129,7 @@ const Register = () => {
 			</Typography>
 			<FormControl>
 				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
-				<Input 
+				<Input onChange={handleName}
 					id='username'
 					variant='filled'
 					sx={styles.input} 
@@ -60,7 +137,7 @@ const Register = () => {
 			</FormControl>
 			<FormControl>
 				<InputLabel htmlFor='email'>Sähköposti</InputLabel>
-				<Input 
+				<Input onChange={handleEmail}
 					id='email'
 					variant='filled'
 					sx={styles.input} 
@@ -68,19 +145,20 @@ const Register = () => {
 			</FormControl>
 			<FormControl>
 				<InputLabel htmlFor='password'>Salasana</InputLabel>
-				<Input
+				<Input onChange={handlePassword}
 					id='password'
 					variant='filled'
 					sx={styles.input}
 				/>
 			</FormControl>
-			<Button
+			<Button onClick={handleSubmit}
 				variant='contained'
 				sx={styles.button}
 			>
 				Rekisteröidy
 			</Button>
-		
+			{errorMessage()}
+        	{successMessage()}  		
 		</FormGroup>
 		
 	)

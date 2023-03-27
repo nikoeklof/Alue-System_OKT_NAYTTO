@@ -4,6 +4,8 @@ Toiminnallisuus:
 
 Käyttäjä voi luoda alueen [X]
 
+Alueen voi poistaa [X]
+
 Käyttäjä voi muokata olemassa olevaa aluetta [ ]
 
 Alueen voi merkata lainatuksi [ ]

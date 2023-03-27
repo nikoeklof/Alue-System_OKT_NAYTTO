@@ -19,6 +19,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 import EditUserModal from './EditUserModal';
 import DeleteWarningModal from './DeleteWarningModal';
+import CreateUserModal from './CreateUserModal';
+
 import theme from '../theme';
 import { users } from '../db';
 
@@ -33,6 +35,11 @@ const styles = {
 	},
 	button: {
 		m: 1
+	},
+	form: {
+		mt: 2,
+		width: '100%', 
+		overflow: 'hidden'
 	}
 };
 
@@ -165,6 +172,7 @@ const UserControl = () => {
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
+	const [openCreate, setCreateOpen] = useState(false);
 
 	const handleChangePage = (newPage) => {
 		setPage(newPage);
@@ -183,15 +191,25 @@ const UserControl = () => {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti poistaa käyttäjän?'
-	}
+	};
+	const createProps = {
+		openCreate,
+		handleCreateModalClose: () => setCreateOpen(false)
+	};
 
 	return (
 		<Container>
 			<Typography variant='h6' sx={styles.mainText}>
 				Käyttäjien hallinta
 			</Typography>
-
-			<Paper sx={{ width: '100%', overflow: 'hidden' }}>
+			<Button 
+				variant='contained'
+				sx={styles.button}
+				onClick={() => setCreateOpen(true)}
+			>
+				Luo Käyttäjä
+			</Button>
+			<Paper sx={styles.form}>
 				<TableContainer sx={{ maxHeight: 440 }}>
 					<Table stickyHeader aria-label='sticky label'>
 						<TableHead>
@@ -218,7 +236,7 @@ const UserControl = () => {
 										setDelOpen
 									};
 									return (
-										<Row key={user.email} {...rowProps} />
+										<Row key={user.id} {...rowProps} />
 									)
 								})	
 							}
@@ -238,6 +256,7 @@ const UserControl = () => {
 			</Paper>
 			<EditUserModal {...editProps} />
 			<DeleteWarningModal {...delProps} />
+			<CreateUserModal {...createProps} />
 		</Container>
 	)
 };

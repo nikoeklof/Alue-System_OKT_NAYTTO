@@ -33,7 +33,7 @@ const styles = {
 	}
 };
 
-const DeleteAreaModal = (delProps) => {
+const DeleteWarningModal = ({...delProps}) => {
 
 	const handleClose = () => delProps.handleCloseDelModal();
 
@@ -49,7 +49,7 @@ const DeleteAreaModal = (delProps) => {
 					component='h2' 
 					sx={styles.header}
 				>
-					Haluatko varmasti poistaa alueen?
+					{delProps.warningText}
 				</Typography>
 				<Box>
 					<Button 
@@ -71,4 +71,4 @@ const DeleteAreaModal = (delProps) => {
 	)
 };
 
-export default DeleteAreaModal;
+export default DeleteWarningModal;

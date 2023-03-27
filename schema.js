@@ -63,10 +63,10 @@ const typeDefs = gql`
     allGuests: [Guest]!
 
     areaCount: Int!
-    allAreas: [Area]!
+    allAreas (type: String, cityName: String, quarter: String): [Area]!
 
     userCount: Int!
-    allUsers: [User]!
+    allUsers (disabled: Boolean, admin: Boolean): [User]!
 
     me: User
   }
@@ -80,7 +80,9 @@ const typeDefs = gql`
     makeRequest (areaId: ID!, guestEmail: String!): Area
 
     createUser (username: String!, password: String!, guestId: String!): User
+    editUser (username: String, password: String): User
     toggleUserDisabled (userId: ID!): User
+    toggleUserAdmin (userId: ID!): User
     allowAreaRequest (areaId: ID!, guestId: ID!): Area
     returnSharedArea (areaId: ID!): Area
 

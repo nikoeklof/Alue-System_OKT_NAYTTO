@@ -35,7 +35,8 @@ startStandaloneServer(server, {
     if (auth) {
       const decodedToken = jwt.verify(auth, process.env.JWT_SECRET)
       const authUser = await User.findById(decodedToken.id)
-      return { authUser }
+      if (!authUser.disabled)
+        return { authUser }
     }
   },
 }).then(({ url }) => {

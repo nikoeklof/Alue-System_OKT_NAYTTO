@@ -14,11 +14,36 @@ const resolvers = {
         guestCount: () => Guest.collection.countDocuments(),
         userCount: () => User.collection.countDocuments(),
         allGuests: async () => await Guest.find({}),
-        allAreas: async () => await Area.find({}),
-        allUsers: async () => await User.find({}),
+        allAreas: async (root, args) => {
+            switch (Object.keys(args).length) {
+                case 1:
+                    if ("type" in args)
+                        return await Area.find({ "info.type": args.type })
 
-        me: (root, args, context) => {
-            return context.authUser
+                    else if ("cityName" in args)
+                        return await Area.find({ "info.cityName": args.cityName })
+
+                    return await Area.find({ "info.quarter": args.quarter })
+
+                case 2:
+                    if ("type" in args)
+                        if ("cityName" in args)
+                            return await Area.find({ "info.type": args.type, "info.cityName": args.cityName })
+                        else
+                            return await Area.find({ "info.type": args.type, "info.quarter": args.quarter })
+
+                    return await Area.find({ "info.cityName": args.cityName, "info.quarter": args.quarter })
+
+                case 3:
+                    return await Area.find({ "info.type": args.type, "info.cityName": args.cityName, "info.quarter": args.quarter })
+
+                default:
+                    return await Area.find({})
+            }
+        },
+        allUsers: async (root, args) => await User.find(args),
+        me: (root, args, contextValue) => {
+            return contextValue.authUser
         }
     },
     Guest: {
@@ -67,10 +92,10 @@ const resolvers = {
 
         createUser: async (root, args) => {
             if (args.username.length < 3)
-                throw new UserInputError("Username is too short! Must have at least minimum 3 letters")
+                throw new UserInputError("Username must have at least minimum 3 letters")
 
             if (args.password.length < 5)
-                throw new UserInputError("Password is too short Must have at least minimum 5 letters")
+                throw new UserInputError("Password must have at least minimum 5 letters")
 
             const guest = await Guest.findById(args.guestId)
 
@@ -105,7 +130,31 @@ const resolvers = {
             return user.save()
         },
 
-        createArea: (root, args) => {
+        toggleUserAdmin: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
+            const user = await User.findById(args.userId)
+            user.admin = !user.admin
+            return user.save()
+        },
+
+        createArea: (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser || !authUser.admin)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
             const area = new Area({
                 info: {
                     type: args.type,
@@ -135,7 +184,16 @@ const resolvers = {
                 })
         },
 
-        deleteArea: async (root, args) => {
+        deleteArea: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser || !authUser.admin)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
             return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
                     throw new UserInputError(error.message, {
@@ -144,7 +202,16 @@ const resolvers = {
                 })
         },
 
-        editArea: async (root, args) => { //Pystyykö tekee paremmin?
+        editArea: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser || !authUser.admin)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
             const area = await Area.findById(args.areaId)
 
             if (!area)
@@ -181,6 +248,38 @@ const resolvers = {
                 area.info.misc = args.misc
 
             return area.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
+        },
+
+        editUser: async (root, args, contextValue) => {
+            const authUser = contextValue.authUser
+
+            if (!authUser)
+                throw new GraphQLError("Not authenticated", {
+                    extensions: {
+                        code: "BAD_USER_INPUT",
+                    }
+                })
+
+            const user = await Area.findById(authUser._id)
+
+            if (args.username)
+                if (args.username.length < 3)
+                    throw new UserInputError("Username must have at least minimum 3 letters")
+                else
+                    user.username = args.username
+
+            if (args.password)
+                if (args.password.length < 5)
+                    throw new UserInputError("Password must have at least minimum 5 letters")
+                else
+                    user.password = await bcrypt.hash(args.password, 10)
+
+            return user.save()
                 .catch(error => {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,

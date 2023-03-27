@@ -4,10 +4,8 @@
 - [X] alueiden lainaaminen
 - [X] alueiden palautus
 - [X] tiedon haku tietovarastolta
-- [ ] alueiden filtteröinti
+- [X] alueiden filtteröinti
 - [X] kirjautuminen
 - [X] alueiden poisto
-- [1/2] tiedon muokkaus
-- [ ] kartta näkymä
-- [ ] kommunikointi back- ja front-endin kanssa
-- [ ] Email pyynnön aikana
+- [X] tiedon muokkaus
+- [X] Email pyynnön aikana

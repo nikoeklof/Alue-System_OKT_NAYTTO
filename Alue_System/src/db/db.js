@@ -2,6 +2,7 @@ const initialAreas = [
   {
     id: 134,
     areaName: "Siekkilä",
+    neighborhood: "Test",
     apartmentAmount: 50,
     latlngs: [
       {
@@ -25,6 +26,7 @@ const initialAreas = [
   {
     id: 156,
     areaName: "Lehmuskylä",
+    neighborhood: "Test",
     apartmentAmount: 50,
     latlngs: [
       {
@@ -48,6 +50,7 @@ const initialAreas = [
   {
     id: 171,
     areaName: "Kaukola",
+    neighborhood: "Test",
     apartmentAmount: 50,
     latlngs: [
       {

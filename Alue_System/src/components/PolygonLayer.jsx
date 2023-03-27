@@ -18,10 +18,11 @@ const PolygonLayer = ({
           <PolygonArea
             key={area.id}
             props={area}
+            selectedArea={selectedArea}
             positions={positions}
             onClick={() => {
-              if (selectedArea) clearSelected();
-              setSelectedArea(area);
+              if (selectedArea?.id === area.id) return clearSelected();
+              else setSelectedArea(area);
             }}
           />
         );

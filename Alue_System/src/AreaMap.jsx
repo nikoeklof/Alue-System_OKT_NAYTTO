@@ -6,16 +6,24 @@ import AreaContext from "./components/AreaContext";
 
 const AreaMap = () => {
   const [areas, setAreas] = useState(initialAreas);
-  const [selectedArea, setSelectedArea] = useState({});
+  const [selectedArea, setSelectedArea] = useState(undefined);
+
+  useEffect(() => {
+    console.log(areas);
+  }, [areas]);
   const addArea = (props) => {
     setAreas([...areas, props]);
   };
   const clearSelected = () => {
-    setSelectedArea({});
+    setSelectedArea(undefined);
   };
-  useEffect(() => {
-    console.log(selectedArea);
-  }, [selectedArea, setSelectedArea]);
+  const removeArea = (props) => {
+    const areaList = [];
+    areas.forEach((area) => {
+      if (area.id !== props.id) areaList.push(area);
+    });
+    setAreas([...areaList]);
+  };
   return (
     <div>
       <LeafletMap
@@ -24,8 +32,8 @@ const AreaMap = () => {
         setSelectedArea={setSelectedArea}
         clearSelected={clearSelected}
       />
-      <CreateAreaForm newArea={addArea} />
-      <AreaContext area={selectedArea} />
+      <CreateAreaForm newArea={addArea} clearSelected={clearSelected} />
+      <AreaContext area={selectedArea} removeArea={removeArea} />
     </div>
   );
 };

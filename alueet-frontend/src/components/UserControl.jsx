@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
+import EditUserModal from './EditUserModal';
 import theme from '../theme';
 import { users } from '../db';
 
@@ -65,11 +66,11 @@ const columns = [
 	},
 ];
 
-const Row = (values) => {
-	const user = values.user;
+const Row = ({...rowProps}) => {
+	const user = rowProps.user;
 	const [open, setOpen] = useState(false);
 	const areaArray = [];
-
+	
 	for (const area in user.areas) {
 		areaArray.push(user.areas[area]);
 	}
@@ -78,7 +79,7 @@ const Row = (values) => {
 		<Fragment>
 			<TableRow 
 				hover 
-				key={user.email}
+				key={user.id}
 				sx={{ '& > *': { borderBottom: 'unset' } }}
 			>
 				<TableCell>
@@ -119,24 +120,27 @@ const Row = (values) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{areaArray.map((area => (
-										<TableRow key={user.areas.id}>
-											<TableCell 
-												component='th' 
-												scope='row'
-											>
-												Fetch from backend
-											</TableCell>
-											<TableCell>
-												{area}
-											</TableCell>
-										</TableRow>
-									)))}
+									{areaArray.map((area => {
+										return (
+											<TableRow key={user.areas.id}>
+												<TableCell 
+													component='th' 
+													scope='row'
+												>
+													Fetch from backend
+												</TableCell>
+												<TableCell>
+													{area}
+												</TableCell>
+											</TableRow>
+										)
+									}))}
 								</TableBody>
 							</Table>
 							<Button 
 								variant='contained'
 								sx={styles.button}
+								onClick={() => rowProps.setEditOpen(true)}
 							>
 								Muokkaa Käyttäjää
 							</Button>
@@ -151,14 +155,20 @@ const Row = (values) => {
 const UserControl = () => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [openEdit, setEditOpen] = useState(false);
 
-	const handleChangePage = (event, newPage) => {
+	const handleChangePage = (newPage) => {
 		setPage(newPage);
 	};
 
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
+	};
+
+	const editProps = {
+		openEdit,
+		handleEditModalClose: () => setEditOpen(false)
 	};
 
 	return (
@@ -187,9 +197,15 @@ const UserControl = () => {
 						<TableBody>
 							{users
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((user) => (
-									<Row key={user.id} user={user} />
-								))	
+								.map((user) => {
+									const rowProps = {
+										user,
+										setEditOpen
+									};
+									return (
+										<Row key={user.email} {...rowProps} />
+									)
+								})	
 							}
 						</TableBody>
 					</Table>
@@ -205,8 +221,8 @@ const UserControl = () => {
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<EditUserModal {...editProps} />
 		</Container>
-		
 	)
 };
 

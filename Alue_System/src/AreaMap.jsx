@@ -8,7 +8,7 @@ import EditArea from "./components/EditArea";
 const AreaMap = () => {
   const [areas, setAreas] = useState(initialAreas);
   const [selectedArea, setSelectedArea] = useState(undefined);
-
+  const [formActive, setFormActive] = useState(false);
   useEffect(() => {
     console.log(areas);
   }, [areas]);
@@ -49,8 +49,14 @@ const AreaMap = () => {
         selectedArea={selectedArea}
         setSelectedArea={setSelectedArea}
         clearSelected={clearSelected}
+        formActive={formActive}
       />
-      <CreateAreaForm newArea={addArea} clearSelected={clearSelected} />
+      <CreateAreaForm
+        newArea={addArea}
+        clearSelected={clearSelected}
+        formActive={formActive}
+        setFormActive={setFormActive}
+      />
       <AreaContext area={selectedArea} removeArea={removeArea} />
       <EditArea area={selectedArea} onSave={updateArea} />
     </div>

@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 import { GetCoordinates } from "./Variables";
 import { getArea } from "./Variables";
 
-const CreateAreaForm = ({ newArea, clearSelected }) => {
-  const [formActive, setFormActive] = useState(true);
+const CreateAreaForm = ({
+  newArea,
+  clearSelected,
+  setFormActive,
+  formActive,
+}) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
   const [areaNeighborhood, setAreaNeighborhood] = useState("");

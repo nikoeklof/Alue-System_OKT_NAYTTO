@@ -3,7 +3,7 @@ import { FeatureGroup } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import { setArea, setCoordinates } from "./Variables";
 
-const DrawComponent = () => {
+const DrawComponent = ({ formActive }) => {
   return (
     <FeatureGroup>
       <EditControl
@@ -15,6 +15,7 @@ const DrawComponent = () => {
           polyline: false,
           marker: false,
           circlemarker: false,
+          polygon: !formActive,
         }}
         onCreated={function (e) {
           const { layer } = e;

@@ -8,6 +8,7 @@ export const LeafletMap = ({
   setSelectedArea,
   selectedArea,
   clearSelected,
+  formActive,
 }) => {
   return (
     <div>
@@ -23,7 +24,7 @@ export const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Pane name="areaPane" style={{ zIndex: 100 }}>
-          <DrawComponent />
+          <DrawComponent formActive={formActive} />
         </Pane>
         <PolygonLayer
           areas={areas}

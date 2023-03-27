@@ -45,8 +45,12 @@ const styles = {
 const CreateUserModal = ({...createProps}) => {
 	const handleClose = () => createProps.handleCreateModalClose();
 
-	const handleChange = () => {
-		console.log('change')
+	const handleChangeAdmin = () => {
+		console.log('change admin')
+	};
+
+	const handleChangeGuest = () => {
+		console.log('change guest')
 	};
 
 	return (
@@ -82,8 +86,13 @@ const CreateUserModal = ({...createProps}) => {
 							sx={styles.input}
 						/>
 						<FormControlLabel 
-							control={<Switch onChange={handleChange}/>}
+							control={<Switch onChange={handleChangeAdmin}/>}
 							label='Admin'
+							sx={styles.input}
+						/>
+						<FormControlLabel 
+							control={<Switch onChange={handleChangeGuest}/>}
+							label='Vieras'
 							sx={styles.input}
 						/>
 					</FormControl>

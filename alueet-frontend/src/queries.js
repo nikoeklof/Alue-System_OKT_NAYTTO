@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 
 //  -----  querys  -----
@@ -15,7 +15,7 @@ query {
     }
   }
 }
-`
+`;
 
 export const ALL_GUESTS = gql`
 query {
@@ -26,7 +26,7 @@ query {
     areas
   }
 }
-`
+`;
 
 export const ALL_AREAS = gql`
 query {
@@ -87,25 +87,25 @@ query {
     }
   }
 }
-`
+`;
 
 export const GUEST_COUNT = gql`
 query {
     guestCount
 }
-`
+`;
 
 export const AREA_COUNT = gql`
 query {
     areaCount
 }
-`
+`;
 
 export const USER_COUNT = gql`
 query {
     userCount
 }
-`
+`;
 
 
 //  -----  mutations  -----
@@ -119,7 +119,7 @@ mutation createGuest($email: String!, $name: String!) {
     name
   }
 }
-`
+`;
 //needs testing
 export const MAKE_REQUEST = gql`
 mutation makeRequest($areaId: ID!, $guestEmail: String!) {
@@ -130,7 +130,7 @@ mutation makeRequest($areaId: ID!, $guestEmail: String!) {
     shareState
   }
 }
-`
+`;
 
 export const CREATE_USER = gql`
 mutation createUser($username: String!, $password: String!, $guestId: String!) {
@@ -146,7 +146,7 @@ mutation createUser($username: String!, $password: String!, $guestId: String!) {
     }
   }
 }
-`
+`;
 
 export const TOGGLE_USER_DISABLED = gql`
 mutation toggleUserDisabled($userId: ID!) {
@@ -156,7 +156,7 @@ mutation toggleUserDisabled($userId: ID!) {
     id
   }
 }
-`
+`;
 
 //needs testing
 export const ALLOW_AREA_REQUEST = gql`
@@ -168,7 +168,7 @@ mutation allowAreaRequest($areaId: ID!, $guestId: ID!) {
     id
   }
 }
-`
+`;
 //Needs testing
 export const RETURN_SHARED_AREA = gql`
 mutation returnSharedArea($areaId: ID!) {
@@ -178,7 +178,7 @@ mutation returnSharedArea($areaId: ID!) {
     id
   }
 }
-`
+`;
 //needs testing
 export const CREATE_AREA = gql`
 mutation createArea($type: String!, $cityName: String!, $quarter: String!, $address: String!, $buildings: Int!, $homes: Int!, $zone: String!, $lan: String!, $lon: String!, $misc: String) {
@@ -197,7 +197,7 @@ mutation createArea($type: String!, $cityName: String!, $quarter: String!, $addr
     id
   }
 }
-`
+`;
 
 
 export const EDIT_AREA = gql`
@@ -218,7 +218,7 @@ mutation editArea($areaId: ID!, $type: String, $cityName: String, $quarter: Stri
     id
   }
 }
-`
+`;
 //needs testing
 export const DELETE_AREA = gql`
 mutation deleteArea($areaId: ID!) {
@@ -228,7 +228,7 @@ mutation deleteArea($areaId: ID!) {
     id
   }
 }
-`
+`;
 //needs testing
 export const LOGIN = gql`
 mutation login($username: String!, $password: String!) {
@@ -239,4 +239,4 @@ mutation login($username: String!, $password: String!) {
     value
   }
 }
-`
+`;

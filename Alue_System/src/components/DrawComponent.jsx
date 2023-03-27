@@ -17,7 +17,7 @@ const DrawComponent = () => {
           circlemarker: false,
         }}
         onCreated={function (e) {
-          const { layerType, layer } = e;
+          const { layer } = e;
 
           const latlngs = layer._latlngs[0];
 

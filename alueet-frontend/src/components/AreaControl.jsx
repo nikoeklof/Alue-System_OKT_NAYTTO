@@ -13,7 +13,7 @@ import {
 import theme from '../theme';
 import { areas } from '../db';
 
-import DeleteAreaModal from './DeleteAreaModal';
+import DeleteWarningModal from './DeleteWarningModal';
 import EditAreaModal from './EditAreaModal';
 import LendAreaModal from './LendAreaModal';
 import ReturnAreaModal from './ReturnAreaModal';
@@ -88,7 +88,8 @@ const AreaInfo = (values) => {
 
 	const delProps = {
 		openDel,
-		handleCloseDelModal: () => setOpenDel(false)
+		handleCloseDelModal: () => setOpenDel(false),
+		warningText: 'Haluatko varmasti poistaa alueen?'
 	};
 	const editProps = {
 		openEdit,
@@ -173,7 +174,7 @@ const AreaInfo = (values) => {
 					</Grid> :
 					''
 				}
-				<DeleteAreaModal {...delProps}/>
+				<DeleteWarningModal {...delProps}/>
 				<EditAreaModal {...editProps}/>
 				<LendAreaModal {...lendProps}/>
 				<ReturnAreaModal {...returnProps} />

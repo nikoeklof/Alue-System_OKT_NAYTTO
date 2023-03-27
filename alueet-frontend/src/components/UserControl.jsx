@@ -18,6 +18,7 @@ import {
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 import EditUserModal from './EditUserModal';
+import DeleteWarningModal from './DeleteWarningModal';
 import theme from '../theme';
 import { users } from '../db';
 
@@ -144,6 +145,13 @@ const Row = ({...rowProps}) => {
 							>
 								Muokkaa Käyttäjää
 							</Button>
+							<Button 
+								variant='contained'
+								sx={styles.button}
+								onClick={() => rowProps.setDelOpen(true)}
+							>
+								Poista Käyttäjä
+							</Button>
 						</Box>
 					</Collapse>
 				</TableCell>
@@ -156,6 +164,7 @@ const UserControl = () => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openEdit, setEditOpen] = useState(false);
+	const [openDel, setDelOpen] = useState(false);
 
 	const handleChangePage = (newPage) => {
 		setPage(newPage);
@@ -170,6 +179,11 @@ const UserControl = () => {
 		openEdit,
 		handleEditModalClose: () => setEditOpen(false)
 	};
+	const delProps = {
+		openDel,
+		handleCloseDelModal: () => setDelOpen(false),
+		warningText: 'Haluatko varmasti poistaa käyttäjän?'
+	}
 
 	return (
 		<Container>
@@ -200,7 +214,8 @@ const UserControl = () => {
 								.map((user) => {
 									const rowProps = {
 										user,
-										setEditOpen
+										setEditOpen,
+										setDelOpen
 									};
 									return (
 										<Row key={user.email} {...rowProps} />
@@ -222,6 +237,7 @@ const UserControl = () => {
 				/>
 			</Paper>
 			<EditUserModal {...editProps} />
+			<DeleteWarningModal {...delProps} />
 		</Container>
 	)
 };

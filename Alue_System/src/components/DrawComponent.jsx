@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { FeatureGroup } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
-import { setArea, setCoordinates } from "./Variables";
+import { setArea } from "./Variables";
 
 const DrawComponent = ({ formActive }) => {
   return (

@@ -42,10 +42,9 @@ const resolvers = {
             }
         },
         allUsers: async (root, args) => await User.find(args),
-        me: (root, args, contextValue) => {
-            return contextValue.authUser
-        }
+        me: (root, args, contextValue) => contextValue.authUser
     },
+
     Guest: {
         email: (root) => {
             return root.email
@@ -57,6 +56,7 @@ const resolvers = {
             return root.areas
         }
     },
+
     User: {
         username: (root) => {
             return root.username
@@ -68,6 +68,7 @@ const resolvers = {
             return await Guest.findById(root.guestId)
         },
     },
+
     Area: {
         info: (root) => {
             return root.info
@@ -79,6 +80,7 @@ const resolvers = {
             return root.shareHistory
         }
     },
+    
     Mutation: {
         createGuest: (root, args) => {
             const guest = new Guest({ ...args })
@@ -116,6 +118,7 @@ const resolvers = {
         },
 
         toggleUserDisabled: async (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser || !authUser.admin)
@@ -124,6 +127,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             const user = await User.findById(args.userId)
             user.disabled = !user.disabled
@@ -131,6 +135,7 @@ const resolvers = {
         },
 
         toggleUserAdmin: async (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser)
@@ -139,6 +144,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             const user = await User.findById(args.userId)
             user.admin = !user.admin
@@ -146,6 +152,7 @@ const resolvers = {
         },
 
         createArea: (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser || !authUser.admin)
@@ -154,6 +161,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             const area = new Area({
                 info: {
@@ -185,6 +193,7 @@ const resolvers = {
         },
 
         deleteArea: async (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser || !authUser.admin)
@@ -193,6 +202,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
@@ -203,6 +213,7 @@ const resolvers = {
         },
 
         editArea: async (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser || !authUser.admin)
@@ -211,6 +222,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             const area = await Area.findById(args.areaId)
 
@@ -265,7 +277,7 @@ const resolvers = {
                     }
                 })
 
-            const user = await Area.findById(authUser._id)
+            const user = await User.findById(authUser._id)
 
             if (args.username)
                 if (args.username.length < 3)
@@ -336,6 +348,7 @@ const resolvers = {
         },
 
         allowAreaRequest: async (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser)
@@ -344,6 +357,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             const guest = await Guest.findById(args.guestId)
 
@@ -377,7 +391,9 @@ const resolvers = {
 
             return area
         },
+
         returnSharedArea: async (root, args, contextValue) => {
+            /*
             const authUser = contextValue.authUser
 
             if (!authUser)
@@ -386,6 +402,7 @@ const resolvers = {
                         code: "BAD_USER_INPUT",
                     }
                 })
+            */
 
             const area = await Area.findById(args.areaId)
 

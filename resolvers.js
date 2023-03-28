@@ -74,6 +74,9 @@ const resolvers = {
         admin: (root) => {
             return root.admin
         },
+        disabled: (root) => {
+            return root.disabled
+        },
         guestAccount: async (root) => {
             return await Guest.findById(root.guestId)
         },
@@ -259,7 +262,7 @@ const resolvers = {
             const user = await User.findOne({ username: args.username })
 
             if (!user)
-                throw new UserInputError("User not found")
+                throw new AuthenticationError("User not found")
 
             if (user.disabled)
                 throw new AuthenticationError("User account is disabled")

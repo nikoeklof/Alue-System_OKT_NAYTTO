@@ -8,6 +8,16 @@ const User = require("./models/user")
 
 const mailer = require("./util/mail")
 
+const contextCheck = (user, hasToBeAdmin) => {
+    if (!user)
+        throw new AuthenticationError("Not authenticated")
+
+    if (hasToBeAdmin && !user.admin)
+        throw new AuthenticationError("User has to be admin")
+
+    return user
+}
+
 const resolvers = {
     Query: {
         areaCount: () => Area.collection.countDocuments(),
@@ -20,7 +30,7 @@ const resolvers = {
                     if ("type" in args)
                         return await Area.find({ "info.type": args.type })
 
-                    else if ("cityName" in args)
+                    if ("cityName" in args)
                         return await Area.find({ "info.cityName": args.cityName })
 
                     return await Area.find({ "info.quarter": args.quarter })
@@ -80,7 +90,7 @@ const resolvers = {
             return root.shareHistory
         }
     },
-    
+
     Mutation: {
         createGuest: (root, args) => {
             const guest = new Guest({ ...args })
@@ -118,16 +128,7 @@ const resolvers = {
         },
 
         toggleUserDisabled: async (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser || !authUser.admin)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, true)
 
             const user = await User.findById(args.userId)
             user.disabled = !user.disabled
@@ -135,16 +136,7 @@ const resolvers = {
         },
 
         toggleUserAdmin: async (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, false)
 
             const user = await User.findById(args.userId)
             user.admin = !user.admin
@@ -152,16 +144,7 @@ const resolvers = {
         },
 
         createArea: (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser || !authUser.admin)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, true)
 
             const area = new Area({
                 info: {
@@ -193,16 +176,7 @@ const resolvers = {
         },
 
         deleteArea: async (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser || !authUser.admin)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, true)
 
             return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
@@ -213,16 +187,7 @@ const resolvers = {
         },
 
         editArea: async (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser || !authUser.admin)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, true)
 
             const area = await Area.findById(args.areaId)
 
@@ -268,16 +233,7 @@ const resolvers = {
         },
 
         editUser: async (root, args, contextValue) => {
-            const authUser = contextValue.authUser
-
-            if (!authUser)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-
-            const user = await User.findById(authUser._id)
+            const user = contextCheck(contextValue.authUser, false)
 
             if (args.username)
                 if (args.username.length < 3)
@@ -348,16 +304,7 @@ const resolvers = {
         },
 
         allowAreaRequest: async (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, false)
 
             const guest = await Guest.findById(args.guestId)
 
@@ -393,16 +340,7 @@ const resolvers = {
         },
 
         returnSharedArea: async (root, args, contextValue) => {
-            /*
-            const authUser = contextValue.authUser
-
-            if (!authUser)
-                throw new GraphQLError("Not authenticated", {
-                    extensions: {
-                        code: "BAD_USER_INPUT",
-                    }
-                })
-            */
+            contextCheck(contextValue.authUser, false)
 
             const area = await Area.findById(args.areaId)
 

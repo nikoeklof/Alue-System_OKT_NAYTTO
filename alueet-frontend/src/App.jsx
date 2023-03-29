@@ -14,6 +14,7 @@ const App = () => {
     <Router>
       <Container>
         <NavBar />
+        <AreaMap />
       </Container>
 
       <Routes>
@@ -22,7 +23,6 @@ const App = () => {
         <Route path="/areaControl" element={<AreaControl />} />
         <Route path="/userControl" element={<UserControl />} />
       </Routes>
-      <AreaMap />
     </Router>
   );
 };

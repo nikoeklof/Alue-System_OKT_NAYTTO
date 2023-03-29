@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { initialAreas } from "./db/db";
 import { LeafletMap } from "./components/LeafletMap";
 import CreateAreaForm from "./components/CreateAreaForm";

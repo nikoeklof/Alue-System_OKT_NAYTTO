@@ -11,9 +11,15 @@ export const LeafletMap = ({
   setLayerContext,
 }) => {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <MapContainer
-        style={{ height: "450px", width: "500px" }}
+        style={{ height: "450px", width: "100%" }}
         center={[61.6834, 27.2653]}
         zoom={11}
         scrollWheelZoom={true}

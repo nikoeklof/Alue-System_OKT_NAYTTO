@@ -201,7 +201,7 @@ mutation createArea($type: String!, $cityName: String!, $quarter: String!, $addr
 
 
 export const EDIT_AREA = gql`
-mutation editArea($areaId: ID!, $type: String, $cityName: String, $quarter: String, $address: String, $buildings: Int, $homes: Int, $zone: String, $lan: String, $lon: String, $misc: String) {
+mutation editArea($areaId: ID!, $type: String, $cityName: String, $quarter: String, $address: String, $buildings: Int, $homes: Int, $map: MapInput, $misc: String) {
   editArea(
     areaId: $areaId,
     type: $type,
@@ -210,9 +210,7 @@ mutation editArea($areaId: ID!, $type: String, $cityName: String, $quarter: Stri
     address: $address,
     buildings: $buildings,
     homes: $homes,
-    zone: $zone,
-    lan: $lan,
-    lon: $lon,
+    map: $map,
     misc: $misc
   ) {
     id

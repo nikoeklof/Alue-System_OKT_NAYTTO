@@ -12,6 +12,7 @@ const typeDefs = gql`
     id: ID!
     username: String!
     admin: Boolean
+    disabled: Boolean
     guestAccount: Guest
   }
 

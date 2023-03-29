@@ -17,12 +17,12 @@ import {
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-import EditUserModal from './EditUserModal';
-import DeleteWarningModal from './DeleteWarningModal';
-import CreateUserModal from './CreateUserModal';
+import EditUserModal from './components/EditUserModal';
+import DeleteWarningModal from './components/DeleteWarningModal';
+import CreateUserModal from './components/CreateUserModal';
 
-import theme from '../theme';
-import { users } from '../db';
+import theme from './style/theme';
+import { users } from './db/db';
 
 const styles = {
 	mainText: {

@@ -2,11 +2,12 @@ import React from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Login from './components/Login';
+import Main from './Main';
+import Login from './Login';
 import NavBar from'./components/NavBar';
-import Register from './components/Register';
-import AreaControl from './components/AreaControl';
-import UserControl from './components/UserControl';
+import Register from './Register';
+import AreaControl from './AreaControl';
+import UserControl from './UserControl';
 
 const App = () => {
 	return (
@@ -16,6 +17,7 @@ const App = () => {
 			</Container>
 
 			<Routes>
+				<Route path='/' element={<Main />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/areaControl' element={<AreaControl />} />

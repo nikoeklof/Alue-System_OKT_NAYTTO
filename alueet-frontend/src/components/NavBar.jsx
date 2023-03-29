@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material'
 
-import theme from '../theme';
+import theme from '../style/theme';
 
 const styles = {
 	responsive: {
@@ -134,18 +134,25 @@ const NavBar = () => {
 		<AppBar position='static' color='default'>
 			<Container maxWidth='xl'>
 				<Toolbar>
-					<Typography
-						variant='h5'
-						noWrap
-						component='a'
-						href=''
-						sx={styles.normal.logoText}
-					>
-						Aluepöytä
-					</Typography>
+					<Link to={'/'} style={styles.normal.link}>
+						<Typography
+							variant='h5'
+							noWrap
+							component='a'
+							href=''
+							sx={styles.normal.logoText}
+						>
+							Aluepöytä
+						</Typography>
+					</Link>
+					
 
 					<Box sx={styles.responsive.box}>
-						<IconButton size='large' onClick={handleOpenNavMenu} style={styles.responsive.icon}>
+						<IconButton 
+							size='large' 
+							onClick={handleOpenNavMenu} 
+							style={styles.responsive.icon}
+						>
 							<MenuIcon />
 						</IconButton>
 						<Menu
@@ -159,19 +166,18 @@ const NavBar = () => {
 							sx={styles.responsive.menu.sx}
 						>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link style={styles.responsive.link}>Lainaa</Link>
+								<Link to={'/areaControl'} style={styles.responsive.link}>
+									Alueiden hallinta
+								</Link>
 							</MenuItem>
 							<MenuItem onClick={handleCloseNavMenu}>
-								<Link style={styles.responsive.link}>Palauta</Link>
-							</MenuItem>
-							<MenuItem onClick={handleCloseNavMenu}>
-								<Link to={'/areaControl'} style={styles.responsive.link}>Alueiden hallinta</Link>
-							</MenuItem>
-							<MenuItem onClick={handleCloseNavMenu}>
-								<Link to={'/userControl'} style={styles.responsive.link}>Käyttäjien hallinta</Link>
+								<Link to={'/userControl'} style={styles.responsive.link}>
+									Käyttäjien hallinta
+								</Link>
 							</MenuItem>
 						</Menu>
 					</Box>
+					
 					<Typography
 						variant='h5'
 						noWrap
@@ -183,20 +189,25 @@ const NavBar = () => {
 					</Typography>
 					<Box sx={styles.normal.box}>
 						<Button
-							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link to={'/areaControl'} style={styles.normal.link}>Alueiden hallinta</Link>
+							<Link to={'/areaControl'} style={styles.normal.link}>
+								Alueiden hallinta
+							</Link>
 						</Button>
 						<Button
-							onClick={handleCloseNavMenu}
 							sx={styles.normal.button}
 						>
-							<Link to={'/userControl'} style={styles.normal.link}>Käyttäjien hallinta</Link>
+							<Link to={'/userControl'} style={styles.normal.link}>
+								Käyttäjien hallinta
+							</Link>
 						</Button>
 					</Box>
 					<Box sx={styles.user.box}>
-						<Button onClick={handleOpenUserMenu} sx={styles.user.link}>
+						<Button 
+							onClick={handleOpenUserMenu} 
+							sx={styles.user.link}
+						>
 							{/* Kirjautuneen käyttäjän nimi tänne */}
 							Username
 						</Button>
@@ -211,7 +222,9 @@ const NavBar = () => {
 							onClose={handleCloseUserMenu}
 						>
 							<MenuItem >
-								<Typography textAlign="center">Kirjaudu ulos</Typography>
+								<Typography textAlign="center">
+									Kirjaudu ulos
+								</Typography>
 							</MenuItem>
 						</Menu>
 					</Box>

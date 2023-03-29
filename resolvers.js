@@ -197,35 +197,7 @@ const resolvers = {
             if (!area)
                 throw new UserInputError("Area not found")
 
-            if (args.type)
-                area.info.type = args.type
-
-            if (args.cityName)
-                area.info.cityName = args.cityName
-
-            if (args.quarter)
-                area.info.quarter = args.quarter
-
-            if (args.address)
-                area.info.address = args.address
-
-            if (args.buildings)
-                area.info.buildings = args.buildings
-
-            if (args.homes)
-                area.info.homes = args.homes
-
-            if (args.lan)
-                area.info.map.coordinates.lan = args.lan
-
-            if (args.lon)
-                area.info.map.coordinates.lon = args.lon
-
-            if (args.zone)
-                area.info.map.zone = args.zone
-
-            if (args.misc)
-                area.info.misc = args.misc
+            area.info = {...area.info, ...args}
 
             return area.save()
                 .catch(error => {

@@ -384,7 +384,26 @@ const resolvers = {
         },
 
         sendTestMail: async (root, args) => {
-            mailer(args.email, 3)
+            const area = {
+                info: {
+                    type: "Kaupunki",
+                    cityName: "Mikkeli",
+                    quarter: "Kaukola",
+                    address: "katu 3",
+                    buildings: 10,
+                    homes: 1,
+                    map: {
+                        coordinates: {
+                            lan: "23.324",
+                            lon: "1.123"
+                        },
+                        zone: "103 192 480 183"
+                    },
+                    misc: "Kaukolan ympäröivä alue"
+                }
+            }
+
+            mailer(args.email, area, 3)
             return true
         },
     }

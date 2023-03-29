@@ -1,5 +1,5 @@
 function main(area, header) {
-    return `
+    const message = `
         < body style = "background-color: #e8e8e8; padding: 25" >
             <Container style="width: 85%; display:block; text-align: center; margin: 0 auto">
                 <Box style="display: block; margin: 0 auto; border: solid #454545 1px; max-width: 500px;">
@@ -80,14 +80,20 @@ function main(area, header) {
                                 <p style="font-weight: bold; margin: 8;">lng:</p> ${area.map.coordinates.lon}
                             </Box>
                         </Box>
-                    </Box>
+                    </Box>`
+
+    if (area.misc)
+        message += `
                     <Box style="display:contents">
                         <p style="font-weight: bold; font-size: 20px;font-family: monospace">
                             Muut tiedot
                         </p>
                         <p style="font-size: 18px;padding: 0 10 0 10">${area.misc}</p>
                     </Box>
-                </Box>
+                    `
+
+    message += `
+                </Box >
                 <p
                     style="color: #454545;font-size: 25px; padding: 5px;font-family: monospace;font-weight: bold;text-decoration:underline;text-decoration-thickness: 2px;text-decoration-color: #bdbdbd;">
                     Huom!</p>
@@ -127,9 +133,11 @@ function main(area, header) {
                         </td>
                     </Table>
                 </Box>
-            </Container>
+            </Container >
         </body >
-    `
+        `
+
+    return message
 }
 
 module.exports = main

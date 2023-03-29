@@ -9,9 +9,8 @@ const AreaMap = () => {
   const [areas, setAreas] = useState(initialAreas);
   const [selectedArea, setSelectedArea] = useState(undefined);
   const [formActive, setFormActive] = useState(false);
-  useEffect(() => {
-    console.log(areas);
-  }, [areas]);
+  const [editArea, setEditArea] = useState(false);
+  const [newArea, setNewArea] = useState({});
 
   const addArea = (props) => {
     setAreas([...areas, props]);
@@ -22,6 +21,7 @@ const AreaMap = () => {
   };
 
   const updateArea = (props) => {
+    clearSelected();
     const areaList = [];
     console.log(props);
     var areaToUpdate = { ...props };
@@ -30,7 +30,6 @@ const AreaMap = () => {
     });
 
     setAreas([...areaList, areaToUpdate]);
-    clearSelected();
   };
 
   const removeArea = (props) => {
@@ -50,15 +49,22 @@ const AreaMap = () => {
         setSelectedArea={setSelectedArea}
         clearSelected={clearSelected}
         formActive={formActive}
+        setLayerContext={setNewArea}
       />
       <CreateAreaForm
         newArea={addArea}
         clearSelected={clearSelected}
         formActive={formActive}
         setFormActive={setFormActive}
+        layerContext={newArea}
       />
-      <AreaContext area={selectedArea} removeArea={removeArea} />
-      <EditArea area={selectedArea} onSave={updateArea} />
+      <AreaContext
+        area={selectedArea}
+        removeArea={removeArea}
+        editArea={setEditArea}
+        active={editArea}
+      />
+      <EditArea area={selectedArea} onSave={updateArea} formActive={editArea} />
     </div>
   );
 };

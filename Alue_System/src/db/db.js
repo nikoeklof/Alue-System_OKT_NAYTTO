@@ -1,9 +1,10 @@
 const initialAreas = [
   {
     id: 134,
-    areaName: "Siekkilä",
+    areaName: "Lehmuskylä",
     neighborhood: "Test",
     apartmentAmount: 50,
+    loaned: true,
     latlngs: [
       {
         lat: 61.689302329747484,
@@ -25,9 +26,10 @@ const initialAreas = [
   },
   {
     id: 156,
-    areaName: "Lehmuskylä",
+    areaName: "Siekkilä",
     neighborhood: "Test",
     apartmentAmount: 50,
+    loaned: false,
     latlngs: [
       {
         lat: 61.69402379806822,
@@ -49,9 +51,10 @@ const initialAreas = [
   },
   {
     id: 171,
-    areaName: "Kaukola",
+    areaName: "Nuijamies",
     neighborhood: "Test",
     apartmentAmount: 50,
+    loaned: false,
     latlngs: [
       {
         lat: 61.685475782455356,

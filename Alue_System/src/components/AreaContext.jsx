@@ -1,4 +1,4 @@
-const AreaContext = ({ area, removeArea }) => {
+const AreaContext = ({ area, removeArea, editArea, active }) => {
   if (!area) {
     return <></>;
   } else {
@@ -7,7 +7,9 @@ const AreaContext = ({ area, removeArea }) => {
         <div>
           {area.areaName}, Asuntoja: {area.apartmentAmount}, Kaupunginosa:
           {area.neighborhood}
+          <br></br>
           <button onClick={() => removeArea(area)}>Poista alue</button>
+          <button onClick={() => editArea(!active)}>Muokkaa aluetta</button>
         </div>
       </>
     );

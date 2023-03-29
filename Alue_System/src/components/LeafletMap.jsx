@@ -1,5 +1,4 @@
 import { MapContainer, TileLayer, Pane } from "react-leaflet";
-import React from "react";
 import DrawComponent from "./DrawComponent";
 import PolygonLayer from "./PolygonLayer";
 
@@ -9,6 +8,7 @@ export const LeafletMap = ({
   selectedArea,
   clearSelected,
   formActive,
+  setLayerContext,
 }) => {
   return (
     <div>
@@ -24,7 +24,10 @@ export const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Pane name="areaPane" style={{ zIndex: 100 }}>
-          <DrawComponent formActive={formActive} />
+          <DrawComponent
+            formActive={formActive}
+            setLayerContext={setLayerContext}
+          />
         </Pane>
         <PolygonLayer
           areas={areas}

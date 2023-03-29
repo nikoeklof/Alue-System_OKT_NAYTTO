@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { GetCoordinates } from "./Variables";
-import { getArea } from "./Variables";
-
 const CreateAreaForm = ({
   newArea,
   clearSelected,
   setFormActive,
   formActive,
+  layerContext,
 }) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
@@ -16,18 +14,6 @@ const CreateAreaForm = ({
   return (
     <>
       {formActive ? (
-        <div>
-          <button
-            onClick={() => {
-              setFormActive(!formActive);
-              clearSelected();
-              console.log(GetCoordinates());
-            }}
-          >
-            Luo uusi alue
-          </button>
-        </div>
-      ) : (
         <div>
           <input
             onChange={(e) => setAreaName(e.target.value)}
@@ -47,12 +33,12 @@ const CreateAreaForm = ({
           <button
             type="button"
             onClick={() => {
-              const layer = getArea();
+              const layer = layerContext;
               console.log(layer);
-              layer.oldLayer.remove();
+              layer.layer.remove();
 
               newArea({
-                id: layer.oldLayer._leaflet_id,
+                id: layer.layer._leaflet_id,
                 areaName: areaName,
                 apartmentAmount: parseInt(apartmentAmount),
                 neighborhood: areaNeighborhood,
@@ -70,6 +56,18 @@ const CreateAreaForm = ({
             }}
           >
             Peruuta
+          </button>
+        </div>
+      ) : (
+        <div>
+          <button
+            onClick={() => {
+              setFormActive(!formActive);
+              clearSelected();
+              console.log(layerContext.layer);
+            }}
+          >
+            Luo uusi alue
           </button>
         </div>
       )}

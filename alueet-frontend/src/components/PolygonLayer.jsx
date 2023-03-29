@@ -10,14 +10,20 @@ const PolygonLayer = ({
 }) => {
 	return (
 		<LayerGroup>
-			{areas.map((area) => {
+			{areas.map((area, i) => {
 				const positions = area.latlngs.map((coords) => {
 					return [coords.lat, coords.lng];
 				});
+				return (
+					<LayerGroup>
+						{areas.map((area, i) => {
+							const positions = area.latlngs.map((coords) => {
+							return [coords.lat, coords.lng];
+							});
 
 				return (
 					<PolygonArea
-						key={area.id}
+						key={i}
 						props={area}
 						selectedArea={selectedArea}
 						positions={positions}
@@ -31,5 +37,20 @@ const PolygonLayer = ({
 			})}
 		</LayerGroup>
 	);
+        return (
+          <PolygonArea
+            key={i}
+            props={area}
+            selectedArea={selectedArea}
+            positions={positions}
+            onClick={() => {
+              if (selectedArea?.id === area.id) return clearSelected();
+              else setSelectedArea(area);
+            }}
+          />
+        );
+      })}
+    </LayerGroup>
+  );
 };
 export default PolygonLayer;

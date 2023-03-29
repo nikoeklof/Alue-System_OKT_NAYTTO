@@ -14,15 +14,14 @@ const App = () => {
 		<Router>
 			<Container>
 				<NavBar />
+				<AreaMap />
 			</Container>
-
 			<Routes>
 				<Route path='/login' element={<Login />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/areaControl' element={<AreaControl />} />
 				<Route path='/userControl' element={<UserControl />} />
 			</Routes>
-			<AreaMap />
 		</Router>
 	);
 };

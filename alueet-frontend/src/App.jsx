@@ -22,7 +22,6 @@ const App = () => {
 				<Route path='/userControl' element={<UserControl />} />
 			</Routes>
 		</Router>
-		
 	);
 };
 

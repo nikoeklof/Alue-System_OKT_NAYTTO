@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material'
 
-import theme from '../theme';
+import theme from '../style/theme';
 
 const styles = {
 	responsive: {

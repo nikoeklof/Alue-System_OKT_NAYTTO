@@ -10,13 +10,13 @@ import {
 	Button
 } from '@mui/material';
 
-import theme from '../theme';
-import { areas } from '../db';
+import theme from './style/theme';
+import { areas } from './db/db';
 
-import DeleteWarningModal from './DeleteWarningModal';
-import EditAreaModal from './EditAreaModal';
-import LendAreaModal from './LendAreaModal';
-import ReturnAreaModal from './ReturnAreaModal';
+import DeleteWarningModal from './components/DeleteWarningModal';
+import EditAreaModal from './components/EditAreaModal';
+import LendAreaModal from './components/LendAreaModal';
+import ReturnAreaModal from './components/ReturnAreaModal';
 
 const styles = {
 	selectMenu: {

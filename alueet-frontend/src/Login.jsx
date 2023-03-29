@@ -8,7 +8,7 @@ import {
 	FormGroup
 } from '@mui/material';
 
-import theme from '../theme';
+import theme from './style/theme';
 
 const styles = {
 	form: {
@@ -34,12 +34,12 @@ const styles = {
 		px: 1,
 	},
 	button: {
-		width: '130px',
+		width: '100px',
 		ml: 0.5		
 	}
 };
 
-const Register = () => {
+const Login = () => {
 	return (
 		<FormGroup  sx={styles.form}>
 			
@@ -48,20 +48,12 @@ const Register = () => {
 				noWrap
 				sx={styles.text}
 			>
-				Rekisteröityminen
+				Kirjaudu sisään
 			</Typography>
 			<FormControl>
 				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
 				<Input 
 					id='username'
-					variant='filled'
-					sx={styles.input} 
-				/>
-			</FormControl>
-			<FormControl>
-				<InputLabel htmlFor='email'>Sähköposti</InputLabel>
-				<Input 
-					id='email'
 					variant='filled'
 					sx={styles.input} 
 				/>
@@ -78,7 +70,7 @@ const Register = () => {
 				variant='contained'
 				sx={styles.button}
 			>
-				Rekisteröidy
+				Kirjaudu
 			</Button>
 		
 		</FormGroup>
@@ -86,4 +78,4 @@ const Register = () => {
 	)
 };
 
-export default Register;
+export default Login;

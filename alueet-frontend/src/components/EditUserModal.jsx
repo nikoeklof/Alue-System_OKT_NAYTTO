@@ -11,7 +11,7 @@ import {
 	Switch
 } from '@mui/material';
 
-import theme from '../theme';
+import theme from '../style/theme';
 
 const styles = {
 	modal: {

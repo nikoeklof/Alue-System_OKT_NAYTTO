@@ -6,9 +6,9 @@ Käyttäjä voi luoda alueen [X]
 
 Alueen voi poistaa [X]
 
-Käyttäjä voi muokata olemassa olevaa aluetta [ ]
+Käyttäjä voi muokata olemassa olevaa aluetta [X]
 
-Alueen voi merkata lainatuksi [ ]
+Alueen voi merkata lainatuksi [Työn alla]
 
 Alueen voi merkata palautetuksi [ ]
 

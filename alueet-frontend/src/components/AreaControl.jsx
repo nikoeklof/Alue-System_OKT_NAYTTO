@@ -83,8 +83,6 @@ const AreaInfo = (values) => {
 
 	let lent = '';
 	const area = areas.find(a => a.name === values.areaName);
-	const admin = values.admin;
-	const auntie = values.auntie;
 
 	const delProps = {
 		openDel,
@@ -124,56 +122,42 @@ const AreaInfo = (values) => {
 						Lainaaja?: owner.username/null
 					</Typography>
 				</Grid>
-				{admin ? 
-					<Grid sx={styles.buttons}>
-						<Button 
-							variant='contained' 
-							sx={styles.areaButton}
-						>
-							Näytä alue
-						</Button>
-						<Button 
-							variant='contained' 
-							sx={styles.areaButton}
-							onClick={() => setOpenEdit(true)}
-						>
-							Muokkaa aluetta
-						</Button>
-						<Button 
-							variant='contained' 
-							sx={styles.areaButton}
-							onClick={() => setOpenDel(true)}
-						>
-							Poista alue
-						</Button>
-					</Grid> :
-					''
-				}
-				{auntie ?
-					<Grid sx={styles.buttons}>
-						<Button 
-							variant='contained' 
-							sx={styles.areaButton}
-						>
-							Näytä alue
-						</Button>
-						<Button 
-							variant='contained' 
-							sx={styles.areaButton}
-							onClick={() => setOpenLend(true)}
-						>
-							Lainaa alue
-						</Button>
-						<Button 
-							variant='contained' 
-							sx={styles.areaButton}
-							onClick={() => setOpenReturn(true)}
-						>
-							Palauta alue
-						</Button>
-					</Grid> :
-					''
-				}
+				<Grid sx={styles.buttons}>
+					<Button 
+						variant='contained' 
+						sx={styles.areaButton}
+					>
+						Näytä alue
+					</Button>
+					<Button 
+						variant='contained' 
+						sx={styles.areaButton}
+						onClick={() => setOpenLend(true)}
+					>
+						Lainaa alue
+					</Button>
+					<Button 
+						variant='contained' 
+						sx={styles.areaButton}
+						onClick={() => setOpenReturn(true)}
+					>
+						Palauta alue
+					</Button>
+					<Button 
+						variant='contained' 
+						sx={styles.areaButton}
+						onClick={() => setOpenEdit(true)}
+					>
+						Muokkaa tietoja
+					</Button>
+					<Button 
+						variant='contained' 
+						sx={styles.areaButton}
+						onClick={() => setOpenDel(true)}
+					>
+						Poista alue
+					</Button>
+				</Grid> 				
 				<DeleteWarningModal {...delProps}/>
 				<EditAreaModal {...editProps}/>
 				<LendAreaModal {...lendProps}/>

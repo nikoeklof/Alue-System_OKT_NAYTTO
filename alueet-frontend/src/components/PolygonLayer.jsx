@@ -9,14 +9,14 @@ const PolygonLayer = ({
 }) => {
   return (
     <LayerGroup>
-      {areas.map((area, i) => {
+      {areas.map((area) => {
         const positions = area.latlngs.map((coords) => {
           return [coords.lat, coords.lng];
         });
 
         return (
           <PolygonArea
-            key={i}
+            key={area.id}
             props={area}
             selectedArea={selectedArea}
             positions={positions}

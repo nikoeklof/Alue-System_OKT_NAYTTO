@@ -11,19 +11,21 @@ import AreaMap from "./AreaMap";
 
 const App = () => {
   return (
-    <Router>
-      <Container>
-        <NavBar />
-        <AreaMap />
-      </Container>
+    <div>
+      <Router>
+        <Container>
+          <NavBar />
+          <AreaMap />
+        </Container>
 
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/areaControl" element={<AreaControl />} />
-        <Route path="/userControl" element={<UserControl />} />
-      </Routes>
-    </Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/areaControl" element={<AreaControl />} />
+          <Route path="/userControl" element={<UserControl />} />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-const AreaContext = ({ area, removeArea, editArea, active }) => {
+const AreaContext = ({ area, removeArea, editArea, active, loanArea }) => {
   if (!area) {
     return <></>;
   } else {
@@ -9,6 +9,9 @@ const AreaContext = ({ area, removeArea, editArea, active }) => {
           <br></br>
           <button onClick={() => removeArea(area)}>Poista alue</button>
           <button onClick={() => editArea(!active)}>Muokkaa aluetta</button>
+          <button onClick={() => loanArea()}>
+            {area.loaned ? "Palauta alue" : "Lainaa alue"}
+          </button>
         </div>
       </>
     );

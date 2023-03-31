@@ -31,6 +31,18 @@ const AreaMap = () => {
 
 		setAreas([...areaList, areaToUpdate]);
 	};
+	const loanArea = () => {
+		const areaList = [];
+		var areaToLoan = { ...selectedArea };
+		areaToLoan.loaned = !areaToLoan.loaned;
+
+		areas.forEach((area) => {
+			if (area.id !== selectedArea.id) areaList.push(area);
+		});
+
+		setAreas([...areaList, areaToLoan]);
+		clearSelected();
+	};
 
 	const removeArea = (props) => {
 		const areaList = [];
@@ -63,6 +75,7 @@ const AreaMap = () => {
 				removeArea={removeArea}
 				editArea={setEditArea}
 				active={editArea}
+				loanArea={loanArea}
 			/>
 			<EditArea area={selectedArea} onSave={updateArea} formActive={editArea} />
 		</div>

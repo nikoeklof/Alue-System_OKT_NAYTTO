@@ -21,8 +21,8 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-import theme from './style/theme';
-import { areas } from './db/db';
+import theme from "./style/theme";
+import { areas } from "./db/db";
 
 import AreaMap from './AreaMap';
 import DeleteWarningModal from './components/DeleteWarningModal';
@@ -99,20 +99,20 @@ const Row = ({ ...area }) => {
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setOpenDel(false),
-		warningText: 'Haluatko varmasti poistaa alueen?'
+		warningText: "Haluatko varmasti poistaa alueen?",
 	};
 	const editProps = {
 		openEdit,
-		handleCloseEditModal: () => setOpenEdit(false)
+		handleCloseEditModal: () => setOpenEdit(false),
 	};
 	const lendProps = {
 		openLend,
-		handleCloseLendModal: () => setOpenLend(false)
+		handleCloseLendModal: () => setOpenLend(false),
 	};
 	const returnProps = {
 		openReturn,
-		handleCloseReturnModal: () => setOpenReturn(false)
-	}
+		handleCloseReturnModal: () => setOpenReturn(false),
+	};
 
 	if (area) {
 		return (

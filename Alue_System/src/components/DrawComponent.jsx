@@ -13,7 +13,7 @@ const DrawComponent = ({ formActive, setLayerContext }) => {
           polyline: false,
           marker: false,
           circlemarker: false,
-          polygon: false || formActive,
+          polygon: true,
         }}
         onCreated={function (e) {
           const { layer } = e;
@@ -24,10 +24,17 @@ const DrawComponent = ({ formActive, setLayerContext }) => {
         }}
         onEdited={function (e) {
           const layer = e.layers._layers;
+          console.log(layer[Object.keys(layer)[0]]);
+          // Checking if the layer has been edited, otherwise will return as undefined
+          if (layer[Object.keys(layer)[0]] !== undefined) {
+            const latlngs = layer[Object.keys(layer)[0]]._latlngs[0];
 
-          const latlngs = layer[Object.keys(layer)[0]]._latlngs[0];
-
-          setLayerContext({ coords: latlngs, layer: layer });
+            setLayerContext({ coords: latlngs, layer: layer });
+          }
+          return;
+        }}
+        onDeleted={function () {
+          setLayerContext({});
         }}
       />
     </FeatureGroup>

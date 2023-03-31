@@ -33,19 +33,25 @@ const CreateAreaForm = ({
           <button
             type="button"
             onClick={() => {
-              const layer = layerContext;
-              console.log(layer);
-              layer.layer.remove();
-
-              newArea({
-                id: layer.layer._leaflet_id,
-                areaName: areaName,
-                apartmentAmount: parseInt(apartmentAmount),
-                neighborhood: areaNeighborhood,
-                areaOwner: "admin",
-                latlngs: layer.coords,
-              });
-              setFormActive(!formActive);
+              if (
+                areaName !== "" &&
+                areaNeighborhood !== "" &&
+                apartmentAmount !== ""
+              ) {
+                const layer = layerContext;
+                layer.layer.remove();
+                newArea({
+                  id: layer.layer._leaflet_id,
+                  areaName: areaName,
+                  apartmentAmount: parseInt(apartmentAmount),
+                  neighborhood: areaNeighborhood,
+                  areaOwner: "admin",
+                  latlngs: layer.coords,
+                });
+                setFormActive(!formActive);
+              } else {
+                return alert("Check inputs!");
+              }
             }}
           >
             Tallenna
@@ -64,7 +70,6 @@ const CreateAreaForm = ({
             onClick={() => {
               setFormActive(!formActive);
               clearSelected();
-              console.log(layerContext.layer);
             }}
           >
             Luo uusi alue

@@ -24,10 +24,9 @@ export const LeafletMap = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Pane name="areaPane" style={{ zIndex: 100 }}>
-          <DrawComponent
-            formActive={formActive}
-            setLayerContext={setLayerContext}
-          />
+          {formActive ? (
+            <DrawComponent setLayerContext={setLayerContext} />
+          ) : null}
         </Pane>
         <PolygonLayer
           areas={areas}

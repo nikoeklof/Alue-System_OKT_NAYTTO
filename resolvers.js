@@ -25,31 +25,28 @@ const resolvers = {
         userCount: () => User.collection.countDocuments(),
         allGuests: async () => await Guest.find({}),
         allAreas: async (root, args) => {
-            switch (Object.keys(args).length) {
-                case 1:
-                    if ("type" in args)
-                        return await Area.find({ "info.type": args.type })
 
-                    if ("cityName" in args)
-                        return await Area.find({ "info.cityName": args.cityName })
+            if (Object.keys(args).length === 0)
+                return await Area.find({})
 
-                    return await Area.find({ "info.quarter": args.quarter })
+            let newArgs = {}
 
-                case 2:
-                    if ("type" in args)
-                        if ("cityName" in args)
-                            return await Area.find({ "info.type": args.type, "info.cityName": args.cityName })
-                        else
-                            return await Area.find({ "info.type": args.type, "info.quarter": args.quarter })
+            if ("type" in args)
+                newArgs["info.type"] = args.type
 
-                    return await Area.find({ "info.cityName": args.cityName, "info.quarter": args.quarter })
+            if ("cityName" in args)
+                newArgs["info.cityName"] = args.cityName
 
-                case 3:
-                    return await Area.find({ "info.type": args.type, "info.cityName": args.cityName, "info.quarter": args.quarter })
+            if ("quarter" in args)
+                newArgs["info.quarter"] = args.quarter
 
-                default:
-                    return await Area.find({})
-            }
+            if ("address" in args)
+                newArgs["info.address"] = args.address
+
+            if ("isShared" in args)
+                newArgs["shareState.isShared"] = args.isShared
+
+            return await Area.find(newArgs)
         },
         allUsers: async (root, args) => await User.find(args),
         me: (root, args, contextValue) => contextValue.authUser
@@ -403,7 +400,7 @@ const resolvers = {
                 }
             }
 
-            mailer(args.email, area, 3)
+            mailer(args.email, area.info, 3)
             return true
         },
     }

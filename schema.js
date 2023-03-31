@@ -64,7 +64,7 @@ const typeDefs = gql`
     allGuests: [Guest]!
 
     areaCount: Int!
-    allAreas (type: String, cityName: String, quarter: String): [Area]!
+    allAreas (type: String, cityName: String, quarter: String, address: String, isShared: Boolean): [Area]!
 
     userCount: Int!
     allUsers (disabled: Boolean, admin: Boolean): [User]!

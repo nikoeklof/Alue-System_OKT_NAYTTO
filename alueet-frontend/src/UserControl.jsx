@@ -88,6 +88,7 @@ const Row = ({...rowProps}) => {
 			<TableRow 
 				hover 
 				key={user.id}
+				onClick={() => setOpen(!open)}
 				sx={{ '& > *': { borderBottom: 'unset' } }}
 			>
 				<TableCell>
@@ -174,7 +175,7 @@ const UserControl = () => {
 	const [openDel, setDelOpen] = useState(false);
 	const [openCreate, setCreateOpen] = useState(false);
 
-	const handleChangePage = (newPage) => {
+	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
 

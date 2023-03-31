@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Polygon } from "react-leaflet";
 
 // Blueprint for the areas drawn to the map, still needs functionality

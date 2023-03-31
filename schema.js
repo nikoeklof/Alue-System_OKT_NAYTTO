@@ -76,6 +76,16 @@ const typeDefs = gql`
     value: String!
   }
 
+  input MapInput {
+    coordinates: CoordinatesInput
+    zone: String
+  }
+
+  input CoordinatesInput {
+    lan: String
+    lon: String
+  }
+
   type Mutation {
     createGuest (email: String!, name: String!): Guest
     makeRequest (areaId: ID!, guestEmail: String!): Area
@@ -88,7 +98,7 @@ const typeDefs = gql`
     returnSharedArea (areaId: ID!): Area
 
     createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
-    editArea (areaId: ID!, type: String, cityName: String, quarter: String, address: String, buildings: Int, homes: Int, zone: String, lan: String, lon: String, misc: String): Area
+    editArea (areaId: ID!, type: String, cityName: String, quarter: String, address: String, buildings: Int, homes: Int, map: MapInput, misc: String): Area
     deleteArea (areaId: ID!): Area
 
     login (username: String!, password: String!): Token

@@ -25,11 +25,7 @@ const resolvers = {
         userCount: () => User.collection.countDocuments(),
         allGuests: async () => await Guest.find({}),
         allAreas: async (root, args) => {
-
-            if (Object.keys(args).length === 0)
-                return await Area.find({})
-
-            let newArgs = {}
+            const newArgs = {}
 
             if ("type" in args)
                 newArgs["info.type"] = args.type

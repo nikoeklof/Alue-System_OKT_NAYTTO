@@ -8,12 +8,12 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 
 const client = new ApolloClient({
-  uri: "http://localhost:3001",
-  cache: new InMemoryCache(),
+	uri: "http://localhost:3001",
+	cache: new InMemoryCache(),
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
+	<ApolloProvider client={client}>
+		<App />
+	</ApolloProvider>
 );

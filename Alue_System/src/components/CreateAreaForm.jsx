@@ -9,7 +9,6 @@ const CreateAreaForm = ({
 }) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-  const [areaNeighborhood, setAreaNeighborhood] = useState("");
 
   return (
     <>
@@ -25,26 +24,17 @@ const CreateAreaForm = ({
             type="text"
             placeholder="Asuntojen määrä..."
           />
-          <input
-            onChange={(e) => setAreaNeighborhood(e.target.value)}
-            type="text"
-            placeholder="Kaupunginosa..."
-          />
+
           <button
             type="button"
             onClick={() => {
-              if (
-                areaName !== "" &&
-                areaNeighborhood !== "" &&
-                apartmentAmount !== ""
-              ) {
+              if (areaName !== "" && apartmentAmount !== "") {
                 const layer = layerContext;
                 layer.layer.remove();
                 newArea({
                   id: layer.layer._leaflet_id,
-                  areaName: areaName,
-                  apartmentAmount: parseInt(apartmentAmount),
-                  neighborhood: areaNeighborhood,
+                  name: areaName,
+                  buildings: parseInt(apartmentAmount),
                   areaOwner: "admin",
                   latlngs: layer.coords,
                 });

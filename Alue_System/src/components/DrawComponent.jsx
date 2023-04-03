@@ -17,6 +17,8 @@ const DrawComponent = ({ formActive, setLayerContext }) => {
         }}
         onCreated={function (e) {
           const { layer } = e;
+          // Grabbing the latlng coordinates from the polygon created by
+          // leaflet-draw to use in my own polygons
 
           const latlngs = layer._latlngs[0];
 
@@ -29,11 +31,12 @@ const DrawComponent = ({ formActive, setLayerContext }) => {
           if (layer[Object.keys(layer)[0]] !== undefined) {
             const latlngs = layer[Object.keys(layer)[0]]._latlngs[0];
 
-            setLayerContext({ coords: latlngs, layer: layer });
+            return setLayerContext({ coords: latlngs, layer: layer });
           }
           return;
         }}
         onDeleted={function () {
+          // Clearing the layercontext to prevent wrong states
           setLayerContext({});
         }}
       />

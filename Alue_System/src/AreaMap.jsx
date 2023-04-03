@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import initialAreas from "./db/db";
+import { areas as initialareas } from "./db/db";
 import { LeafletMap } from "./components/LeafletMap";
 import CreateAreaForm from "./components/CreateAreaForm";
 import AreaContext from "./components/AreaContext";
 import EditArea from "./components/EditArea";
 
 const AreaMap = () => {
-  const [areas, setAreas] = useState(initialAreas);
+  const [areas, setAreas] = useState(initialareas);
   const [selectedArea, setSelectedArea] = useState(undefined);
   const [formActive, setFormActive] = useState(false);
   const [editArea, setEditArea] = useState(false);
@@ -40,6 +40,18 @@ const AreaMap = () => {
     setAreas([...areaList]);
     clearSelected();
   };
+  const loanArea = () => {
+    const areaList = [];
+    var areaToLoan = { ...selectedArea };
+    areaToLoan.loaned = !areaToLoan.loaned;
+
+    areas.forEach((area) => {
+      if (area.id !== selectedArea.id) areaList.push(area);
+    });
+
+    setAreas([...areaList, areaToLoan]);
+    clearSelected();
+  };
 
   return (
     <div>
@@ -63,6 +75,7 @@ const AreaMap = () => {
         removeArea={removeArea}
         editArea={setEditArea}
         active={editArea}
+        loanArea={loanArea}
       />
       <EditArea area={selectedArea} onSave={updateArea} formActive={editArea} />
     </div>

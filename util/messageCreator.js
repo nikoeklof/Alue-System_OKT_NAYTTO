@@ -33,25 +33,29 @@ function main(area, header) {
             }
     
             #longText {
-                max-width: 750px
+                max-width: 750px;
             }
     
             #compress {
                 display: inline;
             }
     
-            #ultra {
-                display: inline;
-                max-height: 4px;
+            #unwide {
+                display: inline-block;
+                height: 5px;
             }
     
-            #noPadding {
-                padding: 0px;
+            #ultra {
+                display: inline;
+            }
+    
+            #item {
+                padding: 2px;
             }
     
             td {
                 margin: 2px auto;
-                padding: 2px
+                padding: 0px
             }
     
             h2 {
@@ -59,13 +63,19 @@ function main(area, header) {
                 font-family: monospace;
                 font-weight: bold;
                 font-size: 20px;
-                margin: 2px
+                margin: 2px;
+            }
+    
+            #centerHeader {
+                display: flex;
+                align-self: center;
+                align-items: center;
             }
     
             h3 {
                 font-weight: bold;
                 font-size: 16px;
-                margin: 0;
+                margin: 0px;
             }
     
             @media (max-width:800px) {
@@ -94,12 +104,17 @@ function main(area, header) {
                     justify-content: center;
                     margin: 0 auto;
                     padding: 0;
-                    max-height: 30px;
+                    max-height: 25px;
+                }
+    
+                #unwide {
+                    display: inline-block;
+                    height: 12px;
                 }
     
                 @media (max-width:600px) {
                     body {
-                        width: 500px
+                        max-width: 500px
                     }
     
                     #longText {
@@ -109,7 +124,7 @@ function main(area, header) {
     
                 @media (max-width:500px) {
                     body {
-                        width: 300px
+                        max-width: 300px
                     }
     
                     #longText {
@@ -124,146 +139,147 @@ function main(area, header) {
         <Table>
             <tbody>
                 <tr>
+                    <Table>
+                        <tr>
+                            <td>
+                                <Table>
+                                    <tr id="centerHeader">
+                                        <h2>Alueet Tuki</h2>
+                                    </tr>
+                                    <tr id="centerHeader">
+                                        <h2>${header}</h2>
+                                    </tr>
+                                </Table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p></p>
+                            </td>
+                        </tr>
+                        <tr id="centerHeader">
+                            <td>
+                                <h2>Alue tiedot</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Table id="compress">
+                                    <tr>
+                                        <td style="text-align: right" id="item">
+                                            <h3>Kaupunkin nimi:</h3>
+                                        </td>
+                                        <td style="text-align: left" id="item">
+                                            ${area.cityName}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right" id="item">
+                                            <h3>Kaupungin osa:</h3>
+                                        </td>
+                                        <td style="text-align: left" id="item">
+                                            ${area.quarter}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right" id="item">
+                                            <h3>Katuosoite:</h3>
+                                        </td>
+                                        <td style="text-align: left" id="item">
+                                            ${area.address}
+                                        </td>
+                                    </tr>
+                                </Table>
+                                <Table id="compress">
+                                    <tr>
+                                        <td style="text-align: right" id="item">
+                                            <h3>Alueen tyyppi:</h3>
+                                        </td>
+                                        <td style="text-align: left" id="item">
+                                            ${area.type}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right" id="item">
+                                            <h3>Rakennusten määrä:</h3>
+                                        </td>
+                                        <td style="text-align: left" id="item">
+                                            ${area.buildings}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right" id="item">
+                                            <h3>Omakotitaloja:</h3>
+                                        </td>
+                                        <td style="text-align: left" id="item">
+                                            ${area.homes}
+                                        </td>
+                                    </tr>
+                                </Table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Table>
+                                    <tr id="centerHeader">
+                                        <Table id="unwide">
+                                            <td id="item">
+                                                <h3>Kordinaatit:</h3>
+                                            </td>
+                                        </Table>
+                                    </tr>
+                                    <tr>
+                                        <Table id="ultra">
+                                            <td id="item">
+                                                <p><b>Lat: </b>${area.map.coordinates.lan}</p>
+                                            </td>
+                                        </Table>
+                                        <Table id="ultra">
+                                            <td id="item">
+                                                <p><b>Lng: </b>${area.map.coordinates.lon}</p>
+                                            </td>
+                                        </Table>
+                                    </tr>
+                                </Table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr id="centerHeader">
+                                        <td>
+                                            <h3>
+                                                Muut alueeseen liittyvät tiedot:
+                                            </h3>
+                                        </td>
+                                    </tr>
+                                    <tr id="centerHeader">
+                                        <td>
+                                            <p id="longText">${area.misc}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </Table>
+                </tr>
+                <tr>
                     <td>
-                        <Table>
-                            <tr>
-                                <td>
-                                    <Table>
-                                        <tr>
-                                            <h2>Alueet - Tuki</h2>
-                                        </tr>
-                                        <tr>
-                                            <h2>${header} - Alue tiedot</h2>
-                                        </tr>
-                                    </Table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <Table id="compress">
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Kaupunkin nimi:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                ${area.cityName}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Kaupungin osa:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                ${area.quarter}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Katuosoite:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                ${area.address}
-                                            </td>
-                                        </tr>
-                                    </Table>
-                                    <Table id="compress">
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Alueen tyyppi:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                ${area.type}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Rakennusten määrä:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                ${area.buildings}
-                                            </td>
-    
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Omakotitaloja:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                ${area.homes}
-                                            </td>
-                                        </tr>
-                                    </Table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="noPadding">
-                                    <Table>
-                                        <tr>
-                                            <td id="noPadding">
-                                                <Table id="ultra">
-                                                    <tr>
-                                                        <td id="noPadding">
-                                                            <h3>Kordinaatit:</h3>
-                                                        </td>
-                                                    </tr>
-                                                </Table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td id="noPadding">
-                                                <Table id="ultra">
-                                                    <tr>
-                                                        <td id="noPadding">
-                                                            <p><b>Lat: </b>${area.map.coordinates.lan}</p>
-                                                        </td>
-                                                    </tr>
-                                                </Table>
-                                                <Table id="ultra">
-                                                    <tr>
-                                                        <td id="noPadding">
-                                                            <p><b>Lng: </b>${area.map.coordinates.lon}</p>
-                                                        </td>
-                                                    </tr>
-                                                </Table>
-                                            </td>
-                                        </tr>
-                                    </Table>
-                                </td>
-                            </tr>
-                        </Table>
-                    </td>
+                        <p></p>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <table>
-                            <tr>
+                            <tr id="centerHeader">
                                 <td>
-                                    <h2>
-                                        Muut tiedot
-                                    </h2>
+                                    <h2 style="text-decoration: underline #454545 1px;">Huom! Jos et ole pyytänyt tätäaluetta</h2>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <p id="longText">${area.misc}</p>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td>
-                                    <h2 style="text-decoration: underline #454545 1px;">Huom!</h2>
-                                </td>
-                            </tr>
-                            <tr>
+                            <tr id="centerHeader">
                                 <td>
                                     <p id="longText">
-                                        Jos et pyytänyt tätä aluetta lorem ipsum dolor sit amet, consectetur adipiscing
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing
                                         elit,
                                         sed do
                                         eiusmod
@@ -285,28 +301,50 @@ function main(area, header) {
                                         donec massa sapien.</p>
                                 </td>
                             </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr id="centerHeader">
+                                <td>
+                                    <h2>Yhteistiedot</h2>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>
-                                    <Table id="ultra">
+                                    <table>
                                         <tr>
-                                            <td style="text-align: right">
-                                                <h3>Puhelinnumero:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                <p>+000 000 000 0000</p>
+                                            <td>
+                                                <Table id="ultra">
+                                                    <tr>
+                                                        <td style="text-align: right" id="item">
+                                                            <h3>Puhelinnumero:</h3>
+                                                        </td>
+                                                        <td style="text-align: left" id="item">
+                                                            <p>+000 000 000 0000</p>
+                                                        </td>
+                                                    </tr>
+                                                </Table>
+                                                <Table id="ultra">
+                                                    <tr>
+                                                        <td style="text-align: right" id="item">
+                                                            <h3>Sähköpostiosoite:</h3>
+                                                        </td>
+                                                        <td style="text-align: left" id="item">
+                                                            <p>loremipsum@mail.net</p>
+                                                        </td>
+                                                    </tr>
+                                                </Table>
                                             </td>
                                         </tr>
-                                    </Table>
-                                    <Table id="ultra">
-                                        <tr>
-                                            <td style="text-align: right">
-                                                <h3>Sähköpostiosoite:</h3>
-                                            </td>
-                                            <td style="text-align: left">
-                                                <p>loremipsum@mail.net</p>
-                                            </td>
-                                        </tr>
-                                    </Table>
+                                    </table>
                                 </td>
                             </tr>
                         </table>

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Main from './Main';
 import Login from './Login';
-import NavBar from'./components/NavBar';
+import NavBar from './components/NavBar';
 import Register from './Register';
 import AreaControl from './AreaControl';
 import UserControl from './UserControl';
@@ -15,7 +15,6 @@ const App = () => {
 			<Container>
 				<NavBar />
 			</Container>
-
 			<Routes>
 				<Route path='/' element={<Main />} />
 				<Route path='/login' element={<Login />} />

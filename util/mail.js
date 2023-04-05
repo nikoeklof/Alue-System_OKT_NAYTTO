@@ -47,7 +47,7 @@ async function main(receiverEmail, area, type) {
             subject = "Test mail"
             break
         default:
-            return
+            subject = "Muistutus viesti"
     }
     
     const html = messageCreator(area, subject)

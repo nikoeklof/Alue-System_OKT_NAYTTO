@@ -10,6 +10,9 @@ import {
 import theme from './style/theme';
 
 const styles = {
+	container: {
+		mb: 8
+	},
 	welcome: {
 		m: 2
 	},
@@ -40,7 +43,7 @@ const styles = {
 const Main = () => {
 
 	return (
-		<Container>
+		<Container sx={styles.container}>
 			<Typography sx={styles.mainText} variant='h6'>
 				Tervetuloa
 			</Typography>

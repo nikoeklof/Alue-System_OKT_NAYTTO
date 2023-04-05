@@ -2,47 +2,53 @@ import React from "react";
 import { MapContainer, TileLayer, Pane } from "react-leaflet";
 import DrawComponent from "./DrawComponent";
 import PolygonLayer from "./PolygonLayer";
+import CreateAreaForm from "./CreateAreaForm";
 
 export const LeafletMap = ({
-	areas,
-	setSelectedArea,
-	selectedArea,
-	clearSelected,
-	formActive,
-	setLayerContext,
+  areas,
+  setSelectedArea,
+  selectedArea,
+  clearSelected,
+  addArea,
+  layerContext,
+  setLayerContext,
+  canEdit,
 }) => {
-	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-			}}
-		>
-			<MapContainer
-				style={{ height: "450px", width: "100%" }}
-				center={[61.6834, 27.2653]}
-				zoom={11}
-				scrollWheelZoom={true}
-				doubleClickZoom={false}
-			>
-				<TileLayer
-					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-				/>
-				<Pane name="areaPane" style={{ zIndex: 100 }}>
-					<DrawComponent
-						formActive={formActive}
-						setLayerContext={setLayerContext}
-					/>
-				</Pane>
-				<PolygonLayer
-					areas={areas}
-					selectedArea={selectedArea}
-					setSelectedArea={setSelectedArea}
-					clearSelected={clearSelected}
-				/>
-			</MapContainer>
-		</div>
-	);
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <MapContainer
+        // Map has to have a set height, otherwise does not render
+        style={{ height: "490px", width: "100%" }}
+        center={[61.6834, 27.2653]}
+        zoom={11}
+        scrollWheelZoom={true}
+        doubleClickZoom={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Pane name="areaPane" style={{ zIndex: 100 }}>
+          {canEdit ? <DrawComponent setLayerContext={setLayerContext} /> : null}
+        </Pane>
+        <PolygonLayer
+          areas={areas}
+          selectedArea={selectedArea}
+          setSelectedArea={setSelectedArea}
+          clearSelected={clearSelected}
+        />
+        <CreateAreaForm
+          addArea={addArea}
+          clearSelected={clearSelected}
+          layerContext={layerContext}
+        />
+      </MapContainer>
+    </div>
+  );
 };

@@ -1,43 +1,50 @@
-import React from 'react';
-import {
-	Container,
-	Box,
-	Typography
-} from '@mui/material';
-
-import theme from './style/theme';
-import { areas } from './db/db';
-import { LeafletMap } from './components/LeafletMap';
+import React from "react";
+import { Container, Box, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import theme from "./style/theme";
+import AreaMap from "./AreaMap";
 
 const styles = {
-	map: {
-		m: 2
-	},
-	mainText: {
-		borderBottom: 'solid',
-		borderColor: theme.bgColor.secondary,
-		borderWidth: 1,
-		mt: 4,
-		mb: 2,
-		pb: 2
-	}
+  map: {
+    m: 2,
+  },
+  mainText: {
+    borderBottom: "solid",
+    borderColor: theme.bgColor.secondary,
+    borderWidth: 1,
+    mt: 4,
+    mb: 2,
+    pb: 2,
+  },
 };
 
-const Main = () => {
+const Main = ({ areas }) => {
+  const [selectedArea, setSelectedArea] = useState(undefined);
 
-	return (
-		<Container>
-			<Typography sx={styles.mainText} variant='h6'>
-				Alueet
-			</Typography>
-			<Box sx={styles.map}>
-				<LeafletMap
-					areas={areas}
-				/>
-			</Box>
-			
-		</Container>
-	)
+  useEffect(() => {
+    console.log(selectedArea);
+  }, [selectedArea, setSelectedArea]);
+
+  const clearSelected = () => {
+    setSelectedArea(undefined);
+  };
+
+  return (
+    <Container>
+      <Typography sx={styles.mainText} variant="h6">
+        Alueet
+      </Typography>
+      <Box sx={styles.map}>
+        <AreaMap
+          areas={areas}
+          selectedArea={selectedArea}
+          setSelectedArea={setSelectedArea}
+          clearSelected={clearSelected}
+          canEdit={false}
+        />
+      </Box>
+    </Container>
+  );
 };
 
 export default Main;

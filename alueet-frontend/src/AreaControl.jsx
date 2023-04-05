@@ -31,6 +31,9 @@ import LendAreaModal from './components/LendAreaModal';
 import ReturnAreaModal from './components/ReturnAreaModal';
 
 const styles = {
+	container: {
+		mb: 8
+	},
 	areas: {
 		flewGrow: 1
 	},
@@ -60,7 +63,7 @@ const styles = {
 		ml: 2,
 		width: '96%'
 	},
-	form: { 
+	form: {
 		width: '100%'
 	},
 	areainfo: {
@@ -80,7 +83,7 @@ const styles = {
 		mb: 0.5
 	},
 	button: {
-				
+
 	},
 	areaButton: {
 		m: 0.5,
@@ -118,8 +121,8 @@ const Row = ({ ...area }) => {
 		return (
 			<>
 				<Fragment>
-					<TableRow 
-						hover 
+					<TableRow
+						hover
 						key={area.id}
 						sx={{ '& > *': { borderBottom: 'unset' } }}
 					>
@@ -138,7 +141,7 @@ const Row = ({ ...area }) => {
 						<TableCell sx={{py: 0}} colSpan={6}>
 							<Collapse in={open} timeout='auto' unmountOnExit>
 								<Box sx={{margin: 1}}>
-									<Typography 
+									<Typography
 										variant='h6'
 										gutterBottom
 										component='div'
@@ -155,8 +158,8 @@ const Row = ({ ...area }) => {
 										</TableHead>
 										<TableBody>
 											<TableRow key={area.id}>
-												<TableCell 
-													component='th' 
+												<TableCell
+													component='th'
 													scope='row'
 												>
 													{area.buildings}
@@ -171,40 +174,40 @@ const Row = ({ ...area }) => {
 										</TableBody>
 									</Table>
 									<Grid sx={styles.buttons}>
-										<Button 
-											variant='contained' 
+										<Button
+											variant='contained'
 											sx={styles.areaButton}
 											onClick={() => setOpenLend(true)}
 										>
 											Lainaa alue
 										</Button>
-										<Button 
-											variant='contained' 
+										<Button
+											variant='contained'
 											sx={styles.areaButton}
 											onClick={() => setOpenReturn(true)}
 										>
 											Palauta alue
 										</Button>
-										<Button 
-											variant='contained' 
+										<Button
+											variant='contained'
 											sx={styles.areaButton}
 											onClick={() => setOpenEdit(true)}
 										>
 											Muokkaa tietoja
 										</Button>
-										<Button 
-											variant='contained' 
+										<Button
+											variant='contained'
 											sx={styles.areaButton}
 											onClick={() => setOpenDel(true)}
 										>
 											Poista alue
 										</Button>
-									</Grid> 	
+									</Grid>
 								</Box>
 							</Collapse>
 						</TableCell>
 					</TableRow>
-				</Fragment>	
+				</Fragment>
 				<DeleteWarningModal {...delProps}/>
 				<EditAreaModal {...editProps}/>
 				<LendAreaModal {...lendProps}/>
@@ -228,14 +231,14 @@ const AreaControl = () => {
 	};
 
 	return (
-		<Container>
+		<Container sx={styles.container}>
 			<Typography sx={styles.mainText} variant='h6'>
 				Alueiden hallinta
 			</Typography>
-			<TextField 
-				label='Hae' 
-				type='search' 
-				variant='outlined' 
+			<TextField
+				label='Hae'
+				type='search'
+				variant='outlined'
 				InputProps={{
 					endAdornment: (
 						<InputAdornment position='end' >
@@ -244,7 +247,7 @@ const AreaControl = () => {
 					)
 				}}
 				sx={styles.search}
-			/>			
+			/>
 			<Container xs={styles.areas}>
 				<Grid container spacing={3}>
 					<Grid item md={6} xs={12}>
@@ -278,7 +281,7 @@ const AreaControl = () => {
 					</Grid>
 				</Grid>
 			</Container>
-			
+
 		</Container>
 	)
 };

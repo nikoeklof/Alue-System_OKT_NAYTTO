@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Main from './Main';
 import Login from './Login';
-import NavBar from './components/NavBar';
 import Register from './Register';
+import NavBar from './components/NavBar';
+import Footer from './components/Footer';
 import AreaControl from './AreaControl';
 import UserControl from './UserControl';
 
@@ -22,6 +23,8 @@ const App = () => {
 					<Route path='/areaControl' element={<AreaControl />} />
 					<Route path='/userControl' element={<UserControl />} />
 				</Routes>
+
+				<Footer />
 			</Container>
 		</Router>
 	);

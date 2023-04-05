@@ -1,9 +1,10 @@
 import React from 'react';
-import { 
-	FormControl, 
-	Input, 
-	Typography, 
-	Button, 
+import {
+	Container,
+	FormControl,
+	Input,
+	Typography,
+	Button,
 	InputLabel,
 	FormGroup
 } from '@mui/material';
@@ -11,8 +12,10 @@ import {
 import theme from './style/theme';
 
 const styles = {
+	container: {
+		mb: 8
+	},
 	form: {
-		mx: 2,
 		px: 2,
 		py: 2,
 		mt: 2,
@@ -35,54 +38,55 @@ const styles = {
 	},
 	button: {
 		width: '130px',
-		ml: 0.5		
+		ml: 0.5
 	}
 };
 
 const Register = () => {
 	return (
-		<FormGroup  sx={styles.form}>
-			
-			<Typography 
-				variant='h5'
-				noWrap
-				sx={styles.text}
-			>
-				Rekisteröityminen
-			</Typography>
-			<FormControl>
-				<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
-				<Input 
-					id='username'
-					variant='filled'
-					sx={styles.input} 
-				/>
-			</FormControl>
-			<FormControl>
-				<InputLabel htmlFor='email'>Sähköposti</InputLabel>
-				<Input 
-					id='email'
-					variant='filled'
-					sx={styles.input} 
-				/>
-			</FormControl>
-			<FormControl>
-				<InputLabel htmlFor='password'>Salasana</InputLabel>
-				<Input
-					id='password'
-					variant='filled'
-					sx={styles.input}
-				/>
-			</FormControl>
-			<Button
-				variant='contained'
-				sx={styles.button}
-			>
-				Rekisteröidy
-			</Button>
-		
-		</FormGroup>
-		
+		<Container sx={styles.container}>
+			<FormGroup  sx={styles.form}>
+
+				<Typography
+					variant='h5'
+					noWrap
+					sx={styles.text}
+				>
+					Rekisteröityminen
+				</Typography>
+				<FormControl>
+					<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
+					<Input
+						id='username'
+						variant='filled'
+						sx={styles.input}
+					/>
+				</FormControl>
+				<FormControl>
+					<InputLabel htmlFor='email'>Sähköposti</InputLabel>
+					<Input
+						id='email'
+						variant='filled'
+						sx={styles.input}
+					/>
+				</FormControl>
+				<FormControl>
+					<InputLabel htmlFor='password'>Salasana</InputLabel>
+					<Input
+						id='password'
+						variant='filled'
+						sx={styles.input}
+					/>
+				</FormControl>
+				<Button
+					variant='contained'
+					sx={styles.button}
+				>
+					Rekisteröidy
+				</Button>
+
+			</FormGroup>
+		</Container>
 	)
 };
 

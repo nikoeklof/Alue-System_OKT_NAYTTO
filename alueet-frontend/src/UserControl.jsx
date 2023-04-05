@@ -25,6 +25,9 @@ import theme from './style/theme';
 import { users } from './db/db';
 
 const styles = {
+	container: {
+		mb: 8
+	},
 	mainText: {
 		borderBottom: 'solid',
 		borderColor: theme.bgColor.secondary,
@@ -38,7 +41,7 @@ const styles = {
 	},
 	form: {
 		mt: 2,
-		width: '100%', 
+		width: '100%',
 		overflow: 'hidden'
 	}
 };
@@ -78,15 +81,15 @@ const Row = ({...rowProps}) => {
 	const user = rowProps.user;
 	const [open, setOpen] = useState(false);
 	const areaArray = [];
-	
+
 	for (const area in user.areas) {
 		areaArray.push(user.areas[area]);
 	}
 
 	return (
 		<Fragment>
-			<TableRow 
-				hover 
+			<TableRow
+				hover
 				key={user.id}
 				onClick={() => setOpen(!open)}
 				sx={{ '& > *': { borderBottom: 'unset' } }}
@@ -114,7 +117,7 @@ const Row = ({...rowProps}) => {
 				<TableCell sx={{py: 0}} colSpan={6}>
 					<Collapse in={open} timeout='auto' unmountOnExit>
 						<Box sx={{margin: 1}}>
-							<Typography 
+							<Typography
 								variant='h6'
 								gutterBottom
 								component='div'
@@ -132,8 +135,8 @@ const Row = ({...rowProps}) => {
 									{areaArray.map((area => {
 										return (
 											<TableRow key={user.areas.id}>
-												<TableCell 
-													component='th' 
+												<TableCell
+													component='th'
 													scope='row'
 												>
 													Fetch from backend
@@ -146,14 +149,14 @@ const Row = ({...rowProps}) => {
 									}))}
 								</TableBody>
 							</Table>
-							<Button 
+							<Button
 								variant='contained'
 								sx={styles.button}
 								onClick={() => rowProps.setEditOpen(true)}
 							>
 								Muokkaa Käyttäjää
 							</Button>
-							<Button 
+							<Button
 								variant='contained'
 								sx={styles.button}
 								onClick={() => rowProps.setDelOpen(true)}
@@ -164,7 +167,7 @@ const Row = ({...rowProps}) => {
 					</Collapse>
 				</TableCell>
 			</TableRow>
-		</Fragment>	
+		</Fragment>
 	)
 };
 
@@ -199,11 +202,11 @@ const UserControl = () => {
 	};
 
 	return (
-		<Container>
+		<Container sx={styles.container}>
 			<Typography variant='h6' sx={styles.mainText}>
 				Käyttäjien hallinta
 			</Typography>
-			<Button 
+			<Button
 				variant='contained'
 				sx={styles.button}
 				onClick={() => setCreateOpen(true)}
@@ -239,7 +242,7 @@ const UserControl = () => {
 									return (
 										<Row key={user.id} {...rowProps} />
 									)
-								})	
+								})
 							}
 						</TableBody>
 					</Table>

@@ -3,17 +3,33 @@ import { Polygon } from "react-leaflet";
 import { useState } from "react";
 
 // Blueprint for the areas drawn to the map
-const PolygonArea = ({ props, onClick, positions, selectedArea }) => {
+const PolygonArea = ({
+  props,
+  onClick,
+  positions,
+  selectedArea,
+  hoverStatus,
+}) => {
   const [color, setCurrentColor] = useState(props.loaned ? "green" : "blue");
   const hoverColorOnSelected = "#a65052";
   const hoverColorDefault = "#5c57ff";
   const hoverColorLoaned = "#6bb572";
 
   useEffect(() => {
-    if (props.id === selectedArea?.id) return setCurrentColor("red");
-    if (props.loaned) return setCurrentColor("green");
-    return setCurrentColor("blue");
-  }, [props.id, selectedArea?.id, props.loaned]);
+    if (props.id === hoverStatus) {
+      if (props.id === selectedArea?.id) {
+        return setCurrentColor(hoverColorOnSelected);
+      }
+      if (props.loaned) {
+        return setCurrentColor(hoverColorLoaned);
+      }
+      return setCurrentColor(hoverColorDefault);
+    } else {
+      if (props.id === selectedArea?.id) return setCurrentColor("red");
+      if (props.loaned) return setCurrentColor("green");
+      return setCurrentColor("blue");
+    }
+  }, [hoverStatus, props.id, props.loaned, selectedArea?.id]);
 
   return (
     <Polygon

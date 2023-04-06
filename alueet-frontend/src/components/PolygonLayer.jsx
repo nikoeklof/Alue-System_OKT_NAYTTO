@@ -7,6 +7,7 @@ const PolygonLayer = ({
   setSelectedArea,
   selectedArea,
   clearSelected,
+  hoverStatus,
 }) => {
   return (
     <LayerGroup>
@@ -21,6 +22,7 @@ const PolygonLayer = ({
             props={area}
             selectedArea={selectedArea}
             positions={positions}
+            hoverStatus={hoverStatus}
             onClick={() => {
               if (selectedArea?.id === area.id) return clearSelected();
               else setSelectedArea(area);

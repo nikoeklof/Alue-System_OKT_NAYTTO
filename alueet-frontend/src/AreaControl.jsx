@@ -73,6 +73,7 @@ const styles = {
 
 const AreaControl = ({ areas, setAreas }) => {
   const [selectedArea, setSelectedArea] = useState(undefined);
+  const [hoverStatus, setHoverStatus] = useState(undefined);
   const [layerContext, setLayerContext] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -94,26 +95,25 @@ const AreaControl = ({ areas, setAreas }) => {
   };
 
   const updateArea = (props) => {
-    clearSelected();
-    const areaList = [];
+    const areaList = areas;
     console.log(props);
     var areaToUpdate = { ...props };
-    areas.forEach((area) => {
-      if (area.id !== props.id) areaList.push(area);
+    areaList.forEach((area, i) => {
+      if (area.id === props.id) areaList.splice(i, 1, areaToUpdate);
     });
 
-    setAreas([...areaList, areaToUpdate]);
+    setAreas([...areaList]);
   };
   const loanArea = (props) => {
-    const areaList = [];
+    const areaList = areas;
     var areaToLoan = { ...props };
     areaToLoan.loaned = !areaToLoan.loaned;
 
-    areas.forEach((area) => {
-      if (area.id !== props.id) areaList.push(area);
+    areaList.forEach((area, i) => {
+      if (area.id === props.id) areaList.splice(i, 1, areaToLoan);
     });
-
-    setAreas([...areaList, areaToLoan]);
+    console.log(areaList);
+    setAreas([...areaList]);
     clearSelected();
   };
 
@@ -159,6 +159,7 @@ const AreaControl = ({ areas, setAreas }) => {
               layerContext={layerContext}
               setLayerContext={setLayerContext}
               canEdit={true}
+              hoverStatus={hoverStatus}
             />
           </Grid>
           <Grid item md={6} xs={12}>
@@ -177,6 +178,10 @@ const AreaControl = ({ areas, setAreas }) => {
                           area={area}
                           setSelectedArea={setSelectedArea}
                           selectedArea={selectedArea}
+                          setHoverStatus={setHoverStatus}
+                          loanArea={loanArea}
+                          removeArea={removeArea}
+                          updateArea={updateArea}
                         />
                       ))}
                   </TableBody>

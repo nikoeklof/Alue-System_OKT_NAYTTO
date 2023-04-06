@@ -74,7 +74,15 @@ const styles = {
   },
 };
 
-const TableRowComponent = ({ area, setSelectedArea, selectedArea }) => {
+const TableRowComponent = ({
+  area,
+  setSelectedArea,
+  selectedArea,
+  setHoverStatus,
+  loanArea,
+  removeArea,
+  updateArea,
+}) => {
   const [open, setOpen] = useState(false);
   const [openDel, setOpenDel] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -95,10 +103,13 @@ const TableRowComponent = ({ area, setSelectedArea, selectedArea }) => {
     openDel,
     handleCloseDelModal: () => setOpenDel(false),
     warningText: "Haluatko varmasti poistaa alueen?",
+    handleConfirm: () => removeArea(area),
   };
   const editProps = {
     openEdit,
     handleCloseEditModal: () => setOpenEdit(false),
+    handleConfirm: (updatedArea) => updateArea(updatedArea),
+    originalArea: area,
   };
   const lendProps = {
     openLend,
@@ -115,11 +126,16 @@ const TableRowComponent = ({ area, setSelectedArea, selectedArea }) => {
         <Fragment>
           <TableRow
             hover={true}
-            onhover={() => setSelectedArea(area)}
             key={area.id}
             sx={{ "& > *": { borderBottom: "unset" } }}
           >
             <TableCell
+              onMouseOver={() => {
+                setHoverStatus(area.id);
+              }}
+              onMouseOut={() => {
+                setHoverStatus(undefined);
+              }}
               onClick={() => {
                 setSelectedArea(open ? undefined : area);
               }}
@@ -167,21 +183,26 @@ const TableRowComponent = ({ area, setSelectedArea, selectedArea }) => {
                     <Button
                       variant="contained"
                       sx={styles.areaButton}
-                      onClick={() => setOpenLend(true)}
+                      onClick={() => {
+                        //setOpenLend(true)
+                        loanArea(area);
+                      }}
                     >
-                      Lainaa alue
+                      {area.loaned ? "Palauta alue" : "Lainaa alue"}
                     </Button>
-                    <Button
+                    {/* <Button
                       variant="contained"
                       sx={styles.areaButton}
                       onClick={() => setOpenReturn(true)}
                     >
                       Palauta alue
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="contained"
                       sx={styles.areaButton}
-                      onClick={() => setOpenEdit(true)}
+                      onClick={() => {
+                        setOpenEdit(true);
+                      }}
                     >
                       Muokkaa tietoja
                     </Button>

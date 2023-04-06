@@ -11,6 +11,7 @@ const AreaMap = ({
   clearSelected,
   layerContext,
   setLayerContext,
+  hoverStatus,
 }) => {
   return (
     <div>
@@ -23,6 +24,7 @@ const AreaMap = ({
         setLayerContext={canEdit ? setLayerContext : undefined}
         canEdit={canEdit}
         clearSelected={clearSelected}
+        hoverStatus={hoverStatus}
       />
     </div>
   );

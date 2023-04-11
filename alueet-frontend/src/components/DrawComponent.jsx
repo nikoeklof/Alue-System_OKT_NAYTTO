@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 
-const DrawComponent = ({ formActive, setLayerContext }) => {
+const DrawComponent = ({ setLayerContext }) => {
+	const [areaCreated, setAreaCreated] = useState(false);
 	return (
 		<FeatureGroup>
 			<EditControl
@@ -14,7 +15,10 @@ const DrawComponent = ({ formActive, setLayerContext }) => {
 					polyline: false,
 					marker: false,
 					circlemarker: false,
-					polygon: false || formActive,
+					polygon: !areaCreated,
+				}}
+				edit={{
+					remove: false,
 				}}
 				onCreated={function (e) {
 					const { layer } = e;
@@ -22,11 +26,13 @@ const DrawComponent = ({ formActive, setLayerContext }) => {
 					const latlngs = layer._latlngs[0];
 
 					setLayerContext({ coords: latlngs, layer: layer });
+					setAreaCreated(!areaCreated);
 				}}
 				onEdited={function (e) {
-					const layer = e.layers._layers;
+					const layer =
+						e.layers._layers[Object.keys(e.layers._layers)[0]];
 
-					const latlngs = layer[Object.keys(layer)[0]]._latlngs[0];
+					const latlngs = layer._latlngs[0];
 
 					setLayerContext({ coords: latlngs, layer: layer });
 				}}

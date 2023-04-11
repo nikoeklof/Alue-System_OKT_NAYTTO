@@ -138,15 +138,21 @@ const NavBar = () => {
 		>
 			<Container maxWidth='xl'>
 				<Toolbar>
-					<Typography
-						variant='h5'
-						noWrap
-						href='/'
-						component='a'
-						sx={styles.normal.logoText}
+					<Link
+						to={'/'}
+						style={styles.normal.link}
 					>
-						Aluepöytä
-					</Typography>
+						<Typography
+							variant='h5'
+							noWrap
+							component='a'
+							href=''
+							sx={styles.normal.logoText}
+						>
+							Aluepöytä
+						</Typography>
+					</Link>
+
 					<Box sx={styles.responsive.box}>
 						<IconButton
 							size='large'
@@ -165,50 +171,59 @@ const NavBar = () => {
 							onClose={handleCloseNavMenu}
 							sx={styles.responsive.menu.sx}
 						>
-							<Link
-								to={'/areaControl'}
-								style={styles.responsive.link}
-							>
-								<MenuItem onClick={handleCloseNavMenu}>
+							<MenuItem onClick={handleCloseNavMenu}>
+								<Link
+									to={'/areaControl'}
+									style={styles.responsive.link}
+								>
 									Alueiden hallinta
-								</MenuItem>
-							</Link>
-							<Link
-								to={'/userControl'}
-								style={styles.responsive.link}
-							>
-								<MenuItem onClick={handleCloseNavMenu}>
+								</Link>
+							</MenuItem>
+							<MenuItem onClick={handleCloseNavMenu}>
+								<Link
+									to={'/userControl'}
+									style={styles.responsive.link}
+								>
 									Käyttäjien hallinta
-								</MenuItem>
-							</Link>
+								</Link>
+							</MenuItem>
 						</Menu>
 					</Box>
+
 					<Typography
 						variant='h5'
 						noWrap
-						href='/'
 						component='a'
+						href=''
 						sx={styles.responsive.logoText}
 					>
 						Aluepöytä
 					</Typography>
 					<Box sx={styles.normal.box}>
-						<Link
-							to={'/areaControl'}
-							style={styles.normal.link}
-						>
-							<Button sx={styles.normal.button}>
+						<Button sx={styles.normal.button}>
+							<Link
+								to={'/areaControl'}
+								style={styles.normal.link}
+							>
 								Alueiden hallinta
-							</Button>
-						</Link>
-						<Link
-							to={'/userControl'}
-							style={styles.normal.link}
-						>
-							<Button sx={styles.normal.button}>
+							</Link>
+						</Button>
+						<Button sx={styles.normal.button}>
+							<Link
+								to={'/userControl'}
+								style={styles.normal.link}
+							>
 								Käyttäjien hallinta
-							</Button>
-						</Link>
+							</Link>
+						</Button>
+						<Button sx={styles.normal.button}>
+							<Link
+								to={'/createArea'}
+								style={styles.normal.link}
+							>
+								Luo Alue
+							</Link>
+						</Button>
 					</Box>
 					<Box sx={styles.user.box}>
 						<Button

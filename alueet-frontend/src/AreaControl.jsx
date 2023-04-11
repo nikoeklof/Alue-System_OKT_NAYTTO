@@ -1,34 +1,20 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Container,
 	Grid,
 	Typography,
-	Button,
 	TextField,
 	InputAdornment,
 	Paper,
 	TableContainer,
 	Table,
-	TableHead,
-	TableRow,
-	TableCell,
 	TableBody,
-	IconButton,
-	Collapse,
-	Box,
 	TablePagination,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-
 import theme from './style/theme';
-import { areas } from './db/db';
-
 import AreaMap from './AreaMap';
-import DeleteWarningModal from './components/DeleteWarningModal';
-import EditAreaModal from './components/EditAreaModal';
-import LendAreaModal from './components/LendAreaModal';
-import ReturnAreaModal from './components/ReturnAreaModal';
+import TableRowComponent from './components/TableRowComponent';
 
 const styles = {
 	container: {
@@ -88,146 +74,16 @@ const styles = {
 	},
 };
 
-const Row = ({ ...area }) => {
-	const [open, setOpen] = useState(false);
-	const [openDel, setOpenDel] = useState(false);
-	const [openEdit, setOpenEdit] = useState(false);
-	const [openLend, setOpenLend] = useState(false);
-	const [openReturn, setOpenReturn] = useState(false);
+const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
+	const [selectedArea, setSelectedArea] = useState(undefined);
+	const [hoverStatus, setHoverStatus] = useState(undefined);
 
-	const loaned = area.loaned;
-
-	const delProps = {
-		openDel,
-		handleCloseDelModal: () => setOpenDel(false),
-		warningText: 'Haluatko varmasti poistaa alueen?',
-	};
-	const editProps = {
-		openEdit,
-		handleCloseEditModal: () => setOpenEdit(false),
-	};
-	const lendProps = {
-		openLend,
-		handleCloseLendModal: () => setOpenLend(false),
-	};
-	const returnProps = {
-		openReturn,
-		handleCloseReturnModal: () => setOpenReturn(false),
-	};
-
-	if (area) {
-		return (
-			<>
-				<Fragment>
-					<TableRow
-						hover
-						key={area.id}
-						sx={{ '& > *': { borderBottom: 'unset' } }}
-					>
-						<TableCell onClick={() => setOpen(!open)}>
-							{area.name}
-						</TableCell>
-						<TableCell>
-							<IconButton
-								aria-label='expand row'
-								size='small'
-								onClick={() => setOpen(!open)}
-							>
-								{open ? <ExpandLess /> : <ExpandMore />}
-							</IconButton>
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell
-							sx={{ py: 0 }}
-							colSpan={6}
-						>
-							<Collapse
-								in={open}
-								timeout='auto'
-								unmountOnExit
-							>
-								<Box sx={{ margin: 1 }}>
-									<Typography
-										variant='h6'
-										gutterBottom
-										component='div'
-									>
-										Info
-									</Typography>
-									<Table
-										size='small'
-										aria-label='areas'
-									>
-										<TableHead>
-											<TableRow>
-												<TableCell>Asunnot</TableCell>
-												<TableCell>Lainattu</TableCell>
-												<TableCell>ID</TableCell>
-											</TableRow>
-										</TableHead>
-										<TableBody>
-											<TableRow key={area.id}>
-												<TableCell
-													component='th'
-													scope='row'
-												>
-													{area.buildings}
-												</TableCell>
-												<TableCell>
-													{loaned ? 'Kyllä' : 'Ei'}
-												</TableCell>
-												<TableCell>{area.id}</TableCell>
-											</TableRow>
-										</TableBody>
-									</Table>
-									<Grid sx={styles.buttons}>
-										<Button
-											variant='contained'
-											sx={styles.areaButton}
-											onClick={() => setOpenLend(true)}
-										>
-											Lainaa alue
-										</Button>
-										<Button
-											variant='contained'
-											sx={styles.areaButton}
-											onClick={() => setOpenReturn(true)}
-										>
-											Palauta alue
-										</Button>
-										<Button
-											variant='contained'
-											sx={styles.areaButton}
-											onClick={() => setOpenEdit(true)}
-										>
-											Muokkaa tietoja
-										</Button>
-										<Button
-											variant='contained'
-											sx={styles.areaButton}
-											onClick={() => setOpenDel(true)}
-										>
-											Poista alue
-										</Button>
-									</Grid>
-								</Box>
-							</Collapse>
-						</TableCell>
-					</TableRow>
-				</Fragment>
-				<DeleteWarningModal {...delProps} />
-				<EditAreaModal {...editProps} />
-				<LendAreaModal {...lendProps} />
-				<ReturnAreaModal {...returnProps} />
-			</>
-		);
-	}
-};
-
-const AreaControl = () => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+
+	useEffect(() => {
+		console.log(selectedArea);
+	}, [selectedArea, setSelectedArea]);
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -236,6 +92,41 @@ const AreaControl = () => {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
+	};
+
+	const updateArea = (props) => {
+		const areaList = areas;
+		console.log(props);
+		var areaToUpdate = { ...props };
+		areaList.forEach((area, i) => {
+			if (area.id === props.id) areaList.splice(i, 1, areaToUpdate);
+		});
+
+		setAreas([...areaList]);
+	};
+	const loanArea = (props) => {
+		const areaList = areas;
+		var areaToLoan = { ...props };
+		areaToLoan.loaned = !areaToLoan.loaned;
+
+		areaList.forEach((area, i) => {
+			if (area.id === props.id) areaList.splice(i, 1, areaToLoan);
+		});
+		console.log(areaList);
+		setAreas([...areaList]);
+		clearSelected();
+	};
+
+	const removeArea = (props) => {
+		const areaList = [];
+		areas.forEach((area) => {
+			if (area.id !== props.id) areaList.push(area);
+		});
+		setAreas([...areaList]);
+		clearSelected();
+	};
+	const clearSelected = () => {
+		setSelectedArea(undefined);
 	};
 
 	return (
@@ -269,7 +160,16 @@ const AreaControl = () => {
 						md={6}
 						xs={12}
 					>
-						<AreaMap />
+						<AreaMap
+							areas={areas}
+							selectedArea={selectedArea}
+							setSelectedArea={setSelectedArea}
+							clearSelected={clearSelected}
+							layerContext={layerContext}
+							setLayerContext={setLayerContext}
+							canEdit={false}
+							hoverStatus={hoverStatus}
+						/>
 					</Grid>
 					<Grid
 						item
@@ -286,9 +186,19 @@ const AreaControl = () => {
 												page * rowsPerPage + rowsPerPage
 											)
 											.map((area) => (
-												<Row
+												<TableRowComponent
 													key={area.name}
-													{...area}
+													area={area}
+													setSelectedArea={
+														setSelectedArea
+													}
+													selectedArea={selectedArea}
+													setHoverStatus={
+														setHoverStatus
+													}
+													loanArea={loanArea}
+													removeArea={removeArea}
+													updateArea={updateArea}
 												/>
 											))}
 									</TableBody>

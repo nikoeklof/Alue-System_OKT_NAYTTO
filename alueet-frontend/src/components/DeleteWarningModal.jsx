@@ -56,6 +56,9 @@ const DeleteWarningModal = ({ ...delProps }) => {
 					<Button
 						sx={styles.button}
 						variant='contained'
+						onClick={() => {
+							delProps.handleConfirm();
+						}}
 					>
 						Poista
 					</Button>

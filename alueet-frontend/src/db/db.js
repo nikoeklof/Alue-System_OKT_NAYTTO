@@ -194,33 +194,9 @@ const areas = [
 			},
 		],
 	},
+
 	{
 		id: 5,
-		name: 'Lähemäki',
-		buildings: 25,
-		loaned: false,
-		ownerId: 4,
-		latlngs: [
-			{
-				lat: 61.695936601164824,
-				lng: 27.307977676391605,
-			},
-			{
-				lat: 61.69626217286178,
-				lng: 27.314500808715824,
-			},
-			{
-				lat: 61.693291203778585,
-				lng: 27.31587409973145,
-			},
-			{
-				lat: 61.69272139619582,
-				lng: 27.3076343536377,
-			},
-		],
-	},
-	{
-		id: 6,
 		name: 'Launiala',
 		buildings: 16,
 		loaned: false,
@@ -245,7 +221,7 @@ const areas = [
 		],
 	},
 	{
-		id: 7,
+		id: 6,
 		name: 'Lehmuskylä',
 		buildings: 4,
 		loaned: true,

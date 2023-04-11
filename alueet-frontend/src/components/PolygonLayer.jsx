@@ -7,6 +7,7 @@ const PolygonLayer = ({
 	setSelectedArea,
 	selectedArea,
 	clearSelected,
+	hoverStatus,
 }) => {
 	return (
 		<LayerGroup>
@@ -14,18 +15,29 @@ const PolygonLayer = ({
 				const positions = area.latlngs.map((coords) => {
 					return [coords.lat, coords.lng];
 				});
-
+				if (setSelectedArea !== undefined) {
+					return (
+						<PolygonArea
+							key={i}
+							props={area}
+							selectedArea={selectedArea}
+							positions={positions}
+							hoverStatus={hoverStatus}
+							onClick={() => {
+								if (selectedArea?.id === area.id)
+									return clearSelected();
+								else setSelectedArea(area);
+							}}
+						/>
+					);
+				}
 				return (
 					<PolygonArea
 						key={i}
 						props={area}
 						selectedArea={selectedArea}
 						positions={positions}
-						onClick={() => {
-							if (selectedArea?.id === area.id)
-								return clearSelected();
-							else setSelectedArea(area);
-						}}
+						hoverStatus={hoverStatus}
 					/>
 				);
 			})}

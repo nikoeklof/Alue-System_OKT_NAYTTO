@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
 	Box,
 	Typography,
@@ -46,6 +46,11 @@ const styles = {
 
 const EditAreaModal = ({ ...editProps }) => {
 	const handleClose = () => editProps.handleCloseEditModal();
+	const [buildingAmount, setBuildingAmount] = useState(
+		editProps.originalArea?.buildings
+	);
+	const [areaName, setAreaName] = useState(editProps.originalArea?.name);
+	const ref = useRef(null);
 
 	return (
 		<Modal
@@ -64,16 +69,22 @@ const EditAreaModal = ({ ...editProps }) => {
 				<FormGroup>
 					<FormControl>
 						<TextField
+							ref={ref}
 							label='Asunnot'
 							type='number'
 							variant='outlined'
+							defaultValue={editProps.originalArea.buildings}
+							onChange={(e) => setBuildingAmount(e.target.value)}
 							sx={styles.inputNum}
 						/>
 						<TextField
-							label='Talot'
-							type='number'
+							ref={ref}
+							label='Alueen Nimi'
+							type='text'
+							defaultValue={editProps.originalArea.name}
+							onChange={(e) => setAreaName(e.target.value)}
 							variant='outlined'
-							sx={styles.inputNum}
+							sx={styles.inputMore}
 						/>
 						<TextField
 							label='Lisätietoja'
@@ -95,6 +106,18 @@ const EditAreaModal = ({ ...editProps }) => {
 				<Button
 					sx={styles.button}
 					variant='contained'
+					onClick={() => {
+						const newArea = {
+							id: editProps.originalArea.id,
+							name: areaName,
+							buildings: parseInt(buildingAmount),
+							ownerId: editProps.originalArea.ownerId,
+							loaned: editProps.originalArea.loaned,
+							latlngs: editProps.originalArea.latlngs,
+						};
+						editProps.handleConfirm(newArea);
+						handleClose();
+					}}
 				>
 					Valmis
 				</Button>

@@ -8,44 +8,56 @@ export const LeafletMap = ({
 	setSelectedArea,
 	selectedArea,
 	clearSelected,
-	formActive,
 	setLayerContext,
+	canEdit,
+	hoverStatus,
 }) => {
 	return (
-		<div
-			style={{
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-			}}
-		>
-			<MapContainer
-				style={{ height: '450px', width: '100%' }}
-				center={[61.6834, 27.2653]}
-				zoom={11}
-				scrollWheelZoom={true}
-				doubleClickZoom={false}
+		<div>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					zIndex: 1,
+				}}
 			>
-				<TileLayer
-					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-					url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-				/>
-				<Pane
-					name='areaPane'
-					style={{ zIndex: 100 }}
+				<MapContainer
+					// Map has to have a set height, otherwise does not render
+					style={{
+						height: '490px',
+						width: '100%',
+						zIndex: 1,
+						position: 'initial',
+						minWidth: '100%',
+						minHeight: '490px',
+					}}
+					center={[61.6834, 27.2653]}
+					zoom={11}
+					scrollWheelZoom={true}
+					doubleClickZoom={false}
 				>
-					<DrawComponent
-						formActive={formActive}
-						setLayerContext={setLayerContext}
+					<TileLayer
+						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+						url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 					/>
-				</Pane>
-				<PolygonLayer
-					areas={areas}
-					selectedArea={selectedArea}
-					setSelectedArea={setSelectedArea}
-					clearSelected={clearSelected}
-				/>
-			</MapContainer>
+					<Pane
+						name='areaPane'
+						style={{ zIndex: 100 }}
+					>
+						{canEdit ? (
+							<DrawComponent setLayerContext={setLayerContext} />
+						) : null}
+					</Pane>
+					<PolygonLayer
+						areas={areas}
+						selectedArea={selectedArea}
+						setSelectedArea={setSelectedArea}
+						clearSelected={clearSelected}
+						hoverStatus={hoverStatus}
+					/>
+				</MapContainer>
+			</div>
 		</div>
 	);
 };

@@ -68,7 +68,7 @@ const styles = {
     },
     button: {
       my: 1,
-      display: "block",,
+      display: "block",
 			color: theme.color.secondary
     },
     menu: {

@@ -1,28 +1,28 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState } from "react";
 import {
-	Box,
-	Button,
-	Collapse,
-	Container,
-	IconButton,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TablePagination,
-	TableRow,
-	Typography
-} from '@mui/material';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+  Box,
+  Button,
+  Collapse,
+  Container,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
-import EditUserModal from './components/EditUserModal';
-import DeleteWarningModal from './components/DeleteWarningModal';
-import CreateUserModal from './components/CreateUserModal';
+import EditUserModal from "./components/EditUserModal";
+import DeleteWarningModal from "./components/DeleteWarningModal";
+import CreateUserModal from "./components/CreateUserModal";
 
-import theme from './style/theme';
-import { users } from './db/db';
+import theme from "./style/theme";
+import { users } from "./db/db";
 
 const styles = {
 	container: {
@@ -47,49 +47,49 @@ const styles = {
 };
 
 const columns = [
-	{
-		id: 'name',
-		label: 'Nimi',
-		minWidth: 120
-	},
-	{
-		id: 'email',
-		label: 'Sähköposti',
-		minWidth: 170
-	},
-	{
-		id: 'quest',
-		label: 'Vieras',
-		minWidth: 50,
-		align: 'right'
-	},
-	{
-		id: 'admin',
-		label: 'Admin',
-		minWidth: 50,
-		align: 'right'
-	},
-	{
-		id: 'id',
-		label: 'ID',
-		minWidth: 60,
-		align: 'right'
-	},
+  {
+    id: "name",
+    label: "Nimi",
+    minWidth: 120,
+  },
+  {
+    id: "email",
+    label: "Sähköposti",
+    minWidth: 170,
+  },
+  {
+    id: "quest",
+    label: "Vieras",
+    minWidth: 50,
+    align: "right",
+  },
+  {
+    id: "admin",
+    label: "Admin",
+    minWidth: 50,
+    align: "right",
+  },
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 60,
+    align: "right",
+  },
 ];
 
 const Row = ({...rowProps}) => {
 	const user = rowProps.user;
 	const [open, setOpen] = useState(false);
 	const areaArray = [];
-
+	
 	for (const area in user.areas) {
 		areaArray.push(user.areas[area]);
 	}
 
 	return (
 		<Fragment>
-			<TableRow
-				hover
+			<TableRow 
+				hover 
 				key={user.id}
 				onClick={() => setOpen(!open)}
 				sx={{ '& > *': { borderBottom: 'unset' } }}
@@ -117,7 +117,7 @@ const Row = ({...rowProps}) => {
 				<TableCell sx={{py: 0}} colSpan={6}>
 					<Collapse in={open} timeout='auto' unmountOnExit>
 						<Box sx={{margin: 1}}>
-							<Typography
+							<Typography 
 								variant='h6'
 								gutterBottom
 								component='div'
@@ -135,8 +135,8 @@ const Row = ({...rowProps}) => {
 									{areaArray.map((area => {
 										return (
 											<TableRow key={user.areas.id}>
-												<TableCell
-													component='th'
+												<TableCell 
+													component='th' 
 													scope='row'
 												>
 													Fetch from backend
@@ -149,14 +149,14 @@ const Row = ({...rowProps}) => {
 									}))}
 								</TableBody>
 							</Table>
-							<Button
+							<Button 
 								variant='contained'
 								sx={styles.button}
 								onClick={() => rowProps.setEditOpen(true)}
 							>
 								Muokkaa Käyttäjää
 							</Button>
-							<Button
+							<Button 
 								variant='contained'
 								sx={styles.button}
 								onClick={() => rowProps.setDelOpen(true)}
@@ -167,39 +167,39 @@ const Row = ({...rowProps}) => {
 					</Collapse>
 				</TableCell>
 			</TableRow>
-		</Fragment>
+		</Fragment>	
 	)
 };
 
 const UserControl = () => {
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [openEdit, setEditOpen] = useState(false);
-	const [openDel, setDelOpen] = useState(false);
-	const [openCreate, setCreateOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [openEdit, setEditOpen] = useState(false);
+  const [openDel, setDelOpen] = useState(false);
+  const [openCreate, setCreateOpen] = useState(false);
 
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(+event.target.value);
-		setPage(0);
-	};
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
-	const editProps = {
-		openEdit,
-		handleEditModalClose: () => setEditOpen(false)
-	};
-	const delProps = {
-		openDel,
-		handleCloseDelModal: () => setDelOpen(false),
-		warningText: 'Haluatko varmasti poistaa käyttäjän?'
-	};
-	const createProps = {
-		openCreate,
-		handleCreateModalClose: () => setCreateOpen(false)
-	};
+  const editProps = {
+    openEdit,
+    handleEditModalClose: () => setEditOpen(false),
+  };
+  const delProps = {
+    openDel,
+    handleCloseDelModal: () => setDelOpen(false),
+    warningText: "Haluatko varmasti poistaa käyttäjän?",
+  };
+  const createProps = {
+    openCreate,
+    handleCreateModalClose: () => setCreateOpen(false),
+  };
 
 	return (
 		<Container sx={styles.container}>

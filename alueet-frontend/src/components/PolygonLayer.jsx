@@ -3,32 +3,44 @@ import { LayerGroup } from "react-leaflet";
 import PolygonArea from "./PolygonArea";
 
 const PolygonLayer = ({
-	areas,
-	setSelectedArea,
-	selectedArea,
-	clearSelected,
+  areas,
+  setSelectedArea,
+  selectedArea,
+  clearSelected,
+  hoverStatus,
 }) => {
-	return (
-		<LayerGroup>
-			{areas.map((area, i) => {
-				const positions = area.latlngs.map((coords) => {
-					return [coords.lat, coords.lng];
-				});
-
-				return (
-					<PolygonArea
-						key={i}
-						props={area}
-						selectedArea={selectedArea}
-						positions={positions}
-						onClick={() => {
-							if (selectedArea?.id === area.id) return clearSelected();
-							else setSelectedArea(area);
-						}}
-					/>
-				);
-			})}
-		</LayerGroup>
-	);
+  return (
+    <LayerGroup>
+      {areas.map((area, i) => {
+        const positions = area.latlngs.map((coords) => {
+          return [coords.lat, coords.lng];
+        });
+        if (setSelectedArea !== undefined) {
+          return (
+            <PolygonArea
+              key={i}
+              props={area}
+              selectedArea={selectedArea}
+              positions={positions}
+              hoverStatus={hoverStatus}
+              onClick={() => {
+                if (selectedArea?.id === area.id) return clearSelected();
+                else setSelectedArea(area);
+              }}
+            />
+          );
+        }
+        return (
+          <PolygonArea
+            key={i}
+            props={area}
+            selectedArea={selectedArea}
+            positions={positions}
+            hoverStatus={hoverStatus}
+          />
+        );
+      })}
+    </LayerGroup>
+  );
 };
 export default PolygonLayer;

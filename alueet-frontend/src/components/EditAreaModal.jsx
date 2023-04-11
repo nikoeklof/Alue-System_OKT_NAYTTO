@@ -6,7 +6,7 @@ import {
 	Button,
 	FormGroup,
 	FormControl,
-	TextField
+	TextField,
 } from '@mui/material';
 
 import theme from '../style/theme';
@@ -22,30 +22,29 @@ const styles = {
 		boxShadow: 24,
 		borderRadius: 2,
 		px: 4,
-		py: 3
+		py: 3,
 	},
 	header: {
 		mb: 2,
 		pb: 1,
 		borderBottom: '1px solid',
-		borderColor: theme.color.primary
+		borderColor: theme.color.primary,
 	},
 	inputNum: {
 		m: 0.5,
-		maxWidth: 100
+		maxWidth: 100,
 	},
 	inputMore: {
 		m: 0.5,
-		mb: 2
+		mb: 2,
 	},
 	button: {
 		float: 'right',
-		m: 0.5
-	}
+		m: 0.5,
+	},
 };
 
-const EditAreaModal = ({...editProps}) => {
-
+const EditAreaModal = ({ ...editProps }) => {
 	const handleClose = () => editProps.handleCloseEditModal();
 
 	return (
@@ -55,9 +54,9 @@ const EditAreaModal = ({...editProps}) => {
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
-				<Typography 
-					variant='h6' 
-					component='h2' 
+				<Typography
+					variant='h6'
+					component='h2'
 					sx={styles.header}
 				>
 					Muokkaa alueen tietoja
@@ -67,44 +66,41 @@ const EditAreaModal = ({...editProps}) => {
 						<TextField
 							label='Asunnot'
 							type='number'
-							variant='outlined' 
+							variant='outlined'
 							sx={styles.inputNum}
 						/>
 						<TextField
 							label='Talot'
 							type='number'
-							variant='outlined' 
+							variant='outlined'
 							sx={styles.inputNum}
 						/>
 						<TextField
 							label='Lisätietoja'
-							variant='outlined' 
+							variant='outlined'
 							multiline
 							rows={5}
 							sx={styles.inputMore}
 						/>
 					</FormControl>
 				</FormGroup>
-				
-				<Button 
-					sx={styles.button} 
+
+				<Button
+					sx={styles.button}
 					variant='contained'
 					onClick={() => handleClose()}
 				>
 					Peruuta
 				</Button>
-				<Button 
-					sx={styles.button} 
+				<Button
+					sx={styles.button}
 					variant='contained'
 				>
 					Valmis
 				</Button>
-				
-				
 			</Box>
 		</Modal>
-		
-	)
+	);
 };
 
 export default EditAreaModal;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-	AppBar, 
+import {
+	AppBar,
 	Toolbar,
 	Container,
 	Typography,
@@ -11,15 +11,15 @@ import {
 	Button,
 	IconButton,
 } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material'
+import { Menu as MenuIcon } from '@mui/icons-material';
 
 import theme from '../style/theme';
 
 const styles = {
 	responsive: {
 		box: {
-			flexGrow: 1, 
-			display: { xs: 'flex', md: 'none' }
+			flexGrow: 1,
+			display: { xs: 'flex', md: 'none' },
 		},
 		logoText: {
 			mr: 2,
@@ -30,15 +30,15 @@ const styles = {
 			textDecoration: 'none',
 		},
 		icon: {
-			color: theme.color.primary
+			color: theme.color.primary,
 		},
 		link: {
-			textDecoration: 'none', 
-			color: theme.color.secondary
+			textDecoration: 'none',
+			color: theme.color.secondary,
 		},
 		menu: {
 			sx: {
-				display: { xs: 'block', md: 'none' }
+				display: { xs: 'block', md: 'none' },
 			},
 			transform: {
 				vertical: 'top',
@@ -47,13 +47,13 @@ const styles = {
 			anchor: {
 				vertical: 'bottom',
 				horizontal: 'left',
-			}
-		}
+			},
+		},
 	},
 	normal: {
 		box: {
-			flexGrow: 1, 
-			display: { xs: 'none', md: 'flex' }
+			flexGrow: 1,
+			display: { xs: 'none', md: 'flex' },
 		},
 		logoText: {
 			mr: 2,
@@ -63,54 +63,54 @@ const styles = {
 			textDecoration: 'none',
 		},
 		link: {
-			textDecoration: 'none', 
-			color: theme.color.secondary
+			textDecoration: 'none',
+			color: theme.color.secondary,
 		},
 		button: {
-			my: 1, 
+			my: 1,
 			display: 'block',
-			color: theme.color.secondary
+			color: theme.color.secondary,
 		},
 		menu: {
 			anchor: {
 				vertical: 'top',
-				horizontal: 'right'
+				horizontal: 'right',
 			},
 			transform: {
 				vertical: 'top',
-				horizontal: 'right'
+				horizontal: 'right',
 			},
 			sx: {
-				mt: '45px'
-			}
-		}	
+				mt: '45px',
+			},
+		},
 	},
 	user: {
 		box: {
-			flexGrow: 0
+			flexGrow: 0,
 		},
 		button: {
-			my: 1, 
-			display: 'block'
+			my: 1,
+			display: 'block',
 		},
 		menu: {
 			sx: {
-				mt: '45px'
+				mt: '45px',
 			},
 			transform: {
 				vertical: 'top',
-				horizontal: 'right'
+				horizontal: 'right',
 			},
 			anchor: {
 				vertical: 'top',
-				horizontal: 'right'
-			}
+				horizontal: 'right',
+			},
 		},
 		link: {
-			textDecoration: 'none', 
-			color: theme.color.secondary
-		}
-	}
+			textDecoration: 'none',
+			color: theme.color.secondary,
+		},
+	},
 };
 
 const NavBar = () => {
@@ -132,7 +132,10 @@ const NavBar = () => {
 	};
 
 	return (
-		<AppBar position='static' color='default'>
+		<AppBar
+			position='static'
+			color='default'
+		>
 			<Container maxWidth='xl'>
 				<Toolbar>
 					<Typography
@@ -145,9 +148,9 @@ const NavBar = () => {
 						Aluepöytä
 					</Typography>
 					<Box sx={styles.responsive.box}>
-						<IconButton 
-							size='large' 
-							onClick={handleOpenNavMenu} 
+						<IconButton
+							size='large'
+							onClick={handleOpenNavMenu}
 							style={styles.responsive.icon}
 						>
 							<MenuIcon />
@@ -162,14 +165,20 @@ const NavBar = () => {
 							onClose={handleCloseNavMenu}
 							sx={styles.responsive.menu.sx}
 						>
-							<Link to={'/areaControl'} style={styles.responsive.link}>
+							<Link
+								to={'/areaControl'}
+								style={styles.responsive.link}
+							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Alueiden hallinta
 								</MenuItem>
 							</Link>
-							<Link to={'/userControl'} style={styles.responsive.link}>
+							<Link
+								to={'/userControl'}
+								style={styles.responsive.link}
+							>
 								<MenuItem onClick={handleCloseNavMenu}>
-									Käyttäjien hallinta		
+									Käyttäjien hallinta
 								</MenuItem>
 							</Link>
 						</Menu>
@@ -184,24 +193,26 @@ const NavBar = () => {
 						Aluepöytä
 					</Typography>
 					<Box sx={styles.normal.box}>
-						<Link to={'/areaControl'} style={styles.normal.link}>
-							<Button
-								sx={styles.normal.button}
-							>
+						<Link
+							to={'/areaControl'}
+							style={styles.normal.link}
+						>
+							<Button sx={styles.normal.button}>
 								Alueiden hallinta
 							</Button>
 						</Link>
-						<Link to={'/userControl'} style={styles.normal.link}>
-							<Button
-								sx={styles.normal.button}
-							>
+						<Link
+							to={'/userControl'}
+							style={styles.normal.link}
+						>
+							<Button sx={styles.normal.button}>
 								Käyttäjien hallinta
 							</Button>
 						</Link>
 					</Box>
 					<Box sx={styles.user.box}>
-						<Button 
-							onClick={handleOpenUserMenu} 
+						<Button
+							onClick={handleOpenUserMenu}
 							sx={styles.user.link}
 						>
 							{/* Kirjautuneen käyttäjän nimi tänne */}
@@ -209,7 +220,7 @@ const NavBar = () => {
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}
-							id="menu-appbar"
+							id='menu-appbar'
 							anchorEl={anchorElUser}
 							anchorOrigin={styles.normal.menu.anchor}
 							keepMounted
@@ -217,14 +228,14 @@ const NavBar = () => {
 							open={Boolean(anchorElUser)}
 							onClose={handleCloseUserMenu}
 						>
-							<MenuItem >
-								<Typography textAlign="center">
+							<MenuItem>
+								<Typography textAlign='center'>
 									Kirjaudu ulos
 								</Typography>
 							</MenuItem>
 						</Menu>
 					</Box>
-				</Toolbar>	
+				</Toolbar>
 			</Container>
 		</AppBar>
 	);

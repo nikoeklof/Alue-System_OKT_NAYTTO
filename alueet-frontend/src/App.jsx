@@ -17,11 +17,26 @@ const App = () => {
 				<NavBar />
 
 				<Routes>
-					<Route path='/' element={<Main />} />
-					<Route path='/login' element={<Login />} />
-					<Route path='/register' element={<Register />} />
-					<Route path='/areaControl' element={<AreaControl />} />
-					<Route path='/userControl' element={<UserControl />} />
+					<Route
+						path='/'
+						element={<Main />}
+					/>
+					<Route
+						path='/login'
+						element={<Login />}
+					/>
+					<Route
+						path='/register'
+						element={<Register />}
+					/>
+					<Route
+						path='/areaControl'
+						element={<AreaControl />}
+					/>
+					<Route
+						path='/userControl'
+						element={<UserControl />}
+					/>
 				</Routes>
 
 				<Footer />

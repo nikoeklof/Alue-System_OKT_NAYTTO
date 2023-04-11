@@ -1,7 +1,7 @@
-import React from "react";
-import { MapContainer, TileLayer, Pane } from "react-leaflet";
-import DrawComponent from "./DrawComponent";
-import PolygonLayer from "./PolygonLayer";
+import React from 'react';
+import { MapContainer, TileLayer, Pane } from 'react-leaflet';
+import DrawComponent from './DrawComponent';
+import PolygonLayer from './PolygonLayer';
 
 export const LeafletMap = ({
 	areas,
@@ -14,13 +14,13 @@ export const LeafletMap = ({
 	return (
 		<div
 			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
 			}}
 		>
 			<MapContainer
-				style={{ height: "450px", width: "100%" }}
+				style={{ height: '450px', width: '100%' }}
 				center={[61.6834, 27.2653]}
 				zoom={11}
 				scrollWheelZoom={true}
@@ -28,9 +28,12 @@ export const LeafletMap = ({
 			>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+					url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 				/>
-				<Pane name="areaPane" style={{ zIndex: 100 }}>
+				<Pane
+					name='areaPane'
+					style={{ zIndex: 100 }}
+				>
 					<DrawComponent
 						formActive={formActive}
 						setLayerContext={setLayerContext}

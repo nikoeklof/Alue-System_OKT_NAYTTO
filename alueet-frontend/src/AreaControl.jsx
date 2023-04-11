@@ -16,13 +16,13 @@ import {
 	IconButton,
 	Collapse,
 	Box,
-	TablePagination
+	TablePagination,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-import theme from "./style/theme";
-import { areas } from "./db/db";
+import theme from './style/theme';
+import { areas } from './db/db';
 
 import AreaMap from './AreaMap';
 import DeleteWarningModal from './components/DeleteWarningModal';
@@ -32,23 +32,23 @@ import ReturnAreaModal from './components/ReturnAreaModal';
 
 const styles = {
 	container: {
-		mb: 8
+		mb: 8,
 	},
 	areas: {
-		flewGrow: 1
+		flewGrow: 1,
 	},
 	selectMenu: {
 		display: 'flex',
 		flexWrap: 'wrap',
-		gap: 0.5
+		gap: 0.5,
 	},
 	menuProps: {
 		PaperProps: {
 			style: {
 				maxHeight: 200,
-				width: 250
-			}
-		}
+				width: 250,
+			},
+		},
 	},
 	mainText: {
 		borderBottom: 'solid',
@@ -56,15 +56,15 @@ const styles = {
 		borderWidth: 1,
 		mt: 4,
 		mb: 2,
-		pb: 2
+		pb: 2,
 	},
 	search: {
 		mb: 2,
 		ml: 2,
-		width: '96%'
+		width: '96%',
 	},
 	form: {
-		width: '100%'
+		width: '100%',
 	},
 	areainfo: {
 		backgroundColor: theme.bgColor.primary,
@@ -74,20 +74,18 @@ const styles = {
 		borderRadius: 1,
 		display: 'flex',
 		py: 2,
-		my: 1
+		my: 1,
 	},
 	info: {
 		flexGrow: 2,
 	},
 	infotext: {
-		mb: 0.5
+		mb: 0.5,
 	},
-	button: {
-
-	},
+	button: {},
 	areaButton: {
 		m: 0.5,
-	}
+	},
 };
 
 const Row = ({ ...area }) => {
@@ -102,7 +100,7 @@ const Row = ({ ...area }) => {
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setOpenDel(false),
-		warningText: "Haluatko varmasti poistaa alueen?",
+		warningText: 'Haluatko varmasti poistaa alueen?',
 	};
 	const editProps = {
 		openEdit,
@@ -126,7 +124,9 @@ const Row = ({ ...area }) => {
 						key={area.id}
 						sx={{ '& > *': { borderBottom: 'unset' } }}
 					>
-						<TableCell onClick={() => setOpen(!open)}>{area.name}</TableCell>
+						<TableCell onClick={() => setOpen(!open)}>
+							{area.name}
+						</TableCell>
 						<TableCell>
 							<IconButton
 								aria-label='expand row'
@@ -138,9 +138,16 @@ const Row = ({ ...area }) => {
 						</TableCell>
 					</TableRow>
 					<TableRow>
-						<TableCell sx={{py: 0}} colSpan={6}>
-							<Collapse in={open} timeout='auto' unmountOnExit>
-								<Box sx={{margin: 1}}>
+						<TableCell
+							sx={{ py: 0 }}
+							colSpan={6}
+						>
+							<Collapse
+								in={open}
+								timeout='auto'
+								unmountOnExit
+							>
+								<Box sx={{ margin: 1 }}>
 									<Typography
 										variant='h6'
 										gutterBottom
@@ -148,7 +155,10 @@ const Row = ({ ...area }) => {
 									>
 										Info
 									</Typography>
-									<Table size='small' aria-label='areas'>
+									<Table
+										size='small'
+										aria-label='areas'
+									>
 										<TableHead>
 											<TableRow>
 												<TableCell>Asunnot</TableCell>
@@ -167,9 +177,7 @@ const Row = ({ ...area }) => {
 												<TableCell>
 													{loaned ? 'Kyllä' : 'Ei'}
 												</TableCell>
-												<TableCell>
-													{area.id}
-												</TableCell>
+												<TableCell>{area.id}</TableCell>
 											</TableRow>
 										</TableBody>
 									</Table>
@@ -208,12 +216,12 @@ const Row = ({ ...area }) => {
 						</TableCell>
 					</TableRow>
 				</Fragment>
-				<DeleteWarningModal {...delProps}/>
-				<EditAreaModal {...editProps}/>
-				<LendAreaModal {...lendProps}/>
+				<DeleteWarningModal {...delProps} />
+				<EditAreaModal {...editProps} />
+				<LendAreaModal {...lendProps} />
 				<ReturnAreaModal {...returnProps} />
 			</>
-		)
+		);
 	}
 };
 
@@ -232,7 +240,10 @@ const AreaControl = () => {
 
 	return (
 		<Container sx={styles.container}>
-			<Typography sx={styles.mainText} variant='h6'>
+			<Typography
+				sx={styles.mainText}
+				variant='h6'
+			>
 				Alueiden hallinta
 			</Typography>
 			<TextField
@@ -241,29 +252,45 @@ const AreaControl = () => {
 				variant='outlined'
 				InputProps={{
 					endAdornment: (
-						<InputAdornment position='end' >
+						<InputAdornment position='end'>
 							<SearchIcon />
 						</InputAdornment>
-					)
+					),
 				}}
 				sx={styles.search}
 			/>
 			<Container xs={styles.areas}>
-				<Grid container spacing={3}>
-					<Grid item md={6} xs={12}>
+				<Grid
+					container
+					spacing={3}
+				>
+					<Grid
+						item
+						md={6}
+						xs={12}
+					>
 						<AreaMap />
 					</Grid>
-					<Grid item md={6} xs={12}>
+					<Grid
+						item
+						md={6}
+						xs={12}
+					>
 						<Paper sx={styles.form}>
 							<TableContainer sx={{ maxHeight: 440 }}>
 								<Table stickyHeader>
 									<TableBody>
 										{areas
-											.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-											.map(area => (
-												<Row key={area.name} {...area} />
-											))
-										}
+											.slice(
+												page * rowsPerPage,
+												page * rowsPerPage + rowsPerPage
+											)
+											.map((area) => (
+												<Row
+													key={area.name}
+													{...area}
+												/>
+											))}
 									</TableBody>
 								</Table>
 							</TableContainer>
@@ -281,9 +308,8 @@ const AreaControl = () => {
 					</Grid>
 				</Grid>
 			</Container>
-
 		</Container>
-	)
+	);
 };
 
 export default AreaControl;

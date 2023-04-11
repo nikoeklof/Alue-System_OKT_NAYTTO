@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-	Box,
-	Typography,
-	Modal,
-	Button
-} from '@mui/material';
+import { Box, Typography, Modal, Button } from '@mui/material';
 
 import theme from '../style/theme';
 
@@ -22,19 +17,18 @@ const styles = {
 		boxShadow: 24,
 		borderRadius: 2,
 		px: 4,
-		py: 3
+		py: 3,
 	},
 	header: {
-		mb: 2
+		mb: 2,
 	},
 	button: {
 		float: 'right',
 		m: 0.5,
-	}
+	},
 };
 
-const DeleteWarningModal = ({...delProps}) => {
-
+const DeleteWarningModal = ({ ...delProps }) => {
 	const handleClose = () => delProps.handleCloseDelModal();
 
 	return (
@@ -44,31 +38,31 @@ const DeleteWarningModal = ({...delProps}) => {
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
-				<Typography 
-					variant='h6' 
-					component='h2' 
+				<Typography
+					variant='h6'
+					component='h2'
 					sx={styles.header}
 				>
 					{delProps.warningText}
 				</Typography>
 				<Box>
-					<Button 
-						sx={styles.button} 
+					<Button
+						sx={styles.button}
 						variant='contained'
 						onClick={() => handleClose()}
 					>
 						Peruuta
 					</Button>
-					<Button 
-						sx={styles.button} 
+					<Button
+						sx={styles.button}
 						variant='contained'
 					>
 						Poista
 					</Button>
 				</Box>
 			</Box>
-		</Modal>		
-	)
+		</Modal>
+	);
 };
 
 export default DeleteWarningModal;

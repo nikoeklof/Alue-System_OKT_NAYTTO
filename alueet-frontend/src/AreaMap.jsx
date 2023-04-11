@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { areas as initialAreas } from "./db/db";
-import { LeafletMap } from "./components/LeafletMap";
-import CreateAreaForm from "./components/CreateAreaForm";
-import AreaContext from "./components/AreaContext";
-import EditArea from "./components/EditArea";
+import React, { useState } from 'react';
+import { areas as initialAreas } from './db/db';
+import { LeafletMap } from './components/LeafletMap';
+import CreateAreaForm from './components/CreateAreaForm';
+import AreaContext from './components/AreaContext';
+import EditArea from './components/EditArea';
 
 const AreaMap = () => {
 	const [areas, setAreas] = useState(initialAreas);
@@ -77,7 +77,11 @@ const AreaMap = () => {
 				active={editArea}
 				loanArea={loanArea}
 			/>
-			<EditArea area={selectedArea} onSave={updateArea} formActive={editArea} />
+			<EditArea
+				area={selectedArea}
+				onSave={updateArea}
+				formActive={editArea}
+			/>
 		</div>
 	);
 };

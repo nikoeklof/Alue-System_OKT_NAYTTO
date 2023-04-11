@@ -1,12 +1,12 @@
-import React from "react";
-import { FeatureGroup } from "react-leaflet";
-import { EditControl } from "react-leaflet-draw";
+import React from 'react';
+import { FeatureGroup } from 'react-leaflet';
+import { EditControl } from 'react-leaflet-draw';
 
 const DrawComponent = ({ formActive, setLayerContext }) => {
 	return (
 		<FeatureGroup>
 			<EditControl
-				position="topright"
+				position='topright'
 				// Disabling all other drawing options except polygons for our usecase
 				draw={{
 					rectangle: false,

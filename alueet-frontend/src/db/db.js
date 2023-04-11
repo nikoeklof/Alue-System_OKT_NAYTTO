@@ -1,6 +1,6 @@
 const users = [
 	{
-		email: "tupu@email.com",
+		email: 'tupu@email.com',
 		id: 1,
 		admin: false,
 		areas: {
@@ -8,8 +8,8 @@ const users = [
 		},
 	},
 	{
-		username: "Janne",
-		email: "jami@email.com",
+		username: 'Janne',
+		email: 'jami@email.com',
 		id: 2,
 		admin: false,
 		areas: {
@@ -19,29 +19,29 @@ const users = [
 		},
 	},
 	{
-		username: "Niko",
-		email: "niek@email.com",
+		username: 'Niko',
+		email: 'niek@email.com',
 		id: 3,
 		admin: true,
 		areas: {},
 	},
 	{
-		username: "Samuli",
-		email: "sako@email.com",
+		username: 'Samuli',
+		email: 'sako@email.com',
 		id: 4,
 		admin: true,
 		areas: {},
 	},
 	{
-		username: "Marko",
-		email: "mala@email.com",
+		username: 'Marko',
+		email: 'mala@email.com',
 		id: 5,
 		admin: false,
 		areas: {},
 	},
 	{
-		username: "Johanna",
-		email: "jotu@email.com",
+		username: 'Johanna',
+		email: 'jotu@email.com',
 		id: 6,
 		admin: true,
 		areas: {},
@@ -51,7 +51,7 @@ const users = [
 const areas = [
 	{
 		id: 0,
-		name: "Emola-Rouhiala",
+		name: 'Emola-Rouhiala',
 		buildings: 12,
 		ownerId: 1,
 		loaned: true,
@@ -84,7 +84,7 @@ const areas = [
 	},
 	{
 		id: 1,
-		name: "Graani",
+		name: 'Graani',
 		buildings: 3,
 		loaned: false,
 		ownerId: null,
@@ -112,7 +112,7 @@ const areas = [
 		],
 	},
 	{
-		name: "Kattilansilta-Laajalampi",
+		name: 'Kattilansilta-Laajalampi',
 		buildings: 30,
 		ownerId: 2,
 		id: 2,
@@ -146,7 +146,7 @@ const areas = [
 	},
 	{
 		id: 3,
-		name: "Keskusta",
+		name: 'Keskusta',
 		buildings: 19,
 		loaned: true,
 		ownerId: 3,
@@ -171,7 +171,7 @@ const areas = [
 	},
 	{
 		id: 4,
-		name: "Kirjala-Nuijamies",
+		name: 'Kirjala-Nuijamies',
 		buildings: 9,
 		loaned: false,
 		ownerId: null,
@@ -196,57 +196,57 @@ const areas = [
 	},
 	{
 		id: 5,
-		name: "Lähemäki",
+		name: 'Lähemäki',
 		buildings: 25,
 		loaned: false,
 		ownerId: 4,
 		latlngs: [
-			{ 
+			{
 				lat: 61.695936601164824,
-				lng: 27.307977676391605 
+				lng: 27.307977676391605,
 			},
-			{ 
-				lat: 61.69626217286178, 
-				lng: 27.314500808715824 
+			{
+				lat: 61.69626217286178,
+				lng: 27.314500808715824,
 			},
-			{ 
-				lat: 61.693291203778585, 
-				lng: 27.31587409973145 
+			{
+				lat: 61.693291203778585,
+				lng: 27.31587409973145,
 			},
-			{ 
-				lat: 61.69272139619582, 
-				lng: 27.3076343536377
+			{
+				lat: 61.69272139619582,
+				lng: 27.3076343536377,
 			},
 		],
 	},
 	{
 		id: 6,
-		name: "Launiala",
+		name: 'Launiala',
 		buildings: 16,
 		loaned: false,
 		ownerId: 5,
 		latlngs: [
 			{
-				lat: 61.695936601164824, 
-				lng: 27.307977676391605 
+				lat: 61.695936601164824,
+				lng: 27.307977676391605,
 			},
-			{ 
-				lat: 61.69626217286178, 
-				lng: 27.314500808715824 
+			{
+				lat: 61.69626217286178,
+				lng: 27.314500808715824,
 			},
-			{ 
-				lat: 61.693291203778585, 
-				lng: 27.31587409973145 
+			{
+				lat: 61.693291203778585,
+				lng: 27.31587409973145,
 			},
-			{ 
-				lat: 61.69272139619582, 
-				lng: 27.3076343536377
+			{
+				lat: 61.69272139619582,
+				lng: 27.3076343536377,
 			},
 		],
 	},
 	{
 		id: 7,
-		name: "Lehmuskylä",
+		name: 'Lehmuskylä',
 		buildings: 4,
 		loaned: true,
 		ownerId: null,

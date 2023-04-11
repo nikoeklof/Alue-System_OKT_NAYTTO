@@ -6,14 +6,14 @@ import {
 	Typography,
 	Button,
 	InputLabel,
-	FormGroup
+	FormGroup,
 } from '@mui/material';
 
 import theme from './style/theme';
 
 const styles = {
 	container: {
-		mb: 8
+		mb: 8,
 	},
 	form: {
 		px: 2,
@@ -24,12 +24,12 @@ const styles = {
 		borderRadius: '3%',
 		display: 'flex',
 		maxWidth: '400px',
-		xs:{ display: 'block' }
+		xs: { display: 'block' },
 	},
 	text: {
 		color: theme.color.primary,
 		ml: 0.5,
-		mb: 1
+		mb: 1,
 	},
 	input: {
 		color: theme.color.primary,
@@ -38,15 +38,14 @@ const styles = {
 	},
 	button: {
 		width: '130px',
-		ml: 0.5
-	}
+		ml: 0.5,
+	},
 };
 
 const Register = () => {
 	return (
 		<Container sx={styles.container}>
-			<FormGroup  sx={styles.form}>
-
+			<FormGroup sx={styles.form}>
 				<Typography
 					variant='h5'
 					noWrap
@@ -84,10 +83,9 @@ const Register = () => {
 				>
 					Rekisteröidy
 				</Button>
-
 			</FormGroup>
 		</Container>
-	)
+	);
 };
 
 export default Register;

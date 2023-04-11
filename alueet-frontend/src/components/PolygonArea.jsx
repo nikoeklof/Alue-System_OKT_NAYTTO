@@ -1,15 +1,15 @@
-import React from "react";
-import { Polygon } from "react-leaflet";
+import React from 'react';
+import { Polygon } from 'react-leaflet';
 
 // Blueprint for the areas drawn to the map, still needs functionality
 const PolygonArea = ({ props, onClick, positions, selectedArea }) => {
 	const getColor = () => {
 		if (props.loaned && props.id !== selectedArea?.id) {
-			return "green";
+			return 'green';
 		} else if (props.id === selectedArea?.id) {
-			return "red";
+			return 'red';
 		} else {
-			return "blue";
+			return 'blue';
 		}
 	};
 
@@ -19,7 +19,7 @@ const PolygonArea = ({ props, onClick, positions, selectedArea }) => {
 				color: getColor(),
 				fillColor: getColor(),
 			}}
-			fill="true"
+			fill='true'
 			id={props.id}
 			positions={positions}
 			eventHandlers={{

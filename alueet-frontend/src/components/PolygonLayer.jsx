@@ -1,6 +1,6 @@
-import React from "react";
-import { LayerGroup } from "react-leaflet";
-import PolygonArea from "./PolygonArea";
+import React from 'react';
+import { LayerGroup } from 'react-leaflet';
+import PolygonArea from './PolygonArea';
 
 const PolygonLayer = ({
 	areas,
@@ -22,7 +22,8 @@ const PolygonLayer = ({
 						selectedArea={selectedArea}
 						positions={positions}
 						onClick={() => {
-							if (selectedArea?.id === area.id) return clearSelected();
+							if (selectedArea?.id === area.id)
+								return clearSelected();
 							else setSelectedArea(area);
 						}}
 					/>

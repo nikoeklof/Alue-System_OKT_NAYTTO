@@ -13,7 +13,7 @@ import {
 	TableHead,
 	TablePagination,
 	TableRow,
-	Typography
+	Typography,
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
@@ -26,7 +26,7 @@ import { users } from './db/db';
 
 const styles = {
 	container: {
-		mb: 8
+		mb: 8,
 	},
 	mainText: {
 		borderBottom: 'solid',
@@ -34,50 +34,50 @@ const styles = {
 		borderWidth: 1,
 		mt: 4,
 		mb: 2,
-		pb: 2
+		pb: 2,
 	},
 	button: {
-		m: 1
+		m: 1,
 	},
 	form: {
 		mt: 2,
 		width: '100%',
-		overflow: 'hidden'
-	}
+		overflow: 'hidden',
+	},
 };
 
 const columns = [
 	{
 		id: 'name',
 		label: 'Nimi',
-		minWidth: 120
+		minWidth: 120,
 	},
 	{
 		id: 'email',
 		label: 'Sähköposti',
-		minWidth: 170
+		minWidth: 170,
 	},
 	{
 		id: 'quest',
 		label: 'Vieras',
 		minWidth: 50,
-		align: 'right'
+		align: 'right',
 	},
 	{
 		id: 'admin',
 		label: 'Admin',
 		minWidth: 50,
-		align: 'right'
+		align: 'right',
 	},
 	{
 		id: 'id',
 		label: 'ID',
 		minWidth: 60,
-		align: 'right'
+		align: 'right',
 	},
 ];
 
-const Row = ({...rowProps}) => {
+const Row = ({ ...rowProps }) => {
 	const user = rowProps.user;
 	const [open, setOpen] = useState(false);
 	const areaArray = [];
@@ -114,9 +114,16 @@ const Row = ({...rowProps}) => {
 				<TableCell align='right'>{user.id}</TableCell>
 			</TableRow>
 			<TableRow>
-				<TableCell sx={{py: 0}} colSpan={6}>
-					<Collapse in={open} timeout='auto' unmountOnExit>
-						<Box sx={{margin: 1}}>
+				<TableCell
+					sx={{ py: 0 }}
+					colSpan={6}
+				>
+					<Collapse
+						in={open}
+						timeout='auto'
+						unmountOnExit
+					>
+						<Box sx={{ margin: 1 }}>
 							<Typography
 								variant='h6'
 								gutterBottom
@@ -124,7 +131,10 @@ const Row = ({...rowProps}) => {
 							>
 								Alueet
 							</Typography>
-							<Table size='small' aria-label='areas'>
+							<Table
+								size='small'
+								aria-label='areas'
+							>
 								<TableHead>
 									<TableRow>
 										<TableCell>Nimi</TableCell>
@@ -132,7 +142,7 @@ const Row = ({...rowProps}) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{areaArray.map((area => {
+									{areaArray.map((area) => {
 										return (
 											<TableRow key={user.areas.id}>
 												<TableCell
@@ -141,12 +151,10 @@ const Row = ({...rowProps}) => {
 												>
 													Fetch from backend
 												</TableCell>
-												<TableCell>
-													{area}
-												</TableCell>
+												<TableCell>{area}</TableCell>
 											</TableRow>
-										)
-									}))}
+										);
+									})}
 								</TableBody>
 							</Table>
 							<Button
@@ -168,7 +176,7 @@ const Row = ({...rowProps}) => {
 				</TableCell>
 			</TableRow>
 		</Fragment>
-	)
+	);
 };
 
 const UserControl = () => {
@@ -189,21 +197,24 @@ const UserControl = () => {
 
 	const editProps = {
 		openEdit,
-		handleEditModalClose: () => setEditOpen(false)
+		handleEditModalClose: () => setEditOpen(false),
 	};
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
-		warningText: 'Haluatko varmasti poistaa käyttäjän?'
+		warningText: 'Haluatko varmasti poistaa käyttäjän?',
 	};
 	const createProps = {
 		openCreate,
-		handleCreateModalClose: () => setCreateOpen(false)
+		handleCreateModalClose: () => setCreateOpen(false),
 	};
 
 	return (
 		<Container sx={styles.container}>
-			<Typography variant='h6' sx={styles.mainText}>
+			<Typography
+				variant='h6'
+				sx={styles.mainText}
+			>
 				Käyttäjien hallinta
 			</Typography>
 			<Button
@@ -215,7 +226,10 @@ const UserControl = () => {
 			</Button>
 			<Paper sx={styles.form}>
 				<TableContainer sx={{ maxHeight: 440 }}>
-					<Table stickyHeader aria-label='sticky label'>
+					<Table
+						stickyHeader
+						aria-label='sticky label'
+					>
 						<TableHead>
 							<TableRow>
 								<TableCell />
@@ -232,18 +246,23 @@ const UserControl = () => {
 						</TableHead>
 						<TableBody>
 							{users
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								.slice(
+									page * rowsPerPage,
+									page * rowsPerPage + rowsPerPage
+								)
 								.map((user) => {
 									const rowProps = {
 										user,
 										setEditOpen,
-										setDelOpen
+										setDelOpen,
 									};
 									return (
-										<Row key={user.id} {...rowProps} />
-									)
-								})
-							}
+										<Row
+											key={user.id}
+											{...rowProps}
+										/>
+									);
+								})}
 						</TableBody>
 					</Table>
 				</TableContainer>
@@ -262,7 +281,7 @@ const UserControl = () => {
 			<DeleteWarningModal {...delProps} />
 			<CreateUserModal {...createProps} />
 		</Container>
-	)
+	);
 };
 
 export default UserControl;

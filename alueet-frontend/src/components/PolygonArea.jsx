@@ -42,7 +42,8 @@ const PolygonArea = ({
       positions={positions}
       eventHandlers={{
         click: () => {
-          onClick();
+          if (onClick) return onClick();
+          else return;
         },
         mouseover: () => {
           if (props.id === selectedArea?.id) {

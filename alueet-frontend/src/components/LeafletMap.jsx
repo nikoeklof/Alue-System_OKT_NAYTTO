@@ -2,36 +2,36 @@ import React from "react";
 import { MapContainer, TileLayer, Pane } from "react-leaflet";
 import DrawComponent from "./DrawComponent";
 import PolygonLayer from "./PolygonLayer";
-import CreateAreaForm from "./CreateAreaForm";
 
 export const LeafletMap = ({
   areas,
   setSelectedArea,
   selectedArea,
   clearSelected,
-  addArea,
-  layerContext,
   setLayerContext,
   canEdit,
   hoverStatus,
 }) => {
   return (
     <div>
-      <CreateAreaForm
-        addArea={addArea}
-        clearSelected={clearSelected}
-        layerContext={layerContext}
-      />
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          zIndex: 1,
         }}
       >
         <MapContainer
           // Map has to have a set height, otherwise does not render
-          style={{ height: "490px", width: "100%" }}
+          style={{
+            height: "490px",
+            width: "100%",
+            zIndex: 1,
+            position: "initial",
+            minWidth: "100%",
+            minHeight: "490px",
+          }}
           center={[61.6834, 27.2653]}
           zoom={11}
           scrollWheelZoom={true}

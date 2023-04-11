@@ -15,7 +15,21 @@ const PolygonLayer = ({
         const positions = area.latlngs.map((coords) => {
           return [coords.lat, coords.lng];
         });
-
+        if (setSelectedArea !== undefined) {
+          return (
+            <PolygonArea
+              key={i}
+              props={area}
+              selectedArea={selectedArea}
+              positions={positions}
+              hoverStatus={hoverStatus}
+              onClick={() => {
+                if (selectedArea?.id === area.id) return clearSelected();
+                else setSelectedArea(area);
+              }}
+            />
+          );
+        }
         return (
           <PolygonArea
             key={i}
@@ -23,10 +37,6 @@ const PolygonLayer = ({
             selectedArea={selectedArea}
             positions={positions}
             hoverStatus={hoverStatus}
-            onClick={() => {
-              if (selectedArea?.id === area.id) return clearSelected();
-              else setSelectedArea(area);
-            }}
           />
         );
       })}

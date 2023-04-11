@@ -5,6 +5,7 @@ const styles = {
   makeAreaBtn: {
     ml: 0.5,
     mt: 1,
+    padding: 1,
   },
   form: {
     mb: 1,
@@ -20,85 +21,55 @@ const styles = {
   },
 };
 
-const CreateAreaForm = ({ addArea, clearSelected, layerContext }) => {
+const CreateAreaForm = ({ addArea, layerContext }) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-  const [areaNeighborhood, setAreaNeighborhood] = useState("");
-  const [formActive, setFormActive] = useState(false);
+  const [areaCity, setAreaCity] = useState("");
 
   return (
     <>
-      {formActive ? (
-        <>
-          <FormControl sx={styles.form}>
-            <TextField
-              onChange={(e) => setAreaName(e.target.value)}
-              type="text"
-              label="Alueen nimi"
-              sx={styles.textField}
-            />
-            <TextField
-              onChange={(e) => setApartmentAmount(e.target.value)}
-              type="number"
-              label="Asuntojen määrä"
-              sx={styles.textField}
-            />
-            <TextField
-              onChange={(e) => setAreaNeighborhood(e.target.value)}
-              type="text"
-              label="Kaupunginosa"
-              sx={styles.textField}
-            />
-          </FormControl>
-          <div>
-            <Button
-              variant="contained"
-              type="button"
-              sx={styles.btns}
-              onClick={() => {
-                const layer = layerContext;
-                console.log(layer);
-                layer.layer.remove();
+      <FormControl sx={styles.form}>
+        <TextField
+          onChange={(e) => setAreaName(e.target.value)}
+          type="text"
+          label="Alueen nimi"
+          sx={styles.textField}
+        />
+        <TextField
+          onChange={(e) => setApartmentAmount(e.target.value)}
+          type="number"
+          label="Asuntojen määrä"
+          sx={styles.textField}
+        />
+        <TextField
+          onChange={(e) => setAreaCity(e.target.value)}
+          type="text"
+          label="Kaupunginosa"
+          sx={styles.textField}
+        />
+      </FormControl>
 
-                addArea({
-                  id: layer.layer._leaflet_id,
-                  areaName: areaName,
-                  apartmentAmount: parseInt(apartmentAmount),
-                  neighborhood: areaNeighborhood,
-                  areaOwner: "admin",
-                  latlngs: layer.coords,
-                });
-                setFormActive(!formActive);
-              }}
-            >
-              Tallenna
-            </Button>
-            <Button
-              variant="contained"
-              sx={styles.btns}
-              onClick={() => {
-                setFormActive(!formActive);
-              }}
-            >
-              Peruuta
-            </Button>
-          </div>
-        </>
-      ) : (
-        <>
-          <Button
-            variant="contained"
-            sx={styles.makeAreaBtn}
-            style={{ position: "absolute" }}
-            onClick={() => {
-              setFormActive(!formActive);
-              clearSelected();
-            }}
-          >
-            Luo alue
-          </Button>
-        </>
-      )}
+      <Button
+        variant="contained"
+        type="button"
+        sx={styles.btns}
+        onClick={() => {
+          const layer = layerContext;
+          console.log(layer);
+          layer.layer.remove();
+
+          addArea({
+            id: layer.layer._leaflet_id,
+            name: areaName,
+            buildings: parseInt(apartmentAmount),
+            city: areaCity,
+            areaOwner: "admin",
+            latlngs: layer.coords,
+          });
+        }}
+      >
+        Luo alue
+      </Button>
     </>
   );
 };

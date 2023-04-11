@@ -18,7 +18,7 @@ const styles = {
   },
 };
 
-const Main = ({ areas }) => {
+const Main = ({ areas, layerContext, setLayerContext }) => {
   const [selectedArea, setSelectedArea] = useState(undefined);
 
   useEffect(() => {
@@ -39,6 +39,8 @@ const Main = ({ areas }) => {
           areas={areas}
           selectedArea={selectedArea}
           setSelectedArea={setSelectedArea}
+          layerContext={layerContext}
+          setLayerContext={setLayerContext}
           clearSelected={clearSelected}
           canEdit={false}
         />

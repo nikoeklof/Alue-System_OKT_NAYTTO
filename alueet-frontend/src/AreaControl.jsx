@@ -71,10 +71,10 @@ const styles = {
   },
 };
 
-const AreaControl = ({ areas, setAreas }) => {
+const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
   const [selectedArea, setSelectedArea] = useState(undefined);
   const [hoverStatus, setHoverStatus] = useState(undefined);
-  const [layerContext, setLayerContext] = useState(null);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -89,9 +89,6 @@ const AreaControl = ({ areas, setAreas }) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-  const addArea = (props) => {
-    setAreas([...areas, props]);
   };
 
   const updateArea = (props) => {
@@ -154,11 +151,10 @@ const AreaControl = ({ areas, setAreas }) => {
               areas={areas}
               selectedArea={selectedArea}
               setSelectedArea={setSelectedArea}
-              addArea={addArea}
               clearSelected={clearSelected}
               layerContext={layerContext}
               setLayerContext={setLayerContext}
-              canEdit={true}
+              canEdit={false}
               hoverStatus={hoverStatus}
             />
           </Grid>

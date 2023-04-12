@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
 	AppBar,
 	Toolbar,
-	Container,
 	Typography,
 	Box,
 	Menu,
@@ -136,7 +135,7 @@ const NavBar = () => {
 			position='static'
 			color='default'
 		>
-			<Container maxWidth='xl'>
+			<Box maxWidth='xl'>
 				<Toolbar>
 					<Link
 						to={'/'}
@@ -145,8 +144,6 @@ const NavBar = () => {
 						<Typography
 							variant='h5'
 							noWrap
-							component='a'
-							href=''
 							sx={styles.normal.logoText}
 						>
 							Aluepöytä
@@ -171,59 +168,82 @@ const NavBar = () => {
 							onClose={handleCloseNavMenu}
 							sx={styles.responsive.menu.sx}
 						>
-							<MenuItem onClick={handleCloseNavMenu}>
-								<Link
-									to={'/areaControl'}
-									style={styles.responsive.link}
-								>
+							<Link
+								to={'/areaControl'}
+								style={styles.responsive.link}
+							>
+								<MenuItem onClick={handleCloseNavMenu}>
 									Alueiden hallinta
-								</Link>
-							</MenuItem>
-							<MenuItem onClick={handleCloseNavMenu}>
-								<Link
-									to={'/userControl'}
-									style={styles.responsive.link}
-								>
+								</MenuItem>
+							</Link>
+							<Link
+								to={'/userControl'}
+								style={styles.responsive.link}
+							>
+								<MenuItem onClick={handleCloseNavMenu}>
 									Käyttäjien hallinta
-								</Link>
-							</MenuItem>
+								</MenuItem>
+							</Link>
+							<Link
+								to={'/createArea'}
+								style={styles.responsive.link}
+							>
+								<MenuItem onClick={handleCloseNavMenu}>
+									Luo alue
+								</MenuItem>
+							</Link>
+							<Link
+								to={'/lendList'}
+								style={styles.responsive.link}
+							>
+								<MenuItem onClick={handleCloseNavMenu}>
+									Lainaa
+								</MenuItem>
+							</Link>
 						</Menu>
 					</Box>
 
-					<Typography
-						variant='h5'
-						noWrap
-						component='a'
-						href=''
-						sx={styles.responsive.logoText}
+					<Link
+						to={'/'}
+						style={styles.normal.link}
 					>
-						Aluepöytä
-					</Typography>
+						<Typography
+							variant='h5'
+							noWrap
+							sx={styles.responsive.logoText}
+						>
+							Aluepöytä
+						</Typography>
+					</Link>
 					<Box sx={styles.normal.box}>
-						<Button sx={styles.normal.button}>
-							<Link
-								to={'/areaControl'}
-								style={styles.normal.link}
-							>
+						<Link
+							to={'/areaControl'}
+							style={styles.normal.link}
+						>
+							<Button sx={styles.normal.button}>
 								Alueiden hallinta
-							</Link>
-						</Button>
-						<Button sx={styles.normal.button}>
-							<Link
-								to={'/userControl'}
-								style={styles.normal.link}
-							>
+							</Button>
+						</Link>
+						<Link
+							to={'/userControl'}
+							style={styles.normal.link}
+						>
+							<Button sx={styles.normal.button}>
 								Käyttäjien hallinta
-							</Link>
-						</Button>
-						<Button sx={styles.normal.button}>
-							<Link
-								to={'/createArea'}
-								style={styles.normal.link}
-							>
-								Luo Alue
-							</Link>
-						</Button>
+							</Button>
+						</Link>
+						<Link
+							to={'/createArea'}
+							style={styles.normal.link}
+						>
+							<Button sx={styles.normal.button}>Luo Alue</Button>
+						</Link>
+						<Link
+							to={'/lendList'}
+							style={styles.normal.link}
+						>
+							<Button sx={styles.normal.button}>Lainaa</Button>
+						</Link>
 					</Box>
 					<Box sx={styles.user.box}>
 						<Button
@@ -251,7 +271,7 @@ const NavBar = () => {
 						</Menu>
 					</Box>
 				</Toolbar>
-			</Container>
+			</Box>
 		</AppBar>
 	);
 };

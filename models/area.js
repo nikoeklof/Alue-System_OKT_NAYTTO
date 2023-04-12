@@ -2,10 +2,6 @@ const mongoose = require("mongoose")
 
 const schema = new mongoose.Schema({
     info: {
-        type: {
-            type: String,
-            required: true
-        },
         cityName: {
             type: String,
             required: true
@@ -22,25 +18,21 @@ const schema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        homes: {
-            type: Number,
-            required: true
-        },
-        map: {
-            coordinates: {
-                lan: {
-                    type: String,
-                    required: true,
-                },
-                lon: {
-                    type: String,
-                    required: true,
+        latlngs: {
+            type: [
+                {
+                    lat: {
+                        type: String,
+                        required: true
+                    },
+                    lng: {
+                        type: String,
+                        required: true
+                    }
                 }
-            },
-            zone: {
-                type: String,
-                required: true
-            }
+            ],
+            default: [],
+            _id: false
         },
         misc: {
             type: String,

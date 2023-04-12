@@ -27,9 +27,6 @@ const resolvers = {
         allAreas: async (root, args) => {
             const newArgs = {}
 
-            if ("type" in args)
-                newArgs["info.type"] = args.type
-
             if ("cityName" in args)
                 newArgs["info.cityName"] = args.cityName
 
@@ -49,42 +46,21 @@ const resolvers = {
     },
 
     Guest: {
-        email: (root) => {
-            return root.email
-        },
-        name: (root) => {
-            return root.name
-        },
-        areas: (root) => {
-            return root.areas
-        }
+        email: (root) => root.email,
+        areas: (root) => root.areas
     },
 
     User: {
-        username: (root) => {
-            return root.username
-        },
-        admin: (root) => {
-            return root.admin
-        },
-        disabled: (root) => {
-            return root.disabled
-        },
-        guestAccount: async (root) => {
-            return await Guest.findById(root.guestId)
-        },
+        username: (root) => root.username,
+        admin: (root) => root.admin,
+        disabled: (root) => root.disabled,
+        guestAccount: async (root) => await Guest.findById(root.guestId),
     },
 
     Area: {
-        info: (root) => {
-            return root.info
-        },
-        shareState: (root) => {
-            return root.shareState
-        },
-        shareHistory: (root) => {
-            return root.shareHistory
-        }
+        info: (root) => root.info,
+        shareState: (root) => root.shareState,
+        shareHistory: (root) => root.shareHistory
     },
 
     Mutation: {
@@ -105,13 +81,14 @@ const resolvers = {
             if (args.password.length < 5)
                 throw new UserInputError("Password must have at least minimum 5 letters")
 
-            const guest = await Guest.findById(args.guestId)
+            const guest = await Guest.findOne({ email: args.guestEmail })
 
             if (!guest)
                 throw new UserInputError("Guest not found")
 
             const user = new User({
                 ...args,
+                guestId: guest._id,
                 password: await bcrypt.hash(args.password, 10)
             })
 
@@ -140,7 +117,14 @@ const resolvers = {
         },
 
         createArea: (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, true)
+            //contextCheck(contextValue.authUser, true)
+            /*
+            [
+            {"lat": "21,9899898", "lng": "69,28178148"},
+            {"lat": "21,9899898", "lng": "69,28178148"},
+            {"lat": "21,9899898", "lng": "69,28178148"}
+            ]
+            */
 
             const area = new Area({
                 info: {
@@ -149,14 +133,7 @@ const resolvers = {
                     quarter: args.quarter,
                     address: args.address,
                     buildings: args.buildings,
-                    homes: args.homes,
-                    map: {
-                        coordinates: {
-                            lan: args.lan,
-                            lon: args.lon
-                        },
-                        zone: args.zone
-                    }
+                    latlngs: args.latlngs
                 }
             })
 
@@ -190,7 +167,7 @@ const resolvers = {
             if (!area)
                 throw new UserInputError("Area not found")
 
-            area.info = {...area.info, ...args}
+            area.info = { ...area.info, ...args }
 
             return area.save()
                 .catch(error => {

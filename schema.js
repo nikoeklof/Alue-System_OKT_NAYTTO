@@ -4,7 +4,6 @@ const typeDefs = gql`
   type Guest {
     id: ID!
     email: String!
-    name: String!
     areas: [String]!
   }
 
@@ -30,25 +29,18 @@ const typeDefs = gql`
     shareEndDate: String
   }
 
+  type latlngs {
+    lat: String
+    lng: String
+  }
+
   type Info {
-    type: String!
     cityName: String!
     quarter: String!
     address: String!
     buildings: Int!
-    homes: Int!
-    map: Map!
+    latlngs: [latlngs]!
     misc: String
-  }
-
-  type Map {
-    coordinates: Coordinates!
-    zone: String!
-  }
-
-  type Coordinates {
-    lan: String!
-    lon: String!
   }
 
   type ShareState {
@@ -64,7 +56,7 @@ const typeDefs = gql`
     allGuests: [Guest]!
 
     areaCount: Int!
-    allAreas (type: String, cityName: String, quarter: String, address: String, isShared: Boolean): [Area]!
+    allAreas (cityName: String, quarter: String, address: String, isShared: Boolean): [Area]!
 
     userCount: Int!
     allUsers (disabled: Boolean, admin: Boolean): [User]!
@@ -76,29 +68,24 @@ const typeDefs = gql`
     value: String!
   }
 
-  input MapInput {
-    coordinates: CoordinatesInput
-    zone: String
-  }
-
-  input CoordinatesInput {
-    lan: String
-    lon: String
+  input latlngsType {
+    lat: String
+    lng: String
   }
 
   type Mutation {
-    createGuest (email: String!, name: String!): Guest
+    createGuest (email: String!): Guest
     makeRequest (areaId: ID!, guestEmail: String!): Area
 
-    createUser (username: String!, password: String!, guestId: String!): User
+    createUser (username: String!, password: String!, guestEmail: String!): User
     editUser (username: String, password: String): User
     toggleUserDisabled (userId: ID!): User
     toggleUserAdmin (userId: ID!): User
     allowAreaRequest (areaId: ID!, guestId: ID!): Area
     returnSharedArea (areaId: ID!): Area
 
-    createArea (type: String!, cityName: String!, quarter: String!, address: String!, buildings: Int!, homes: Int!, zone: String!, lan: String!, lon: String!, misc: String): Area
-    editArea (areaId: ID!, type: String, cityName: String, quarter: String, address: String, buildings: Int, homes: Int, map: MapInput, misc: String): Area
+    createArea (cityName: String!, quarter: String!, address: String!, buildings: Int!, latlngs: [latlngsType]!, misc: String): Area
+    editArea (areaId: ID!, cityName: String, quarter: String, address: String, buildings: Int, misc: String): Area
     deleteArea (areaId: ID!): Area
 
     login (username: String!, password: String!): Token

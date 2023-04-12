@@ -51,7 +51,6 @@ const resolvers = {
     },
 
     User: {
-        username: (root) => root.username,
         admin: (root) => root.admin,
         disabled: (root) => root.disabled,
         guestAccount: async (root) => await Guest.findById(root.guestId),
@@ -75,13 +74,10 @@ const resolvers = {
         },
 
         createUser: async (root, args) => {
-            if (args.username.length < 3)
-                throw new UserInputError("Username must have at least minimum 3 letters")
-
             if (args.password.length < 5)
                 throw new UserInputError("Password must have at least minimum 5 letters")
 
-            const guest = await Guest.findOne({ email: args.guestEmail })
+            const guest = await Guest.findOne({ email: args.email })
 
             if (!guest)
                 throw new UserInputError("Guest not found")
@@ -177,14 +173,8 @@ const resolvers = {
                 })
         },
 
-        editUser: async (root, args, contextValue) => {
+        changeUserPassword: async (root, args, contextValue) => {
             const user = contextCheck(contextValue.authUser, false)
-
-            if (args.username)
-                if (args.username.length < 3)
-                    throw new UserInputError("Username must have at least minimum 3 letters")
-                else
-                    user.username = args.username
 
             if (args.password)
                 if (args.password.length < 5)
@@ -201,7 +191,12 @@ const resolvers = {
         },
 
         login: async (root, args) => {
-            const user = await User.findOne({ username: args.username })
+            const guest = await Guest.findOne({ email: args.email })
+
+            if (!guest)
+                throw new UserInputError("Invalid email")
+
+            const user = await User.findOne({ guestId: guest._id })
 
             if (!user)
                 throw new AuthenticationError("User not found")
@@ -215,7 +210,7 @@ const resolvers = {
             });
 
             const userForToken = {
-                username: user.username,
+                email: guest.email,
                 id: user._id
             }
 
@@ -325,7 +320,7 @@ const resolvers = {
             return area
         },
 
-        sendTestMail: async (root, args) => {
+        sendTestMail: async (root, args) => { //BACKEND ONLY
             const area = {
                 info: {
                     type: "Kaupunki",

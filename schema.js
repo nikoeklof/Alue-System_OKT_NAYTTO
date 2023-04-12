@@ -77,8 +77,8 @@ const typeDefs = gql`
     createGuest (email: String!): Guest
     makeRequest (areaId: ID!, guestEmail: String!): Area
 
-    createUser (username: String!, password: String!, guestEmail: String!): User
-    editUser (username: String, password: String): User
+    createUser (email: String!, password: String!): User
+    changeUserPassword (password: String): User
     toggleUserDisabled (userId: ID!): User
     toggleUserAdmin (userId: ID!): User
     allowAreaRequest (areaId: ID!, guestId: ID!): Area
@@ -88,7 +88,7 @@ const typeDefs = gql`
     editArea (areaId: ID!, cityName: String, quarter: String, address: String, buildings: Int, misc: String): Area
     deleteArea (areaId: ID!): Area
 
-    login (username: String!, password: String!): Token
+    login (email: String!, password: String!): Token
     sendTestMail (email: String!): Boolean
   }
 `

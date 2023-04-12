@@ -60,7 +60,7 @@ const DeleteWarningModal = ({ ...delProps }) => {
 							delProps.handleConfirm();
 						}}
 					>
-						Poista
+						Kyllä
 					</Button>
 				</Box>
 			</Box>

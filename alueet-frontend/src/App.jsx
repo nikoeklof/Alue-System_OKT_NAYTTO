@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { areas as initialAreas } from './db/db';
+import { areas as initialAreas, users } from './db/db';
 import Main from './Main';
 import Login from './Login';
 import Register from './Register';
@@ -11,6 +11,8 @@ import Footer from './components/Footer';
 import AreaControl from './AreaControl';
 import UserControl from './UserControl';
 import AreaCreate from './components/AreaCreate';
+import UserProfile from './UserProfile';
+import LendList from './LendList';
 
 const App = () => {
 	const [areas, setAreas] = useState(initialAreas);
@@ -68,6 +70,14 @@ const App = () => {
 								layerContext={layerContext}
 							/>
 						}
+					/>
+					<Route
+						path='/lendList'
+						element={<LendList users={users} />}
+					/>
+					<Route
+						path='/userProfile'
+						element={<UserProfile />}
 					/>
 				</Routes>
 				<Footer />

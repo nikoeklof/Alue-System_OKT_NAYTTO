@@ -1,3 +1,4 @@
+import React, { useState, Fragment, useEffect } from 'react';
 import {
 	Grid,
 	Typography,
@@ -11,8 +12,8 @@ import {
 	Collapse,
 	Box,
 } from '@mui/material';
-import React, { useState, Fragment, useEffect } from 'react';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
+
 import DeleteWarningModal from './DeleteWarningModal';
 import EditAreaModal from './EditAreaModal';
 import LendAreaModal from './LendAreaModal';

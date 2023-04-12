@@ -1,10 +1,9 @@
 import { gql } from '@apollo/client';
 
-
 //  -----  querys  -----
 export const ALL_USERS = gql`
-query {
-  allUsers {
+query allUsers($disabled: Boolean, $admin: Boolean) {
+  allUsers(disabled: $disabled, admin: $admin) {
     id
     username
     admin
@@ -29,8 +28,8 @@ query {
 `;
 
 export const ALL_AREAS = gql`
-query {
-  allAreas {
+query allAreas($isShared: Boolean, $address: String, $quarter: String, $cityName: String, $type: String) {
+  allAreas(isShared: $isShared, address: $address, quarter: $quarter, cityName: $cityName, type: $type) {
     id
     info {
       type
@@ -50,40 +49,6 @@ query {
     }
     shareState {
       isShared
-      sharedRequests {
-        id
-        email
-        name
-      }
-      sharedTo {
-        id
-        email
-        name
-      }
-      sharedBy {
-        id
-        username
-        guestAccount {
-          email
-        }
-      }
-      shareStartDate
-    }
-    shareHistory {
-      sharedTo {
-        id 
-        email
-        name
-      }
-      sharedBy {
-        id
-        username
-        guestAccount {
-          email
-        }
-      }
-      shareStartDate
-      shareEndDate
     }
   }
 }
@@ -186,7 +151,7 @@ mutation createArea($type: String!, $cityName: String!, $quarter: String!, $addr
     type: $type, 
     cityName: $cityName, 
     quarter: $quarter, 
-    address: $addres, 
+    address: $address, 
     buildings: $buildings, 
     homes: $homes, 
     zone: $zone, 

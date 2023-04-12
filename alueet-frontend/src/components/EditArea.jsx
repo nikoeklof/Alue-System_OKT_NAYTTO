@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 
 const EditArea = ({ area, onSave, formActive }) => {
 	console.log(area);
 	const [areaName, setAreaName] = useState(area?.areaName);
-	const [areaNeighborhood, setAreaNeighborhood] = useState(area?.neighborhood);
+	const [areaNeighborhood, setAreaNeighborhood] = useState(
+		area?.neighborhood
+	);
 	const [areaApartmentAmount, setAreaApartmentAmount] = useState(
 		area?.apartmentAmount
 	);
@@ -13,7 +15,7 @@ const EditArea = ({ area, onSave, formActive }) => {
 	return (
 		<div>
 			<form>
-			Alueen Nimi:
+				Alueen Nimi:
 				<input
 					ref={ref}
 					defaultValue={areaName}
@@ -43,7 +45,7 @@ const EditArea = ({ area, onSave, formActive }) => {
 						});
 					}}
 				>
-				Tallenna{" "}
+					Tallenna{' '}
 				</button>
 			</form>
 		</div>

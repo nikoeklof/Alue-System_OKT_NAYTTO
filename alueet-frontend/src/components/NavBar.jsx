@@ -115,6 +115,7 @@ const styles = {
 const NavBar = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
+	const admin = ''; // find logged user
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -203,18 +204,15 @@ const NavBar = () => {
 						</Menu>
 					</Box>
 
-					<Link
-						to={'/'}
-						style={styles.normal.link}
+					<Typography
+						variant='h5'
+						component='a'
+						href='/'
+						noWrap
+						sx={styles.responsive.logoText}
 					>
-						<Typography
-							variant='h5'
-							noWrap
-							sx={styles.responsive.logoText}
-						>
-							Aluepöytä
-						</Typography>
-					</Link>
+						Aluepöytä
+					</Typography>
 					<Box sx={styles.normal.box}>
 						<Link
 							to={'/areaControl'}
@@ -250,8 +248,8 @@ const NavBar = () => {
 							onClick={handleOpenUserMenu}
 							sx={styles.user.link}
 						>
-							{/* Kirjautuneen käyttäjän nimi tänne */}
-							Username
+							{/* Käyttäjänimi = logged in user */}
+							{admin ? 'Käyttäjänimi' : 'Aloitus'}
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}
@@ -263,11 +261,22 @@ const NavBar = () => {
 							open={Boolean(anchorElUser)}
 							onClose={handleCloseUserMenu}
 						>
-							<MenuItem>
-								<Typography textAlign='center'>
-									Kirjaudu ulos
-								</Typography>
-							</MenuItem>
+							{admin ? (
+								<MenuItem>
+									<Typography textAlign='center'>
+										Kirjaudu ulos
+									</Typography>
+								</MenuItem>
+							) : (
+								<>
+									<MenuItem>
+										<Typography>Kirjaudu sisään</Typography>
+									</MenuItem>
+									<MenuItem>
+										<Typography>Rekisteröidy</Typography>
+									</MenuItem>
+								</>
+							)}
 						</Menu>
 					</Box>
 				</Toolbar>

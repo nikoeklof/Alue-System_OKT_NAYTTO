@@ -5,10 +5,6 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    },
-    areas: {
-        type: Array,
-        default: []
     }
 })
 

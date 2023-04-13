@@ -47,7 +47,8 @@ const resolvers = {
 
     Guest: {
         email: (root) => root.email,
-        areas: (root) => root.areas
+        areas: async (root) => await Area.find({ ["shareState.sharedTo"]: root.email })
+
     },
 
     User: {
@@ -80,10 +81,9 @@ const resolvers = {
             const guest = await Guest.findOne({ email: args.email })
 
             if (!guest)
-                throw new UserInputError("Guest not found")
+                throw new UserInputError("Invalid email, guest not found")
 
             const user = new User({
-                ...args,
                 guestId: guest._id,
                 password: await bcrypt.hash(args.password, 10)
             })
@@ -96,45 +96,22 @@ const resolvers = {
                 })
         },
 
-        toggleUserDisabled: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, true)
-
-            const user = await User.findById(args.userId)
-            user.disabled = !user.disabled
-            return user.save()
-        },
-
-        toggleUserAdmin: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, false)
-
-            const user = await User.findById(args.userId)
-            user.admin = !user.admin
-            return user.save()
-        },
-
-        createArea: (root, args, contextValue) => {
-            //contextCheck(contextValue.authUser, true)
-            /*
+        /*
             [
             {"lat": "21,9899898", "lng": "69,28178148"},
             {"lat": "21,9899898", "lng": "69,28178148"},
             {"lat": "21,9899898", "lng": "69,28178148"}
             ]
-            */
+        */
+
+        createArea: (root, args, contextValue) => {
+            //contextCheck(contextValue.authUser, true)
 
             const area = new Area({
                 info: {
-                    type: args.type,
-                    cityName: args.cityName,
-                    quarter: args.quarter,
-                    address: args.address,
-                    buildings: args.buildings,
-                    latlngs: args.latlngs
+                    ...args
                 }
             })
-
-            if (args.misc)
-                area.info.misc = args.misc
 
             return area.save()
                 .catch(error => {
@@ -176,11 +153,10 @@ const resolvers = {
         changeUserPassword: async (root, args, contextValue) => {
             const user = contextCheck(contextValue.authUser, false)
 
-            if (args.password)
-                if (args.password.length < 5)
-                    throw new UserInputError("Password must have at least minimum 5 letters")
-                else
-                    user.password = await bcrypt.hash(args.password, 10)
+            if (args.password.length < 5)
+                throw new UserInputError("Password must have at least minimum 5 letters")
+
+            user.password = await bcrypt.hash(args.password, 10)
 
             return user.save()
                 .catch(error => {
@@ -204,10 +180,8 @@ const resolvers = {
             if (user.disabled)
                 throw new AuthenticationError("User account is disabled")
 
-            bcrypt.compare(args.password, user.password, function (err, result) {
-                if (!result)
-                    throw new AuthenticationError("Invalid password")
-            });
+            if (!await bcrypt.compare(args.password, user.password))
+                throw new AuthenticationError("Invalid password")
 
             const userForToken = {
                 email: guest.email,
@@ -218,7 +192,7 @@ const resolvers = {
         },
 
         makeRequest: async (root, args) => {
-            const guest = await Guest.findOne({ email: args.guestEmail })
+            const guest = await Guest.findOne({ email: args.email })
 
             if (!guest)
                 throw new UserInputError("Guest not found")
@@ -228,17 +202,17 @@ const resolvers = {
             if (!area)
                 throw new UserInputError("Area not found")
 
-            if (area.shareState.shareRequests.includes(guest._id))
+            if (area.shareState.shareRequests.includes(guest.email))
                 throw new UserInputError("You have already reguested this area")
 
-            if (area.shareState.sharedTo == guest._id)
+            if (area.shareState.sharedTo == guest.email)
                 throw new UserInputError("Area is already being shared to you")
 
-            area.shareState.shareRequests.push(guest._id)
+            area.shareState.shareRequests.push(guest.email)
 
             area.save()
 
-            mailer(guest.email, area.info, 0)
+            //mailer(guest.email, area.info, 0)
 
             return area
         },
@@ -246,7 +220,7 @@ const resolvers = {
         allowAreaRequest: async (root, args, contextValue) => {
             contextCheck(contextValue.authUser, false)
 
-            const guest = await Guest.findById(args.guestId)
+            const guest = await Guest.findOne({ email: args.email })
 
             if (!guest)
                 throw new UserInputError("Guest not found")
@@ -259,13 +233,15 @@ const resolvers = {
             if (area.shareState.isShared == true)
                 throw new UserInputError("Area is currently being shared")
 
-            if (area.shareState.shareRequests.includes(args.guestId))
-                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(args.guestId), 1)
+            if (area.shareState.shareRequests.includes(guest.email))
+                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(guest.email), 1)
+
+            const authGuest = await Guest.findById(contextValue.authUser.guestId)
 
             area.shareState.isShared = true
-            area.shareState.sharedBy = authUser.id
-            area.shareState.sharedTo = args.guestId
-            area.shareState.shareStartDate = new Date().toJSON()
+            area.shareState.sharedBy = authGuest.email
+            area.shareState.sharedTo = guest.email
+            area.shareState.shareStartDate = new Date()
 
             area.save()
                 .catch(error => {
@@ -274,7 +250,7 @@ const resolvers = {
                     })
                 })
 
-            mailer(guest.email, area.info, 1)
+            //mailer(guest.email, area.info, 1)
 
             return area
         },
@@ -294,7 +270,7 @@ const resolvers = {
                 sharedTo: area.shareState.sharedTo,
                 sharedBy: area.shareState.sharedBy,
                 shareStartDate: area.shareState.shareStartDate,
-                shareEndDate: new Date().toJSON()
+                shareEndDate: new Date()
             }
 
             area.shareHistory.push(shareEnd)
@@ -313,9 +289,9 @@ const resolvers = {
                     })
                 })
 
-            const guest = await Guest.findById(shareEnd.sharedTo)
+            const guest = await Guest.findOne({ email: shareEnd.sharedTo })
 
-            mailer(guest.email, area.info, 2)
+            //mailer(guest.email, area.info, 2)
 
             return area
         },

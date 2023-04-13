@@ -2,6 +2,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import theme from "../style/theme";
 import AreaMap from "../AreaMap";
 import CreateAreaForm from "./CreateAreaForm";
+
 const styles = {
   areas: {
     flewGrow: 1,

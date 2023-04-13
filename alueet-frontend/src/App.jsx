@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Container } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
@@ -15,12 +15,10 @@ import AreaCreate from "./components/AreaCreate";
 const App = () => {
   const [areas, setAreas] = useState(initialAreas);
   const [layerContext, setLayerContext] = useState(null);
+
   const addArea = (props) => {
     setAreas([...areas, props]);
   };
-  useEffect(() => {
-    console.log(layerContext);
-  }, [layerContext]);
 
   return (
     <Router>

@@ -31,7 +31,7 @@ const AreaCreate = ({ areas, addArea, layerContext, setLayerContext }) => {
 			<Container xs={styles.areas}>
 				<Grid
 					container
-					spacing={3}
+					spacing={2}
 				>
 					<Grid
 						item

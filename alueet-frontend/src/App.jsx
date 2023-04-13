@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { areas as initialAreas, users } from './db/db';
 import Main from './Main';
 import Login from './Login';
-import Register from './Register';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import AreaControl from './AreaControl';
@@ -42,10 +41,6 @@ const App = () => {
 					<Route
 						path='/login'
 						element={<Login />}
-					/>
-					<Route
-						path='/register'
-						element={<Register />}
 					/>
 					<Route
 						path='/areaControl'

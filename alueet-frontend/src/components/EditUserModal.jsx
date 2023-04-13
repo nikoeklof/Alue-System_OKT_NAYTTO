@@ -8,7 +8,7 @@ import {
 	FormControl,
 	TextField,
 	FormControlLabel,
-	Switch
+	Switch,
 } from '@mui/material';
 
 import theme from '../style/theme';
@@ -24,13 +24,13 @@ const styles = {
 		boxShadow: 24,
 		borderRadius: 2,
 		px: 4,
-		py: 3
+		py: 3,
 	},
 	header: {
 		mb: 2,
 		pb: 1,
 		borderBottom: '1px solid',
-		borderColor: theme.color.primary
+		borderColor: theme.color.primary,
 	},
 	input: {
 		m: 0.5,
@@ -38,15 +38,15 @@ const styles = {
 	button: {
 		float: 'right',
 		m: 0.5,
-		mt: 2
-	}
+		mt: 2,
+	},
 };
 
-const EditUserModal = ({...editProps}) => {
+const EditUserModal = ({ ...editProps }) => {
 	const handleClose = () => editProps.handleEditModalClose();
 
 	const handleChange = () => {
-		console.log('change')
+		console.log('change');
 	};
 
 	return (
@@ -56,9 +56,9 @@ const EditUserModal = ({...editProps}) => {
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
-				<Typography 
-					variant='h6' 
-					component='h2' 
+				<Typography
+					variant='h6'
+					component='h2'
 					sx={styles.header}
 				>
 					Muokkaa käyttäjän tietoja
@@ -67,37 +67,37 @@ const EditUserModal = ({...editProps}) => {
 					<FormControl>
 						<TextField
 							label='Käyttäjänimi'
-							variant='outlined' 
+							variant='outlined'
 							sx={styles.input}
 						/>
 						<TextField
 							label='Sähköposti'
-							variant='outlined' 
+							variant='outlined'
 							sx={styles.input}
 						/>
-						<FormControlLabel 
-							control={<Switch onChange={handleChange}/>}
+						<FormControlLabel
+							control={<Switch onChange={handleChange} />}
 							label='Admin'
 							sx={styles.input}
 						/>
 					</FormControl>
 				</FormGroup>
-				<Button 
-					sx={styles.button} 
+				<Button
+					sx={styles.button}
 					variant='contained'
 					onClick={() => handleClose()}
 				>
 					Peruuta
 				</Button>
-				<Button 
-					sx={styles.button} 
+				<Button
+					sx={styles.button}
 					variant='contained'
 				>
 					Valmis
 				</Button>
 			</Box>
 		</Modal>
-	)
+	);
 };
 
 export default EditUserModal;

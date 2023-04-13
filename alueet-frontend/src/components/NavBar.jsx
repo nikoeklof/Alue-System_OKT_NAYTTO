@@ -115,7 +115,7 @@ const styles = {
 const NavBar = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
-	const admin = ''; // find logged user
+	const user = 'true'; // find logged user
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -249,7 +249,7 @@ const NavBar = () => {
 							sx={styles.user.link}
 						>
 							{/* Käyttäjänimi = logged in user */}
-							{admin ? 'Käyttäjänimi' : 'Aloitus'}
+							{user ? 'Käyttäjänimi' : 'Aloitus'}
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}
@@ -261,21 +261,29 @@ const NavBar = () => {
 							open={Boolean(anchorElUser)}
 							onClose={handleCloseUserMenu}
 						>
-							{admin ? (
-								<MenuItem>
-									<Typography textAlign='center'>
-										Kirjaudu ulos
-									</Typography>
-								</MenuItem>
+							{user ? (
+								<Box>
+									<Link
+										to='/userProfile'
+										style={styles.responsive.link}
+									>
+										<MenuItem>
+											<Typography textAlign='center'>
+												Profiili
+											</Typography>
+										</MenuItem>
+									</Link>
+
+									<MenuItem>
+										<Typography textAlign='center'>
+											Kirjaudu ulos
+										</Typography>
+									</MenuItem>
+								</Box>
 							) : (
-								<>
-									<MenuItem>
-										<Typography>Kirjaudu sisään</Typography>
-									</MenuItem>
-									<MenuItem>
-										<Typography>Rekisteröidy</Typography>
-									</MenuItem>
-								</>
+								<MenuItem>
+									<Typography>Kirjaudu sisään</Typography>
+								</MenuItem>
 							)}
 						</Menu>
 					</Box>

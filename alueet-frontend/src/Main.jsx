@@ -356,21 +356,8 @@ const Main = () => {
 							Aloitus
 						</Typography>
 						<Typography sx={styles.text}>
-							Etkö ole vielä rekisteröitynyt?
-						</Typography>
-						<Link
-							to={'/register'}
-							style={styles.link}
-						>
-							<Button
-								variant='contained'
-								sx={styles.button}
-							>
-								Rekisteröidy
-							</Button>
-						</Link>
-						<Typography sx={styles.text}>
-							Kirjaudu sisään jos olet jo rekisteröitynyt!
+							Kirjaudu sisään, jotta saat sivun toiminnot
+							käyttöösi!
 						</Typography>
 						<Link
 							to={'/login'}

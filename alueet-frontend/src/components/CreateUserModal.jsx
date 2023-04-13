@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Typography,
@@ -44,13 +44,18 @@ const styles = {
 
 const CreateUserModal = ({ ...createProps }) => {
 	const handleClose = () => createProps.handleCreateModalClose();
+	const [admin, setAdmin] = useState(false);
+	const [guest, setGuest] = useState(false);
+	const [ready, setReady] = useState(true);
 
 	const handleChangeAdmin = () => {
-		console.log('change admin');
+		setAdmin(!admin);
+		setReady(!ready);
 	};
 
 	const handleChangeGuest = () => {
-		console.log('change guest');
+		setGuest(!guest);
+		setReady(!ready);
 	};
 
 	return (
@@ -69,32 +74,56 @@ const CreateUserModal = ({ ...createProps }) => {
 				</Typography>
 				<FormGroup>
 					<FormControl>
-						<TextField
-							label='Käyttäjänimi'
-							variant='outlined'
-							sx={styles.input}
-						/>
-						<TextField
-							label='Nimi'
-							variant='outlined'
-							sx={styles.input}
-						/>
-						<TextField
-							label='Sähköposti'
-							variant='outlined'
-							required
-							sx={styles.input}
-						/>
 						<FormControlLabel
-							control={<Switch onChange={handleChangeAdmin} />}
+							control={
+								<Switch
+									disabled={guest}
+									onChange={handleChangeAdmin}
+								/>
+							}
 							label='Admin'
 							sx={styles.input}
 						/>
 						<FormControlLabel
-							control={<Switch onChange={handleChangeGuest} />}
+							control={
+								<Switch
+									disabled={admin}
+									onChange={handleChangeGuest}
+								/>
+							}
 							label='Vieras'
 							sx={styles.input}
 						/>
+						{admin ? (
+							<>
+								<TextField
+									label='Sähköposti'
+									variant='outlined'
+									type='email'
+									required
+									sx={styles.input}
+								/>
+								<TextField
+									label='Salasana'
+									type='password'
+									required
+									variant='outlined'
+									sx={styles.input}
+								/>
+							</>
+						) : (
+							''
+						)}
+						{guest ? (
+							<TextField
+								label='Sähköposti'
+								variant='outlined'
+								required
+								sx={styles.input}
+							/>
+						) : (
+							''
+						)}
 					</FormControl>
 				</FormGroup>
 				<Button
@@ -105,10 +134,11 @@ const CreateUserModal = ({ ...createProps }) => {
 					Peruuta
 				</Button>
 				<Button
+					disabled={ready}
 					sx={styles.button}
 					variant='contained'
 				>
-					Luo
+					Valmis
 				</Button>
 			</Box>
 		</Modal>

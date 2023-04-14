@@ -22,8 +22,8 @@ const typeDefs = gql`
   }
 
   type Shares {
-    sharedTo: Guest
-    sharedBy: User
+    sharedTo: String
+    sharedBy: String
     shareStartDate: String
     shareEndDate: String
   }
@@ -45,8 +45,8 @@ const typeDefs = gql`
   type ShareState {
     isShared: Boolean!
     sharedRequests: [Guest]
-    sharedTo: Guest
-    sharedBy: User
+    sharedTo: String
+    sharedBy: String
     shareStartDate: String
   }
   
@@ -86,7 +86,6 @@ const typeDefs = gql`
     deleteArea (areaId: ID!): Area
 
     login (email: String!, password: String!): Token
-    sendTestMail (email: String!): Boolean
   }
 `
 

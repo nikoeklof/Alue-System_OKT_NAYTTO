@@ -295,30 +295,6 @@ const resolvers = {
 
             return area
         },
-
-        sendTestMail: async (root, args) => { //BACKEND ONLY
-            const area = {
-                info: {
-                    type: "Kaupunki",
-                    cityName: "Mikkeli",
-                    quarter: "Kaukola",
-                    address: "katu 3",
-                    buildings: 10,
-                    homes: 1,
-                    map: {
-                        coordinates: {
-                            lan: "23.324",
-                            lon: "1.123"
-                        },
-                        zone: "103 192 480 183"
-                    },
-                    misc: "Kaukolan ympäröivä alue"
-                }
-            }
-
-            mailer(args.email, area.info, 3)
-            return true
-        },
     }
 }
 

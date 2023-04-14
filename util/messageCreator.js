@@ -207,39 +207,6 @@ function main(area, header) {
                                             ${area.buildings}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td style="text-align: right" id="item">
-                                            <h3>Omakotitaloja:</h3>
-                                        </td>
-                                        <td style="text-align: left" id="item">
-                                            ${area.homes}
-                                        </td>
-                                    </tr>
-                                </Table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <Table>
-                                    <tr id="centerHeader">
-                                        <Table id="unwide">
-                                            <td id="item">
-                                                <h3>Kordinaatit:</h3>
-                                            </td>
-                                        </Table>
-                                    </tr>
-                                    <tr>
-                                        <Table id="ultra">
-                                            <td id="item">
-                                                <p><b>Lat: </b>${area.map.coordinates.lan}</p>
-                                            </td>
-                                        </Table>
-                                        <Table id="ultra">
-                                            <td id="item">
-                                                <p><b>Lng: </b>${area.map.coordinates.lon}</p>
-                                            </td>
-                                        </Table>
-                                    </tr>
                                 </Table>
                             </td>
                         </tr>

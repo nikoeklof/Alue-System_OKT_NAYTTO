@@ -10,3 +10,7 @@ EMAIL_CLIENTID
 EMAIL_SECRET
 EMAIL_REFRESHTOKEN
 EMAIL_SENDER
+
+For logging:
+
+LOGGING - "1" will log all requests

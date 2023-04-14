@@ -43,17 +43,42 @@ const styles = {
 };
 
 const CreateUserModal = ({ ...createProps }) => {
-	const handleClose = () => createProps.handleCreateModalClose();
 	const [admin, setAdmin] = useState(false);
 	const [guest, setGuest] = useState(false);
 	const [ready, setReady] = useState(true);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [emailError, setEmailError] = useState('');
+	const [passwordError, setPasswordError] = useState('');
+
+	const handleClose = () => {
+		setEmailError('');
+		setPasswordError('');
+		setEmail('');
+		setPassword('');
+		setAdmin(false);
+		setGuest(false);
+		setReady(true);
+		createProps.handleCreateModalClose();
+	};
+
+	const handleSubmit = () => {
+		if (!password) setPasswordError('Salasana on pakollinen');
+		else setPasswordError('');
+		if (!email) setEmailError('Sähköposti on pakollinen');
+		else setEmailError('');
+	};
 
 	const handleChangeAdmin = () => {
+		setEmail('');
+		setPassword('');
 		setAdmin(!admin);
 		setReady(!ready);
 	};
 
 	const handleChangeGuest = () => {
+		setEmail('');
+		setPassword('');
 		setGuest(!guest);
 		setReady(!ready);
 	};
@@ -99,15 +124,23 @@ const CreateUserModal = ({ ...createProps }) => {
 								<TextField
 									label='Sähköposti'
 									variant='outlined'
-									type='email'
+									defaultValue={email}
+									onChange={(e) => setEmail(e.target.value)}
 									required
+									error={!email}
+									helperText={emailError}
 									sx={styles.input}
 								/>
 								<TextField
 									label='Salasana'
-									type='password'
-									required
 									variant='outlined'
+									defaultValue={password}
+									onChange={(e) =>
+										setPassword(e.target.value)
+									}
+									required
+									error={!password}
+									helperText={passwordError}
 									sx={styles.input}
 								/>
 							</>
@@ -118,7 +151,11 @@ const CreateUserModal = ({ ...createProps }) => {
 							<TextField
 								label='Sähköposti'
 								variant='outlined'
+								defaultValue={email}
+								onChange={(e) => setEmail(e.target.value)}
 								required
+								error={!email}
+								helperText={emailError}
 								sx={styles.input}
 							/>
 						) : (
@@ -137,6 +174,7 @@ const CreateUserModal = ({ ...createProps }) => {
 					disabled={ready}
 					sx={styles.button}
 					variant='contained'
+					onClick={() => handleSubmit()}
 				>
 					Valmis
 				</Button>

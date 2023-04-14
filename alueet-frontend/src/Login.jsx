@@ -1,30 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Container,
 	FormControl,
-	Input,
 	Typography,
 	Button,
-	InputLabel,
 	FormGroup,
+	TextField,
+	Paper,
+	Divider,
 } from '@mui/material';
 
 import theme from './style/theme';
 
 const styles = {
 	container: {
-		mb: 8,
+		maxWidth: 500,
 	},
 	form: {
 		px: 2,
-		py: 2,
+		pt: 2,
 		mt: 2,
-		border: 'solid',
-		borderColor: theme.bgColor.secondary,
-		borderRadius: '3%',
-		display: 'flex',
-		maxWidth: '400px',
-		xs: { display: 'block' },
 	},
 	text: {
 		color: theme.color.primary,
@@ -33,49 +28,83 @@ const styles = {
 	},
 	input: {
 		color: theme.color.primary,
-		my: 2,
-		px: 1,
+		my: 0.5,
 	},
 	button: {
-		width: '100px',
-		ml: 0.5,
+		m: 1,
+		ml: 2,
+		mb: 2,
+	},
+	divider: {
+		borderColor: theme.bgColor.secondary,
+		mb: 2,
 	},
 };
 
 const Login = () => {
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [passwordError, setPasswordError] = useState('');
+	const [usernameError, setUsernameError] = useState('');
+
+	const handleSubmit = () => {
+		const user = {
+			username: username,
+			password: password,
+		};
+
+		if (!password) setPasswordError('Tarvitaan salasana');
+		else setPasswordError('');
+		if (!username) setUsernameError('Tarvitaan käyttäjätunnus');
+		else setUsernameError('');
+
+		console.log(user);
+	};
+
 	return (
 		<Container sx={styles.container}>
-			<FormGroup sx={styles.form}>
-				<Typography
-					variant='h5'
-					noWrap
-					sx={styles.text}
-				>
-					Kirjaudu sisään
-				</Typography>
-				<FormControl>
-					<InputLabel htmlFor='username'>Käyttäjätunnus</InputLabel>
-					<Input
-						id='username'
-						variant='filled'
-						sx={styles.input}
-					/>
-				</FormControl>
-				<FormControl>
-					<InputLabel htmlFor='password'>Salasana</InputLabel>
-					<Input
-						id='password'
-						variant='filled'
-						sx={styles.input}
-					/>
-				</FormControl>
+			<Paper>
+				<FormGroup sx={styles.form}>
+					<Typography
+						variant='h5'
+						noWrap
+						sx={styles.text}
+					>
+						Kirjaudu sisään
+					</Typography>
+					<Divider sx={styles.divider} />
+					<FormControl>
+						<TextField
+							label='Käyttäjänimi'
+							variant='outlined'
+							onChange={(e) => setUsername(e.target.value)}
+							required
+							error={!!usernameError}
+							helperText={usernameError}
+							sx={styles.input}
+						/>
+					</FormControl>
+					<FormControl>
+						<TextField
+							label='Salasana'
+							type='password'
+							onChange={(e) => setPassword(e.target.value)}
+							required
+							error={!!passwordError}
+							helperText={passwordError}
+							variant='outlined'
+							sx={styles.input}
+						/>
+					</FormControl>
+				</FormGroup>
 				<Button
 					variant='contained'
 					sx={styles.button}
+					onClick={() => handleSubmit()}
 				>
 					Kirjaudu
 				</Button>
-			</FormGroup>
+			</Paper>
 		</Container>
 	);
 };

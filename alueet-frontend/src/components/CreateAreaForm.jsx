@@ -53,6 +53,36 @@ const CreateAreaForm = ({ addArea, layerContext }) => {
 		}
 	}, [layerContext]);
 
+	const handleSubmit = () => {
+		if (!layer) setErrorAlert(true);
+		else setErrorAlert(false);
+
+		console.log(layer);
+		layer.layer.remove();
+
+		if (!areaCity) setAreaCityError('Kaupunki on pakollinen');
+		else setAreaCityError('');
+
+		if (!areaName) setAreaNameError('Alueen nimi on pakollinen');
+		else setAreaNameError('');
+
+		if (!parseInt(apartmentAmount))
+			setAreaBuildingsError('Asuntojen määrä on pakollinen');
+		else setAreaBuildingsError('');
+
+		if (areaName && apartmentAmount && areaCity && layer) {
+			setSuccessAlert(false);
+			addArea({
+				id: layer.layer._leaflet_id,
+				name: areaName,
+				buildings: parseInt(apartmentAmount),
+				city: areaCity,
+				areaOwner: 'admin',
+				latlngs: layer.coords,
+			});
+		}
+	};
+
 	return (
 		<>
 			<Typography sx={styles.subText}>Alueen tiedot</Typography>
@@ -111,36 +141,7 @@ const CreateAreaForm = ({ addArea, layerContext }) => {
 				variant='contained'
 				type='button'
 				sx={styles.btns}
-				onClick={() => {
-					if (!layer) setErrorAlert(true);
-					else setErrorAlert(false);
-
-					console.log(layer);
-					layer.layer.remove();
-
-					if (!areaCity) setAreaCityError('Kaupunki on pakollinen');
-					else setAreaCityError('');
-
-					if (!areaName)
-						setAreaNameError('Alueen nimi on pakollinen');
-					else setAreaNameError('');
-
-					if (!parseInt(apartmentAmount))
-						setAreaBuildingsError('Asuntojen määrä on pakollinen');
-					else setAreaBuildingsError('');
-
-					if (areaName && apartmentAmount && areaCity && layer) {
-						setSuccessAlert(false);
-						addArea({
-							id: layer.layer._leaflet_id,
-							name: areaName,
-							buildings: parseInt(apartmentAmount),
-							city: areaCity,
-							areaOwner: 'admin',
-							latlngs: layer.coords,
-						});
-					}
-				}}
+				onClick={() => handleSubmit()}
 			>
 				Luo alue
 			</Button>

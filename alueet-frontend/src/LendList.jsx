@@ -51,6 +51,7 @@ const LendList = ({ users }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openDel, setDelOpen] = useState(false);
+	const [warningText, setWarningText] = useState('');
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -64,7 +65,7 @@ const LendList = ({ users }) => {
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
-		warningText: 'Haluatko varmasti hylätä lainaus pyynnön?',
+		warningText,
 	};
 
 	return (
@@ -119,6 +120,12 @@ const LendList = ({ users }) => {
 												<Button
 													variant='contained'
 													sx={styles.button}
+													onClick={() => {
+														setWarningText(
+															'Haluatko varmasti hyväksyä lainaus pyynnön?'
+														);
+														setDelOpen(true);
+													}}
 												>
 													Hyväksy
 												</Button>
@@ -127,9 +134,12 @@ const LendList = ({ users }) => {
 												<Button
 													variant='contained'
 													sx={styles.button}
-													onClick={() =>
-														setDelOpen(true)
-													}
+													onClick={() => {
+														setWarningText(
+															'Haluatko varmasti hylätä lainaus pyynnön?'
+														);
+														setDelOpen(true);
+													}}
 												>
 													Hylkää
 												</Button>

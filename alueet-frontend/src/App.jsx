@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { areas as initialAreas, users } from './db/db';
+import { areas as initialAreas, users as initialUsers } from './db/db';
 import Main from './Main';
 import Login from './Login';
 import NavBar from './components/NavBar';
@@ -15,9 +15,14 @@ import LendList from './LendList';
 
 const App = () => {
 	const [areas, setAreas] = useState(initialAreas);
+	const [users, setUsers] = useState(initialUsers);
 	const [layerContext, setLayerContext] = useState(null);
 	const addArea = (props) => {
 		setAreas([...areas, props]);
+	};
+	const addUser = (props) => {
+		setUsers([...users, props]);
+		console.log(users);
 	};
 	useEffect(() => {
 		console.log(layerContext);
@@ -53,7 +58,13 @@ const App = () => {
 					/>
 					<Route
 						path='/userControl'
-						element={<UserControl />}
+						element={
+							<UserControl
+								users={users}
+								addUser={addUser}
+								setUsers={setUsers}
+							/>
+						}
 					/>
 					<Route
 						path='/createArea'

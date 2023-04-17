@@ -43,31 +43,32 @@ const styles = {
 };
 
 const EditUserModal = ({ ...editProps }) => {
-	const [username, setUsername] = useState('TestDummy');
-	const [email, setEmail] = useState('Test@Dummy.fi');
-	const [admin, setAdmin] = useState(true);
-	const [usernameError, setUsernameError] = useState('');
+	const [username, setUsername] = useState(editProps.originalUser?.username);
+	const [email, setEmail] = useState(editProps.originalUser?.email);
+	const [admin, setAdmin] = useState(editProps.originalUser?.admin);
 	const [emailError, setEmailError] = useState('');
 
 	const handleClose = () => {
-		setUsernameError('');
 		setEmailError('');
 		editProps.handleEditModalClose();
 	};
 
 	const handleSubmit = () => {
-		const user = {
+		const newUser = {
+			id: editProps.originalUser.id,
 			username,
 			email,
 			admin,
+			areas: editProps.originalUser.areas,
 		};
 
-		if (!username) setUsernameError('Käyttäjänimi on pakollinen');
-		else setUsernameError('');
-		if (!email) setEmailError('Sähköposti on pakollinen');
+		if (!email || !newUser.email) setEmailError('Sähköposti on pakollinen');
 		else setEmailError('');
 
-		console.log(user);
+		if (newUser.email) {
+			editProps.handleConfirm(newUser);
+			handleClose();
+		}
 	};
 
 	return (
@@ -89,17 +90,14 @@ const EditUserModal = ({ ...editProps }) => {
 						<TextField
 							label='Käyttäjänimi'
 							variant='outlined'
-							defaultValue={username}
+							defaultValue={editProps.originalUser?.username}
 							onChange={(e) => setUsername(e.target.value)}
-							required
-							error={!username}
-							helperText={usernameError}
 							sx={styles.input}
 						/>
 						<TextField
 							label='Sähköposti'
 							variant='outlined'
-							defaultValue={email}
+							defaultValue={editProps.originalUser?.email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
 							error={!email}

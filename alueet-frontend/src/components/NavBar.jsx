@@ -115,7 +115,7 @@ const styles = {
 const NavBar = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
-	const user = 'true'; // find logged user
+	const user = ''; // find logged user
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -281,9 +281,14 @@ const NavBar = () => {
 									</MenuItem>
 								</Box>
 							) : (
-								<MenuItem>
-									<Typography>Kirjaudu sisään</Typography>
-								</MenuItem>
+								<Link
+									to='/login'
+									style={styles.responsive.link}
+								>
+									<MenuItem>
+										<Typography>Kirjaudu sisään</Typography>
+									</MenuItem>
+								</Link>
 							)}
 						</Menu>
 					</Box>

@@ -141,7 +141,7 @@ const TableRowComponent = ({
 								setSelectedArea(open ? undefined : area);
 							}}
 						>
-							{area.name}
+							{area.info.quarter}
 						</TableCell>
 						<TableCell>
 							<IconButton
@@ -190,7 +190,7 @@ const TableRowComponent = ({
 													component='th'
 													scope='row'
 												>
-													{area.buildings}
+													{area.info.buildings}
 												</TableCell>
 												<TableCell>
 													{loaned ? 'Kyllä' : 'Ei'}
@@ -208,7 +208,7 @@ const TableRowComponent = ({
 												loanArea(area);
 											}}
 										>
-											{area.loaned
+											{area.shareState.isShared
 												? 'Palauta alue'
 												: 'Lainaa alue'}
 										</Button>

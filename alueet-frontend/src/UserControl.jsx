@@ -22,7 +22,6 @@ import DeleteWarningModal from './components/DeleteWarningModal';
 import CreateUserModal from './components/CreateUserModal';
 
 import theme from './style/theme';
-import { users } from './db/db';
 
 const styles = {
 	container: {
@@ -179,7 +178,7 @@ const Row = ({ ...rowProps }) => {
 	);
 };
 
-const UserControl = () => {
+const UserControl = ({ users, addUser }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openEdit, setEditOpen] = useState(false);
@@ -207,6 +206,7 @@ const UserControl = () => {
 	const createProps = {
 		openCreate,
 		handleCreateModalClose: () => setCreateOpen(false),
+		addUser,
 	};
 
 	return (

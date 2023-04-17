@@ -67,6 +67,23 @@ const CreateUserModal = ({ ...createProps }) => {
 		else setPasswordError('');
 		if (!email) setEmailError('Sähköposti on pakollinen');
 		else setEmailError('');
+
+		if (admin) {
+			const user = {
+				admin,
+				email,
+				password,
+			};
+			console.log(user);
+			createProps.addUser(user);
+		} else {
+			const user = {
+				admin: false,
+				email,
+			};
+			console.log(user);
+			createProps.addUser(user);
+		}
 	};
 
 	const handleChangeAdmin = () => {
@@ -124,7 +141,7 @@ const CreateUserModal = ({ ...createProps }) => {
 								<TextField
 									label='Sähköposti'
 									variant='outlined'
-									defaultValue={email}
+									type='email'
 									onChange={(e) => setEmail(e.target.value)}
 									required
 									error={!email}
@@ -134,7 +151,7 @@ const CreateUserModal = ({ ...createProps }) => {
 								<TextField
 									label='Salasana'
 									variant='outlined'
-									defaultValue={password}
+									type='password'
 									onChange={(e) =>
 										setPassword(e.target.value)
 									}
@@ -151,7 +168,7 @@ const CreateUserModal = ({ ...createProps }) => {
 							<TextField
 								label='Sähköposti'
 								variant='outlined'
-								defaultValue={email}
+								type='email'
 								onChange={(e) => setEmail(e.target.value)}
 								required
 								error={!email}

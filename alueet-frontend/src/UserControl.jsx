@@ -52,12 +52,6 @@ const columns = [
 		minWidth: 170,
 	},
 	{
-		id: 'quest',
-		label: 'Vieras',
-		minWidth: 50,
-		align: 'right',
-	},
-	{
 		id: 'admin',
 		label: 'Admin',
 		minWidth: 50,
@@ -91,7 +85,14 @@ const UserControl = ({ users, addUser, setUsers }) => {
 		userList.forEach((user, i) => {
 			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
 		});
+		setUsers([...userList]);
+	};
 
+	const removeUser = (props) => {
+		const userList = [];
+		users.forEach((user) => {
+			if (user.id !== props.id) userList.push(user);
+		});
 		setUsers([...userList]);
 	};
 
@@ -146,6 +147,7 @@ const UserControl = ({ users, addUser, setUsers }) => {
 									const rowProps = {
 										user,
 										updateUser,
+										removeUser,
 									};
 
 									return (

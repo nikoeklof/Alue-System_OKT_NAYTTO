@@ -23,7 +23,7 @@ const styles = {
 	},
 };
 
-const UserTableRowComponent = ({ user, updateUser }) => {
+const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 	const [open, setOpen] = useState(false);
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
@@ -44,6 +44,7 @@ const UserTableRowComponent = ({ user, updateUser }) => {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti poistaa käyttäjän?',
+		handleConfirm: () => removeUser(user),
 	};
 
 	return (
@@ -66,9 +67,6 @@ const UserTableRowComponent = ({ user, updateUser }) => {
 					</TableCell>
 					<TableCell>{user.username}</TableCell>
 					<TableCell>{user.email}</TableCell>
-					<TableCell align='right'>
-						{user.username ? 'Ei' : 'Kyllä'}
-					</TableCell>
 					<TableCell align='right'>
 						{user.admin ? 'Kyllä' : 'Ei'}
 					</TableCell>

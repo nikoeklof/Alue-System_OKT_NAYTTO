@@ -73,16 +73,18 @@ const CreateUserModal = ({ ...createProps }) => {
 				admin,
 				email,
 				password,
+				areas: {},
 			};
-			console.log(user);
 			createProps.addUser(user);
+			handleClose();
 		} else {
 			const user = {
 				admin: false,
 				email,
+				areas: {},
 			};
-			console.log(user);
 			createProps.addUser(user);
+			handleClose();
 		}
 	};
 

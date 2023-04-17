@@ -60,7 +60,7 @@ const App = () => {
 						path='/userControl'
 						element={
 							<UserControl
-								users={initialUsers}
+								users={users}
 								addUser={addUser}
 								setUsers={setUsers}
 							/>
@@ -79,7 +79,7 @@ const App = () => {
 					/>
 					<Route
 						path='/lendList'
-						element={<LendList users={initialUsers} />}
+						element={<LendList users={users} />}
 					/>
 					<Route
 						path='/userProfile'

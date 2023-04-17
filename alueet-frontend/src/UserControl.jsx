@@ -1,10 +1,7 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import {
-	Box,
 	Button,
-	Collapse,
 	Container,
-	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -15,10 +12,8 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-import EditUserModal from './components/EditUserModal';
-import DeleteWarningModal from './components/DeleteWarningModal';
+import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
 
 import theme from './style/theme';
@@ -76,113 +71,9 @@ const columns = [
 	},
 ];
 
-const Row = ({ ...rowProps }) => {
-	const user = rowProps.user;
-	const [open, setOpen] = useState(false);
-	const areaArray = [];
-
-	for (const area in user.areas) {
-		areaArray.push(user.areas[area]);
-	}
-
-	return (
-		<Fragment>
-			<TableRow
-				hover
-				key={user.id}
-				onClick={() => setOpen(!open)}
-				sx={{ '& > *': { borderBottom: 'unset' } }}
-			>
-				<TableCell>
-					<IconButton
-						aria-label='expand row'
-						size='small'
-						onClick={() => setOpen(!open)}
-					>
-						{open ? <ExpandLess /> : <ExpandMore />}
-					</IconButton>
-				</TableCell>
-				<TableCell>{user.username}</TableCell>
-				<TableCell>{user.email}</TableCell>
-				<TableCell align='right'>
-					{user.username ? 'Ei' : 'Kyllä'}
-				</TableCell>
-				<TableCell align='right'>
-					{user.admin ? 'Kyllä' : 'Ei'}
-				</TableCell>
-				<TableCell align='right'>{user.id}</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell
-					sx={{ py: 0 }}
-					colSpan={6}
-				>
-					<Collapse
-						in={open}
-						timeout='auto'
-						unmountOnExit
-					>
-						<Box sx={{ margin: 1 }}>
-							<Typography
-								variant='h6'
-								gutterBottom
-								component='div'
-							>
-								Alueet
-							</Typography>
-							<Table
-								size='small'
-								aria-label='areas'
-							>
-								<TableHead>
-									<TableRow>
-										<TableCell>Nimi</TableCell>
-										<TableCell>ID</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{areaArray.map((area) => {
-										return (
-											<TableRow key={user.areas.id}>
-												<TableCell
-													component='th'
-													scope='row'
-												>
-													Fetch from backend
-												</TableCell>
-												<TableCell>{area}</TableCell>
-											</TableRow>
-										);
-									})}
-								</TableBody>
-							</Table>
-							<Button
-								variant='contained'
-								sx={styles.button}
-								onClick={() => rowProps.setEditOpen(true)}
-							>
-								Muokkaa Käyttäjää
-							</Button>
-							<Button
-								variant='contained'
-								sx={styles.button}
-								onClick={() => rowProps.setDelOpen(true)}
-							>
-								Poista Käyttäjä
-							</Button>
-						</Box>
-					</Collapse>
-				</TableCell>
-			</TableRow>
-		</Fragment>
-	);
-};
-
-const UserControl = ({ users, addUser }) => {
+const UserControl = ({ users, addUser, setUsers }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [openEdit, setEditOpen] = useState(false);
-	const [openDel, setDelOpen] = useState(false);
 	const [openCreate, setCreateOpen] = useState(false);
 
 	const handleChangePage = (event, newPage) => {
@@ -194,15 +85,16 @@ const UserControl = ({ users, addUser }) => {
 		setPage(0);
 	};
 
-	const editProps = {
-		openEdit,
-		handleEditModalClose: () => setEditOpen(false),
+	const updateUser = (props) => {
+		const userList = users;
+		let userToUpdate = { ...props };
+		userList.forEach((user, i) => {
+			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
+		});
+
+		setUsers([...userList]);
 	};
-	const delProps = {
-		openDel,
-		handleCloseDelModal: () => setDelOpen(false),
-		warningText: 'Haluatko varmasti poistaa käyttäjän?',
-	};
+
 	const createProps = {
 		openCreate,
 		handleCreateModalClose: () => setCreateOpen(false),
@@ -253,11 +145,11 @@ const UserControl = ({ users, addUser }) => {
 								.map((user) => {
 									const rowProps = {
 										user,
-										setEditOpen,
-										setDelOpen,
+										updateUser,
 									};
+
 									return (
-										<Row
+										<UserTableRowComponent
 											key={user.id}
 											{...rowProps}
 										/>
@@ -277,8 +169,6 @@ const UserControl = ({ users, addUser }) => {
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
 			</Paper>
-			<EditUserModal {...editProps} />
-			<DeleteWarningModal {...delProps} />
 			<CreateUserModal {...createProps} />
 		</Container>
 	);

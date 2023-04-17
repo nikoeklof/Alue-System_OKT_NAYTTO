@@ -62,6 +62,7 @@ const App = () => {
 							<UserControl
 								users={initialUsers}
 								addUser={addUser}
+								setUsers={setUsers}
 							/>
 						}
 					/>

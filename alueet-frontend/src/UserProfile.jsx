@@ -40,6 +40,8 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 	const [openDel, setDelOpen] = useState(false);
 	const [username, setUsername] = useState(loggedUser.username);
 	const [email, setEmail] = useState(loggedUser.email);
+	const [usernameError, setUsernameError] = useState('');
+	const [emailError, setEmailError] = useState('');
 
 	const updatedUser = {
 		username,
@@ -52,6 +54,12 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 	const updateUser = (props) => {
 		const userList = users;
 		let userToUpdate = { ...props };
+
+		if (!username) setUsernameError('Käyttäjänimi tarvitaan');
+		else setUsernameError('');
+		if (!email) setEmailError('Sähköposti tarvitaan');
+		else setEmailError('');
+
 		userList.forEach((user, i) => {
 			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
 		});
@@ -65,6 +73,8 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 		warningText: 'Haluatko varmasti tallentaa tiedot?',
 		handleConfirm: () => {
 			updateUser(updatedUser);
+			setUsernameError('');
+			setEmailError('');
 			setDelOpen(false);
 		},
 	};
@@ -85,6 +95,9 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 							label='Käyttäjänimi'
 							defaultValue={loggedUser.username}
 							onChange={(e) => setUsername(e.target.value)}
+							required
+							error={!username}
+							helperText={usernameError}
 							variant='outlined'
 						/>
 					</FormControl>
@@ -96,6 +109,9 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 							label='Sähköposti'
 							defaultValue={loggedUser.email}
 							onChange={(e) => setEmail(e.target.value)}
+							required
+							error={!email}
+							helperText={emailError}
 							variant='outlined'
 						/>
 					</FormControl>

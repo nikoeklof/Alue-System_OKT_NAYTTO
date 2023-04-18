@@ -142,9 +142,9 @@ const Row = ({ ...rowProps }) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{areaArray.map((area) => {
+									{areaArray.map((area, i) => {
 										return (
-											<TableRow key={user.areas.id}>
+											<TableRow key={i}>
 												<TableCell
 													component='th'
 													scope='row'

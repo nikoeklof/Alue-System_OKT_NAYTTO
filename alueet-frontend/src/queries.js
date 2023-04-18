@@ -142,29 +142,32 @@ export const RETURN_SHARED_AREA = gql`
 //needs testing
 export const CREATE_AREA = gql`
   mutation createArea(
-    $type: String!
     $cityName: String!
     $quarter: String!
     $address: String!
     $buildings: Int!
-    $homes: Int!
-    $zone: String!
-    $lan: String!
-    $lon: String!
+    $latlngs: [latlngsType]!
     $misc: String
   ) {
     createArea(
-      type: $type
       cityName: $cityName
       quarter: $quarter
       address: $address
       buildings: $buildings
-      homes: $homes
-      zone: $zone
-      lan: $lan
-      lon: $lon
+      latlngs: $latlngs
       misc: $misc
     ) {
+      info {
+        address
+        buildings
+        cityName
+        latlngs {
+          lat
+          lng
+        }
+        misc
+        quarter
+      }
       id
     }
   }

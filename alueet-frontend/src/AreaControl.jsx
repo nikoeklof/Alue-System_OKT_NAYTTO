@@ -74,13 +74,7 @@ const styles = {
   },
 };
 
-const AreaControl = ({
-  areas,
-
-  setAreas,
-  layerContext,
-  setLayerContext,
-}) => {
+const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
   const [selectedArea, setSelectedArea] = useState(undefined);
   const [hoverStatus, setHoverStatus] = useState(undefined);
 
@@ -179,7 +173,7 @@ const AreaControl = ({
                       )
                       .map((area) => (
                         <TableRowComponent
-                          key={area.name}
+                          key={area.id}
                           area={area}
                           setSelectedArea={setSelectedArea}
                           selectedArea={selectedArea}

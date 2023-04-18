@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Container } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import { areas as initialAreas, users } from "./db/db";
+import { users } from "./db/db";
 import { InfinitySpin } from "react-loader-spinner";
 import Main from "./Main";
 import Login from "./Login";
@@ -17,10 +17,14 @@ import LendList from "./LendList";
 import { useQuery } from "@apollo/client";
 import { ALL_AREAS } from "./queries";
 const App = () => {
-  const { loading, error, data } = useQuery(ALL_AREAS);
+  const { loading, data } = useQuery(ALL_AREAS, {
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
-  const [areas, setAreas] = useState(data?.allAreas);
-  console.log(areas);
+  const [areas, setAreas] = useState(null);
+
   const [layerContext, setLayerContext] = useState(null);
   const addArea = (props) => {
     setAreas([...areas, props]);
@@ -42,10 +46,10 @@ const App = () => {
             path="/areaControl"
             element={
               !areas ? (
-                <div style={{ position: "initial", top: "40%", left: "45%" }}>
+                <div style={{ position: "absolute", top: "50%", left: "45%" }}>
                   <InfinitySpin
-                    width="400"
-                    color="black"
+                    width="200"
+                    color="gray"
                     ariaLabel="loading"
                     wrapperStyle
                     wrapperClass
@@ -61,7 +65,7 @@ const App = () => {
             path="/createArea"
             element={
               !areas ? (
-                <div style={{ position: "absolute", top: "50%", left: "50%" }}>
+                <div style={{ position: "absolute", top: "50%", left: "45%" }}>
                   <InfinitySpin
                     width="200"
                     color="gray"

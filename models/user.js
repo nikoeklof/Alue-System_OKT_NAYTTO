@@ -17,6 +17,14 @@ const schema = new mongoose.Schema({
     disabled: {
         type: Boolean,
         default: true
+    },
+    rank: {
+        type: [String],
+        default: null
+    },
+    aboutMe: {
+        type: String,
+        default: null
     }
 })
 

@@ -58,7 +58,7 @@ const typeDefs = gql`
     allAreas (cityName: String, quarter: String, address: String, isShared: Boolean): [Area]!
 
     userCount: Int!
-    allUsers (disabled: Boolean, admin: Boolean): [User]!
+    allUsers (admin: Boolean): [User]!
 
     me: User
   }
@@ -86,6 +86,7 @@ const typeDefs = gql`
     deleteArea (areaId: ID!): Area
 
     login (email: String!, password: String!): Token
+    changeUserInfo (aboutMe: String, rank: [String]): User
   }
 `
 

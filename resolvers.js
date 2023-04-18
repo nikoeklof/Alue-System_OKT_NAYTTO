@@ -41,7 +41,7 @@ const resolvers = {
 
             return await Area.find(newArgs)
         },
-        allUsers: async (root, args) => await User.find(args),
+        allUsers: async (root, args) => await User.find({ ...args, disabled: false }),
         me: (root, args, contextValue) => contextValue.authUser
     },
 
@@ -294,6 +294,23 @@ const resolvers = {
             //mailer(guest.email, area.info, 2)
 
             return area
+        },
+
+        changeUserInfo: async (root, args, contextValue) => {
+            const user = contextCheck(contextValue.authUser, false)
+
+            if (args.aboutMe)
+                user.aboutMe = args.aboutMe
+
+            if (args.rank)
+                user.rank = args.rank
+
+            return user.save()
+                .catch(error => {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                })
         },
     }
 }

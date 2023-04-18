@@ -13,4 +13,4 @@ EMAIL_SENDER
 
 For logging:
 
-LOGGING - "1" will log all requests
+LOGGING - "1" will log all requests, variables included

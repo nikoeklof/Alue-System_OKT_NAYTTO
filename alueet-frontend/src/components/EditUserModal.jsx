@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Typography,
@@ -43,10 +43,32 @@ const styles = {
 };
 
 const EditUserModal = ({ ...editProps }) => {
-	const handleClose = () => editProps.handleEditModalClose();
+	const [username, setUsername] = useState(editProps.originalUser?.username);
+	const [email, setEmail] = useState(editProps.originalUser?.email);
+	const [admin, setAdmin] = useState(editProps.originalUser?.admin);
+	const [emailError, setEmailError] = useState('');
 
-	const handleChange = () => {
-		console.log('change');
+	const handleClose = () => {
+		setEmailError('');
+		editProps.handleEditModalClose();
+	};
+
+	const handleSubmit = () => {
+		const newUser = {
+			id: editProps.originalUser.id,
+			username,
+			email,
+			admin,
+			areas: editProps.originalUser.areas,
+		};
+
+		if (!email || !newUser.email) setEmailError('Sähköposti on pakollinen');
+		else setEmailError('');
+
+		if (newUser.email) {
+			editProps.handleConfirm(newUser);
+			handleClose();
+		}
 	};
 
 	return (
@@ -68,15 +90,27 @@ const EditUserModal = ({ ...editProps }) => {
 						<TextField
 							label='Käyttäjänimi'
 							variant='outlined'
+							defaultValue={editProps.originalUser?.username}
+							onChange={(e) => setUsername(e.target.value)}
 							sx={styles.input}
 						/>
 						<TextField
 							label='Sähköposti'
 							variant='outlined'
+							defaultValue={editProps.originalUser?.email}
+							onChange={(e) => setEmail(e.target.value)}
+							required
+							error={!email}
+							helperText={emailError}
 							sx={styles.input}
 						/>
 						<FormControlLabel
-							control={<Switch onChange={handleChange} />}
+							control={
+								<Switch
+									checked={admin}
+									onChange={(e) => setAdmin(e.target.checked)}
+								/>
+							}
 							label='Admin'
 							sx={styles.input}
 						/>
@@ -92,6 +126,7 @@ const EditUserModal = ({ ...editProps }) => {
 				<Button
 					sx={styles.button}
 					variant='contained'
+					onClick={() => handleSubmit()}
 				>
 					Valmis
 				</Button>

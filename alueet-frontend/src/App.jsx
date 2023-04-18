@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Container } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import { users } from "./db/db";
+import { users as initialUsers } from "./db/db";
 import { InfinitySpin } from "react-loader-spinner";
 import Main from "./Main";
 import Login from "./Login";
@@ -25,9 +25,14 @@ const App = () => {
 
   const [areas, setAreas] = useState(null);
 
+  const [users, setUsers] = useState(initialUsers);
   const [layerContext, setLayerContext] = useState(null);
   const addArea = (props) => {
     setAreas([...areas, props]);
+  };
+  const addUser = (props) => {
+    setUsers([...users, props]);
+    console.log(users);
   };
   useEffect(() => {
     setAreas(data?.allAreas);
@@ -60,7 +65,16 @@ const App = () => {
               )
             }
           />
-          <Route path="/userControl" element={<UserControl />} />
+          <Route
+            path="/userControl"
+            element={
+              <UserControl
+                users={users}
+                addUser={addUser}
+                setUsers={setUsers}
+              />
+            }
+          />
           <Route
             path="/createArea"
             element={

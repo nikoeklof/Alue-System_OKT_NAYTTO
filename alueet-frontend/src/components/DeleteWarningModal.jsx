@@ -21,6 +21,7 @@ const styles = {
 	},
 	header: {
 		mb: 2,
+		textAlign: 'center',
 	},
 	button: {
 		float: 'right',

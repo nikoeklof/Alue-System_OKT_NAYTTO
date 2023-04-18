@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Typography,
@@ -43,14 +43,63 @@ const styles = {
 };
 
 const CreateUserModal = ({ ...createProps }) => {
-	const handleClose = () => createProps.handleCreateModalClose();
+	const [admin, setAdmin] = useState(false);
+	const [guest, setGuest] = useState(false);
+	const [ready, setReady] = useState(true);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [emailError, setEmailError] = useState('');
+	const [passwordError, setPasswordError] = useState('');
+
+	const handleClose = () => {
+		setEmailError('');
+		setPasswordError('');
+		setEmail('');
+		setPassword('');
+		setAdmin(false);
+		setGuest(false);
+		setReady(true);
+		createProps.handleCreateModalClose();
+	};
+
+	const handleSubmit = () => {
+		if (!password) setPasswordError('Salasana on pakollinen');
+		else setPasswordError('');
+		if (!email) setEmailError('Sähköposti on pakollinen');
+		else setEmailError('');
+
+		if (admin) {
+			const user = {
+				admin,
+				email,
+				password,
+				areas: {},
+			};
+			createProps.addUser(user);
+			handleClose();
+		} else {
+			const user = {
+				admin: false,
+				email,
+				areas: {},
+			};
+			createProps.addUser(user);
+			handleClose();
+		}
+	};
 
 	const handleChangeAdmin = () => {
-		console.log('change admin');
+		setEmail('');
+		setPassword('');
+		setAdmin(!admin);
+		setReady(!ready);
 	};
 
 	const handleChangeGuest = () => {
-		console.log('change guest');
+		setEmail('');
+		setPassword('');
+		setGuest(!guest);
+		setReady(!ready);
 	};
 
 	return (
@@ -69,32 +118,68 @@ const CreateUserModal = ({ ...createProps }) => {
 				</Typography>
 				<FormGroup>
 					<FormControl>
-						<TextField
-							label='Käyttäjänimi'
-							variant='outlined'
-							sx={styles.input}
-						/>
-						<TextField
-							label='Nimi'
-							variant='outlined'
-							sx={styles.input}
-						/>
-						<TextField
-							label='Sähköposti'
-							variant='outlined'
-							required
-							sx={styles.input}
-						/>
 						<FormControlLabel
-							control={<Switch onChange={handleChangeAdmin} />}
+							control={
+								<Switch
+									disabled={guest}
+									onChange={handleChangeAdmin}
+								/>
+							}
 							label='Admin'
 							sx={styles.input}
 						/>
 						<FormControlLabel
-							control={<Switch onChange={handleChangeGuest} />}
+							control={
+								<Switch
+									disabled={admin}
+									onChange={handleChangeGuest}
+								/>
+							}
 							label='Vieras'
 							sx={styles.input}
 						/>
+						{admin ? (
+							<>
+								<TextField
+									label='Sähköposti'
+									variant='outlined'
+									type='email'
+									onChange={(e) => setEmail(e.target.value)}
+									required
+									error={!email}
+									helperText={emailError}
+									sx={styles.input}
+								/>
+								<TextField
+									label='Salasana'
+									variant='outlined'
+									type='password'
+									onChange={(e) =>
+										setPassword(e.target.value)
+									}
+									required
+									error={!password}
+									helperText={passwordError}
+									sx={styles.input}
+								/>
+							</>
+						) : (
+							''
+						)}
+						{guest ? (
+							<TextField
+								label='Sähköposti'
+								variant='outlined'
+								type='email'
+								onChange={(e) => setEmail(e.target.value)}
+								required
+								error={!email}
+								helperText={emailError}
+								sx={styles.input}
+							/>
+						) : (
+							''
+						)}
 					</FormControl>
 				</FormGroup>
 				<Button
@@ -105,10 +190,12 @@ const CreateUserModal = ({ ...createProps }) => {
 					Peruuta
 				</Button>
 				<Button
+					disabled={ready}
 					sx={styles.button}
 					variant='contained'
+					onClick={() => handleSubmit()}
 				>
-					Luo
+					Valmis
 				</Button>
 			</Box>
 		</Modal>

@@ -32,15 +32,15 @@ const styles = {
 	},
 	inputNum: {
 		m: 0.5,
-		maxWidth: 100,
+		maxWidth: 150,
 	},
 	inputMore: {
 		m: 0.5,
-		mb: 2,
 	},
 	button: {
 		float: 'right',
 		m: 0.5,
+		mt: 2,
 	},
 };
 
@@ -51,6 +51,8 @@ const EditAreaModal = ({ ...editProps }) => {
 	);
 	const [areaName, setAreaName] = useState(editProps.originalArea?.name);
 	const ref = useRef(null);
+	const [areaNameError, setAreaNameError] = useState('');
+	const [areaBuildingsError, setAreaBuildingsError] = useState('');
 
 	return (
 		<Modal
@@ -73,6 +75,9 @@ const EditAreaModal = ({ ...editProps }) => {
 							label='Asunnot'
 							type='number'
 							variant='outlined'
+							required
+							error={!!areaBuildingsError}
+							helperText={areaBuildingsError}
 							defaultValue={editProps.originalArea.buildings}
 							onChange={(e) => setBuildingAmount(e.target.value)}
 							sx={styles.inputNum}
@@ -81,6 +86,9 @@ const EditAreaModal = ({ ...editProps }) => {
 							ref={ref}
 							label='Alueen Nimi'
 							type='text'
+							required
+							error={!!areaNameError}
+							helperText={areaNameError}
 							defaultValue={editProps.originalArea.name}
 							onChange={(e) => setAreaName(e.target.value)}
 							variant='outlined'
@@ -99,7 +107,13 @@ const EditAreaModal = ({ ...editProps }) => {
 				<Button
 					sx={styles.button}
 					variant='contained'
-					onClick={() => handleClose()}
+					onClick={() => {
+						setAreaBuildingsError('');
+						setAreaNameError('');
+						setAreaName(editProps.originalArea?.name);
+						setBuildingAmount(editProps.originalArea?.buildings);
+						handleClose();
+					}}
 				>
 					Peruuta
 				</Button>
@@ -115,8 +129,19 @@ const EditAreaModal = ({ ...editProps }) => {
 							loaned: editProps.originalArea.loaned,
 							latlngs: editProps.originalArea.latlngs,
 						};
-						editProps.handleConfirm(newArea);
-						handleClose();
+
+						if (!areaName || !newArea.name)
+							setAreaNameError('Alueen nimi pakollinen');
+						else setAreaNameError('');
+
+						if (!parseInt(buildingAmount) || !newArea.buildings)
+							setAreaBuildingsError('Asunnot pakollisia');
+						else setAreaBuildingsError('');
+
+						if (newArea.name && newArea.buildings) {
+							editProps.handleConfirm(newArea);
+							handleClose();
+						}
 					}}
 				>
 					Valmis

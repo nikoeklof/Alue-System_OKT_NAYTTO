@@ -112,10 +112,10 @@ const styles = {
 	},
 };
 
-const NavBar = () => {
+const NavBar = ({ loggedUser }) => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
-	const user = ''; // find logged user
+	const user = loggedUser;
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -248,8 +248,7 @@ const NavBar = () => {
 							onClick={handleOpenUserMenu}
 							sx={styles.user.link}
 						>
-							{/* Käyttäjänimi = logged in user */}
-							{user ? 'Käyttäjänimi' : 'Aloitus'}
+							{user ? user.username : 'Aloitus'}
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}
@@ -263,6 +262,7 @@ const NavBar = () => {
 						>
 							{user ? (
 								<Box>
+									{}
 									<Link
 										to='/userProfile'
 										style={styles.responsive.link}

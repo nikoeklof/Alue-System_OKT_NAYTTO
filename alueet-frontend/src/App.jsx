@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { areas as initialAreas, users as initialUsers } from './db/db';
+import {
+	areas as initialAreas,
+	users as initialUsers,
+	loggedUser,
+} from './db/db';
 import Main from './Main';
 import Login from './Login';
 import NavBar from './components/NavBar';
@@ -22,7 +26,6 @@ const App = () => {
 	};
 	const addUser = (props) => {
 		setUsers([...users, props]);
-		console.log(users);
 	};
 	useEffect(() => {
 		console.log(layerContext);
@@ -31,7 +34,7 @@ const App = () => {
 	return (
 		<Router>
 			<Container>
-				<NavBar />
+				<NavBar loggedUser={loggedUser} />
 
 				<Routes>
 					<Route
@@ -83,7 +86,13 @@ const App = () => {
 					/>
 					<Route
 						path='/userProfile'
-						element={<UserProfile />}
+						element={
+							<UserProfile
+								loggedUser={loggedUser}
+								users={users}
+								setUsers={setUsers}
+							/>
+						}
 					/>
 				</Routes>
 				<Footer />

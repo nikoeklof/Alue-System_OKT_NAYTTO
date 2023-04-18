@@ -36,18 +36,37 @@ const styles = {
 	},
 };
 
-const UserProfile = () => {
+const UserProfile = ({ loggedUser, users, setUsers }) => {
 	const [openDel, setDelOpen] = useState(false);
+	const [username, setUsername] = useState(loggedUser.username);
+	const [email, setEmail] = useState(loggedUser.email);
 
-	const updateUser = () => {
-		console.log('saved user');
+	const updatedUser = {
+		username,
+		email,
+		id: loggedUser.id,
+		admin: loggedUser.admin,
+		areas: loggedUser.areas,
+	};
+
+	const updateUser = (props) => {
+		const userList = users;
+		let userToUpdate = { ...props };
+		userList.forEach((user, i) => {
+			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
+		});
+		setUsers([...userList]);
+		console.log(userList);
 	};
 
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti tallentaa tiedot?',
-		handleConfirm: () => updateUser,
+		handleConfirm: () => {
+			updateUser(updatedUser);
+			setDelOpen(false);
+		},
 	};
 
 	return (
@@ -64,6 +83,8 @@ const UserProfile = () => {
 					<FormControl sx={styles.form}>
 						<TextField
 							label='Käyttäjänimi'
+							defaultValue={loggedUser.username}
+							onChange={(e) => setUsername(e.target.value)}
 							variant='outlined'
 						/>
 					</FormControl>
@@ -73,6 +94,8 @@ const UserProfile = () => {
 					<FormControl sx={styles.form}>
 						<TextField
 							label='Sähköposti'
+							defaultValue={loggedUser.email}
+							onChange={(e) => setEmail(e.target.value)}
 							variant='outlined'
 						/>
 					</FormControl>

@@ -29,7 +29,7 @@ const CreateAreaForm = ({ layerContext }) => {
   const [areaCity, setAreaCity] = useState("");
   const [quarterName, setQuarterName] = useState("");
   const [miscInfo, setMiscInfo] = useState("");
-  const [createArea, { data }] = useMutation(CREATE_AREA);
+  const [createArea] = useMutation(CREATE_AREA);
   return (
     <>
       <FormControl sx={styles.form}>

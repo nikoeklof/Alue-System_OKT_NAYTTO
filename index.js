@@ -4,8 +4,7 @@ const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 
-const resolvers = require("./resolvers")
-const typeDefs = require("./schema")
+const schema = require("./apollo/execSchema")
 const User = require("./models/user")
 
 const mongoUrl = process.env.MONGODB_URI
@@ -21,8 +20,7 @@ mongoose
   })
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   plugins: [
     {
       requestDidStart(requestContext) {

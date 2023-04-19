@@ -74,10 +74,14 @@ const typeDefs = gql`
 
   type Mutation {
     createGuest (email: String!): Guest
-    makeRequest (areaId: ID!, email: String!): Area
 
     createUser (email: String!, password: String!): User
     changeUserPassword (password: String!): User
+    changeUserAbout (aboutMe: String!): User
+    addUserRank (rank: String!): User
+    removeUserRank (rank: String!): User
+
+    makeRequest (areaId: ID!, email: String!): Area
     allowAreaRequest (areaId: ID!, email: String!): Area
     returnSharedArea (areaId: ID!): Area
 
@@ -86,7 +90,6 @@ const typeDefs = gql`
     deleteArea (areaId: ID!): Area
 
     login (email: String!, password: String!): Token
-    changeUserInfo (aboutMe: String, rank: [String]): User
   }
 `
 

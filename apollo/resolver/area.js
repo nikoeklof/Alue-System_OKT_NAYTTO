@@ -1,28 +1,14 @@
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const { UserInputError } = require("apollo-server")
 
-const Area = require("./models/area")
-const Guest = require("./models/guest")
-const User = require("./models/user")
+const Area = require("../../models/area")
+const Guest = require("../../models/guest")
 
-const mailer = require("./util/mail")
+const contextCheck = require("../../util/contextCheck")
+const mailer = require("../../util/mail")
 
-const contextCheck = (user, hasToBeAdmin) => {
-    if (!user)
-        throw new AuthenticationError("Not authenticated")
-
-    if (hasToBeAdmin && !user.admin)
-        throw new AuthenticationError("User has to be admin")
-
-    return user
-}
-
-const resolvers = {
+module.exports = {
     Query: {
         areaCount: () => Area.collection.countDocuments(),
-        guestCount: () => Guest.collection.countDocuments(),
-        userCount: () => User.collection.countDocuments(),
-        allGuests: async () => await Guest.find({}),
         allAreas: async (root, args) => {
             const newArgs = {}
 
@@ -40,20 +26,6 @@ const resolvers = {
 
             return await Area.find(newArgs)
         },
-        allUsers: async (root, args) => await User.find({ ...args, disabled: false }),
-        me: (root, args, contextValue) => contextValue.authUser
-    },
-
-    Guest: {
-        email: (root) => root.email,
-        areas: async (root) => await Area.find({ ["shareState.sharedTo"]: root.email })
-
-    },
-
-    User: {
-        admin: (root) => root.admin,
-        disabled: (root) => root.disabled,
-        guestAccount: async (root) => await Guest.findById(root.guestId),
     },
 
     Area: {
@@ -61,48 +33,7 @@ const resolvers = {
         shareState: (root) => root.shareState,
         shareHistory: (root) => root.shareHistory
     },
-
     Mutation: {
-        createGuest: (root, args) => {
-            const guest = new Guest({ ...args })
-            return guest.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
-        },
-
-        createUser: async (root, args) => {
-            if (args.password.length < 5)
-                throw new UserInputError("Password must have at least minimum 5 letters")
-
-            const guest = await Guest.findOne({ email: args.email })
-
-            if (!guest)
-                throw new UserInputError("Invalid email, guest not found")
-
-            const user = new User({
-                guestId: guest._id,
-                password: await bcrypt.hash(args.password, 10)
-            })
-
-            return user.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
-        },
-
-        /*
-            [
-            {"lat": "21,9899898", "lng": "69,28178148"},
-            {"lat": "21,9899898", "lng": "69,28178148"},
-            {"lat": "21,9899898", "lng": "69,28178148"}
-            ]
-        */
-
         createArea: (root, args, contextValue) => {
             //contextCheck(contextValue.authUser, true)
 
@@ -113,17 +44,6 @@ const resolvers = {
             })
 
             return area.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
-        },
-
-        deleteArea: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, true)
-
-            return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,
@@ -149,45 +69,15 @@ const resolvers = {
                 })
         },
 
-        changeUserPassword: async (root, args, contextValue) => {
-            const user = contextCheck(contextValue.authUser, false)
+        deleteArea: async (root, args, contextValue) => {
+            contextCheck(contextValue.authUser, true)
 
-            if (args.password.length < 5)
-                throw new UserInputError("Password must have at least minimum 5 letters")
-
-            user.password = await bcrypt.hash(args.password, 10)
-
-            return user.save()
+            return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,
                     })
                 })
-        },
-
-        login: async (root, args) => {
-            const guest = await Guest.findOne({ email: args.email })
-
-            if (!guest)
-                throw new UserInputError("Invalid email")
-
-            const user = await User.findOne({ guestId: guest._id })
-
-            if (!user)
-                throw new AuthenticationError("User not found")
-
-            if (user.disabled)
-                throw new AuthenticationError("User account is disabled")
-
-            if (!await bcrypt.compare(args.password, user.password))
-                throw new AuthenticationError("Invalid password")
-
-            const userForToken = {
-                email: guest.email,
-                id: user._id
-            }
-
-            return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
         },
 
         makeRequest: async (root, args) => {
@@ -293,47 +183,6 @@ const resolvers = {
             //mailer(guest.email, area.info, 2)
 
             return area
-        },
-
-        changeUserAbout: async (root, args, contextValue) => {
-            const user = contextCheck(contextValue.authUser, false)
-
-            user.aboutMe = args.aboutMe
-
-            return user.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
-        },
-
-        addUserRank: async (root, args, contextValue) => {
-            const user = contextCheck(contextValue.authUser, false)
-
-            user.rank.push(args.rank)
-
-            return user.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
-        },
-
-        removeUserRank: async (root, args, contextValue) => {
-            const user = contextCheck(contextValue.authUser, false)
-            
-            user.rank.splice(user.rank.indexOf(args.rank), 1)
-
-            return user.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                })
-        },
+        }
     }
 }
-
-module.exports = resolvers

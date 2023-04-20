@@ -24,9 +24,9 @@ const App = () => {
 	});
 
 	const [areas, setAreas] = useState(null);
-
 	const [users, setUsers] = useState(initialUsers);
 	const [layerContext, setLayerContext] = useState(null);
+
 	const addArea = (props) => {
 		setAreas([...areas, props]);
 	};

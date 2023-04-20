@@ -36,18 +36,47 @@ const styles = {
 	},
 };
 
-const UserProfile = () => {
+const UserProfile = ({ loggedUser, users, setUsers }) => {
 	const [openDel, setDelOpen] = useState(false);
+	const [username, setUsername] = useState(loggedUser.username);
+	const [email, setEmail] = useState(loggedUser.email);
+	const [usernameError, setUsernameError] = useState('');
+	const [emailError, setEmailError] = useState('');
 
-	const updateUser = () => {
-		console.log('saved user');
+	const updatedUser = {
+		username,
+		email,
+		id: loggedUser.id,
+		admin: loggedUser.admin,
+		areas: loggedUser.areas,
+	};
+
+	const updateUser = (props) => {
+		const userList = users;
+		let userToUpdate = { ...props };
+
+		if (!username) setUsernameError('Käyttäjänimi tarvitaan');
+		else setUsernameError('');
+		if (!email) setEmailError('Sähköposti tarvitaan');
+		else setEmailError('');
+
+		userList.forEach((user, i) => {
+			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
+		});
+		setUsers([...userList]);
+		console.log(userList);
 	};
 
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti tallentaa tiedot?',
-		handleConfirm: () => updateUser,
+		handleConfirm: () => {
+			updateUser(updatedUser);
+			setUsernameError('');
+			setEmailError('');
+			setDelOpen(false);
+		},
 	};
 
 	return (
@@ -64,6 +93,11 @@ const UserProfile = () => {
 					<FormControl sx={styles.form}>
 						<TextField
 							label='Käyttäjänimi'
+							defaultValue={loggedUser.username}
+							onChange={(e) => setUsername(e.target.value)}
+							required
+							error={!username}
+							helperText={usernameError}
 							variant='outlined'
 						/>
 					</FormControl>
@@ -73,6 +107,11 @@ const UserProfile = () => {
 					<FormControl sx={styles.form}>
 						<TextField
 							label='Sähköposti'
+							defaultValue={loggedUser.email}
+							onChange={(e) => setEmail(e.target.value)}
+							required
+							error={!email}
+							helperText={emailError}
 							variant='outlined'
 						/>
 					</FormControl>

@@ -48,6 +48,14 @@ const users = [
 	},
 ];
 
+const loggedUser = {
+	username: 'Johanna',
+	email: 'jotu@email.com',
+	id: 6,
+	admin: true,
+	areas: {},
+};
+
 const areas = [
 	{
 		id: 0,
@@ -243,4 +251,4 @@ const areas = [
 	},
 ];
 
-export { users, areas };
+export { users, areas, loggedUser };

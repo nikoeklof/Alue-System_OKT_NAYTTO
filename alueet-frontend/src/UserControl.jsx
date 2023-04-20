@@ -42,11 +42,6 @@ const styles = {
 
 const columns = [
 	{
-		id: 'name',
-		label: 'Nimi',
-		minWidth: 120,
-	},
-	{
 		id: 'email',
 		label: 'Sähköposti',
 		minWidth: 170,

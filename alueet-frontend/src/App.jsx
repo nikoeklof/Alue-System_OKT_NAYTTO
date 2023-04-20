@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { users as initialUsers } from './db/db';
 import { InfinitySpin } from 'react-loader-spinner';
 import Main from './Main';
 import Login from './Login';
@@ -15,16 +14,20 @@ import AreaCreate from './components/AreaCreate';
 import UserProfile from './UserProfile';
 import LendList from './LendList';
 import { useQuery } from '@apollo/client';
-import { ALL_AREAS } from './queries';
+import { ALL_AREAS, ALL_USERS } from './queries';
 const App = () => {
-	const { loading, data } = useQuery(ALL_AREAS, {
+	const { loading: loadingAreas, data: dataAreas } = useQuery(ALL_AREAS, {
 		onError: (e) => {
-			console.log(e);
+			console.error(e);
 		},
+	});
+	const { loading: loadingUsers, data: dataUsers } = useQuery(ALL_USERS, {
+		variables: { admin: null },
+		onError: (e) => console.error('userError: ' + e),
 	});
 
 	const [areas, setAreas] = useState(null);
-	const [users, setUsers] = useState(initialUsers);
+	const [users, setUsers] = useState(null);
 	const [layerContext, setLayerContext] = useState(null);
 
 	const addArea = (props) => {
@@ -35,8 +38,11 @@ const App = () => {
 		console.log(users);
 	};
 	useEffect(() => {
-		setAreas(data?.allAreas);
-	}, [loading, data]);
+		setAreas(dataAreas?.allAreas);
+	}, [loadingAreas, dataAreas]);
+	useEffect(() => {
+		setUsers(dataUsers?.allUsers);
+	}, [loadingUsers, dataUsers]);
 
 	return (
 		<Router>
@@ -83,11 +89,29 @@ const App = () => {
 					<Route
 						path='/userControl'
 						element={
-							<UserControl
-								users={users}
-								addUser={addUser}
-								setUsers={setUsers}
-							/>
+							!users ? (
+								<div
+									style={{
+										position: 'absolute',
+										top: '50%',
+										left: '45%',
+									}}
+								>
+									<InfinitySpin
+										width='200'
+										color='gray'
+										ariaLabel='loading'
+										wrapperStyle
+										wrapperClass
+									/>
+								</div>
+							) : (
+								<UserControl
+									users={users}
+									addUser={addUser}
+									setUsers={setUsers}
+								/>
+							)
 						}
 					/>
 					<Route
@@ -121,7 +145,7 @@ const App = () => {
 					/>
 					<Route
 						path='/lendList'
-						element={<LendList users={users} />}
+						element={<LendList />}
 					/>
 					<Route
 						path='/userProfile'

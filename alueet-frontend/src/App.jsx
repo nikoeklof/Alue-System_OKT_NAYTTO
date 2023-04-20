@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import {
-	areas as initialAreas,
-	users as initialUsers,
-	loggedUser,
-} from './db/db';
+import { users as initialUsers } from './db/db';
+import { InfinitySpin } from 'react-loader-spinner';
 import Main from './Main';
 import Login from './Login';
+
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import AreaControl from './AreaControl';
@@ -16,9 +14,17 @@ import UserControl from './UserControl';
 import AreaCreate from './components/AreaCreate';
 import UserProfile from './UserProfile';
 import LendList from './LendList';
-
+import { useQuery } from '@apollo/client';
+import { ALL_AREAS } from './queries';
 const App = () => {
-	const [areas, setAreas] = useState(initialAreas);
+	const { loading, data } = useQuery(ALL_AREAS, {
+		onError: (e) => {
+			console.log(e);
+		},
+	});
+
+	const [areas, setAreas] = useState(null);
+
 	const [users, setUsers] = useState(initialUsers);
 	const [layerContext, setLayerContext] = useState(null);
 	const addArea = (props) => {
@@ -26,37 +32,52 @@ const App = () => {
 	};
 	const addUser = (props) => {
 		setUsers([...users, props]);
+		console.log(users);
 	};
 	useEffect(() => {
-		console.log(layerContext);
-	}, [layerContext]);
+		setAreas(data?.allAreas);
+	}, [loading, data]);
 
 	return (
 		<Router>
 			<Container>
-				<NavBar loggedUser={loggedUser} />
+				<NavBar />
 
 				<Routes>
 					<Route
 						path='/'
-						element={
-							<Main
-								areas={areas}
-								setAreas={setAreas}
-							/>
-						}
+						element={<Main />}
 					/>
 					<Route
 						path='/login'
 						element={<Login />}
 					/>
+
 					<Route
 						path='/areaControl'
 						element={
-							<AreaControl
-								areas={areas}
-								setAreas={setAreas}
-							/>
+							!areas ? (
+								<div
+									style={{
+										position: 'absolute',
+										top: '50%',
+										left: '45%',
+									}}
+								>
+									<InfinitySpin
+										width='200'
+										color='gray'
+										ariaLabel='loading'
+										wrapperStyle
+										wrapperClass
+									/>
+								</div>
+							) : (
+								<AreaControl
+									areas={areas}
+									setAreas={setAreas}
+								/>
+							)
 						}
 					/>
 					<Route
@@ -72,12 +93,30 @@ const App = () => {
 					<Route
 						path='/createArea'
 						element={
-							<AreaCreate
-								areas={areas}
-								addArea={addArea}
-								setLayerContext={setLayerContext}
-								layerContext={layerContext}
-							/>
+							!areas ? (
+								<div
+									style={{
+										position: 'absolute',
+										top: '50%',
+										left: '45%',
+									}}
+								>
+									<InfinitySpin
+										width='200'
+										color='gray'
+										ariaLabel='loading'
+										wrapperStyle
+										wrapperClass
+									/>
+								</div>
+							) : (
+								<AreaCreate
+									areas={areas}
+									addArea={addArea}
+									setLayerContext={setLayerContext}
+									layerContext={layerContext}
+								/>
+							)
 						}
 					/>
 					<Route
@@ -86,13 +125,7 @@ const App = () => {
 					/>
 					<Route
 						path='/userProfile'
-						element={
-							<UserProfile
-								loggedUser={loggedUser}
-								users={users}
-								setUsers={setUsers}
-							/>
-						}
+						element={<UserProfile />}
 					/>
 				</Routes>
 				<Footer />

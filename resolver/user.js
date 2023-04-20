@@ -2,9 +2,9 @@ const { UserInputError, AuthenticationError } = require("apollo-server")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
-const Guest = require("../../models/guest")
-const User = require("../../models/user")
-const contextCheck = require("../../util/contextCheck")
+const Guest = require("../models/guest")
+const User = require("../models/user")
+const contextCheck = require("../util/contextCheck")
 
 module.exports = {
     Query: {

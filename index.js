@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 
-const schema = require("./apollo/execSchema")
+const schema = require("./execSchema")
 const User = require("./models/user")
 
 const mongoUrl = process.env.MONGODB_URI

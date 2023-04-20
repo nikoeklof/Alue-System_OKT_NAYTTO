@@ -1,7 +1,7 @@
 const { UserInputError } = require("apollo-server")
 
-const Guest = require("../../models/guest")
-const Area = require("../../models/area")
+const Guest = require("../models/guest")
+const Area = require("../models/area")
 
 module.exports = {
     Query: {

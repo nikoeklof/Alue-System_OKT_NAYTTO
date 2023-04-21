@@ -120,6 +120,22 @@ module.exports = {
                         invalidArgs: args,
                     })
                 })
+        },
+
+        toggleUserDisabled: async (root, args, contextValue) => {
+            contextCheck(contextValue.authUser, true)
+
+            const user = await User.findById(args.userId)
+            user.disabled = !user.disabled
+            return user.save()
+        },
+
+        toggleUserAdmin: async (root, args, contextValue) => {
+            contextCheck(contextValue.authUser, false)
+
+            const user = await User.findById(args.userId)
+            user.admin = !user.admin
+            return user.save()
         }
     }
 }

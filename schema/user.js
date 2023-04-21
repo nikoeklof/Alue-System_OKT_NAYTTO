@@ -25,6 +25,9 @@ module.exports = `
     addUserRank (rank: String!): User
     removeUserRank (rank: String!): User
 
+    toggleUserDisabled (userId: ID!): User
+    toggleUserAdmin (userId: ID!): User
+
     login (email: String!, password: String!): Token
   }
 `;

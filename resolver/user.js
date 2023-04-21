@@ -131,7 +131,7 @@ module.exports = {
         },
 
         toggleUserAdmin: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, false)
+            contextCheck(contextValue.authUser, true)
 
             const user = await User.findById(args.userId)
             user.admin = !user.admin

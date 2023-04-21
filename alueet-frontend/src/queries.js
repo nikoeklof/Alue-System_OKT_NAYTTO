@@ -32,14 +32,15 @@ export const ALL_AREAS = gql`
     allAreas {
       id
       info {
-        address
-        buildings
-        cityName
+        misc
         quarter
         latlngs {
           lat
           lng
         }
+        cityName
+        buildings
+        address
       }
       shareHistory {
         shareEndDate
@@ -52,12 +53,10 @@ export const ALL_AREAS = gql`
         shareStartDate
         sharedBy
         sharedRequests {
-          areas {
-            id
-          }
           id
           email
         }
+        sharedTo
       }
     }
   }
@@ -92,9 +91,12 @@ export const CREATE_GUEST = gql`
 `;
 //needs testing
 export const MAKE_REQUEST = gql`
-  mutation makeRequest($areaId: ID!, $guestEmail: String!) {
-    makeRequest(areaId: $areaId, guestEmail: $guestEmail) {
-      shareState
+  mutation makeRequest($areaId: ID!, $email: String!) {
+    makeRequest(areaId: $areaId, email: $email) {
+      id
+      shareState {
+        isShared
+      }
     }
   }
 `;
@@ -125,9 +127,16 @@ export const TOGGLE_USER_DISABLED = gql`
 
 //needs testing
 export const ALLOW_AREA_REQUEST = gql`
-  mutation allowAreaRequest($areaId: ID!, $guestId: ID!) {
-    allowAreaRequest(userId: $userId, guestId: $guestId) {
+  mutation allowAreaRequest($areaId: ID!, $email: String!) {
+    allowAreaRequest(areaId: $areaId, email: $email) {
       id
+      shareState {
+        isShared
+      }
+      shareHistory {
+        sharedBy
+        sharedTo
+      }
     }
   }
 `;
@@ -174,33 +183,34 @@ export const CREATE_AREA = gql`
 `;
 
 export const EDIT_AREA = gql`
-  mutation editArea(
+  mutation (
     $areaId: ID!
-    $type: String
     $cityName: String
     $quarter: String
     $address: String
     $buildings: Int
-    $homes: Int
-    $zone: String
-    $lan: String
-    $lon: String
     $misc: String
   ) {
     editArea(
       areaId: $areaId
-      type: $type
       cityName: $cityName
       quarter: $quarter
       address: $address
       buildings: $buildings
-      homes: $homes
-      zone: $zone
-      lan: $lan
-      lon: $lon
       misc: $misc
     ) {
       id
+      info {
+        address
+        buildings
+        cityName
+        latlngs {
+          lat
+          lng
+        }
+        misc
+        quarter
+      }
     }
   }
 `;

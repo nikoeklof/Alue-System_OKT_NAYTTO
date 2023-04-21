@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 
 import theme from "../style/theme";
+import { useMutation } from "@apollo/client";
+import { ALL_AREAS, EDIT_AREA } from "../queries";
 
 const styles = {
   modal: {
@@ -47,12 +49,22 @@ const styles = {
 const EditAreaModal = ({ ...editProps }) => {
   const handleClose = () => editProps.handleCloseEditModal();
   const [buildingAmount, setBuildingAmount] = useState(
-    editProps.originalArea?.buildings
+    editProps.originalArea?.info?.buildings
   );
-  const [areaName, setAreaName] = useState(editProps.originalArea?.name);
+  const [areaAddress, setAreaAddress] = useState(
+    editProps.originalArea?.info?.address
+  );
+  const [areaMiscInfo, setAreaMiscInfo] = useState(
+    editProps.originalArea?.info?.misc
+  );
+  const [areaQuarter, setAreaQuarter] = useState(
+    editProps.originalArea?.info?.quarter
+  );
   const ref = useRef(null);
-  const [areaNameError, setAreaNameError] = useState("");
+  const [areaAddressError, setAreaAddressError] = useState("");
+  const [areaQuarterError, setAreaQuarterError] = useState("");
   const [areaBuildingsError, setAreaBuildingsError] = useState("");
+  const [areaMutation] = useMutation(EDIT_AREA);
 
   return (
     <Modal component="div" open={editProps.openEdit} onClose={handleClose}>
@@ -79,14 +91,27 @@ const EditAreaModal = ({ ...editProps }) => {
               label="Alueen Nimi"
               type="text"
               required
-              error={!!areaNameError}
-              helperText={areaNameError}
-              defaultValue={editProps.originalArea.info.quarter}
-              onChange={(e) => setAreaName(e.target.value)}
+              error={!!areaAddressError}
+              helperText={areaAddressError}
+              defaultValue={editProps.originalArea.info.address}
+              onChange={(e) => setAreaAddress(e.target.value)}
               variant="outlined"
               sx={styles.inputMore}
             />
             <TextField
+              ref={ref}
+              defaultValue={editProps.originalArea.info.quarter}
+              onChange={(e) => setAreaQuarter(e.target.value)}
+              error={!!areaQuarterError}
+              helperText={areaQuarterError}
+              label="Kaupunginosa"
+              variant="outlined"
+              sx={styles.inputMore}
+            />
+            <TextField
+              ref={ref}
+              defaultValue={editProps.originalArea.info.misc}
+              onChange={(e) => setAreaMiscInfo(e.target.value)}
               label="Lisätietoja"
               variant="outlined"
               multiline
@@ -101,9 +126,11 @@ const EditAreaModal = ({ ...editProps }) => {
           variant="contained"
           onClick={() => {
             setAreaBuildingsError("");
-            setAreaNameError("");
-            setAreaName(editProps.originalArea?.quarter);
-            setBuildingAmount(editProps.originalArea?.buildings);
+            setAreaAddressError("");
+            setAreaQuarterError("");
+            setAreaAddress(editProps.originalArea?.info?.address);
+            setBuildingAmount(editProps.originalArea?.info?.buildings);
+            setAreaQuarter(editProps.originalArea?.info?.quarter);
             handleClose();
           }}
         >
@@ -113,27 +140,42 @@ const EditAreaModal = ({ ...editProps }) => {
           sx={styles.button}
           variant="contained"
           onClick={() => {
-            const newArea = {
-              id: editProps.originalArea.info.id,
-              name: areaName,
-              buildings: parseInt(buildingAmount),
-
-              loaned: editProps.originalArea.info.loaned,
-              latlngs: editProps.originalArea.info.latlngs,
-            };
-
-            if (!areaName || !newArea.name)
-              setAreaNameError("Alueen nimi pakollinen");
-            else setAreaNameError("");
-
-            if (!parseInt(buildingAmount) || !newArea.buildings)
-              setAreaBuildingsError("Asunnot pakollisia");
-            else setAreaBuildingsError("");
-
-            if (newArea.name && newArea.buildings) {
-              editProps.handleConfirm(newArea);
-              handleClose();
+            if (!areaAddress || !editProps.originalArea?.info?.address) {
+              setAreaAddressError("Alueen nimi pakollinen");
+            } else {
+              setAreaAddressError("");
             }
+
+            if (
+              !parseInt(buildingAmount) ||
+              !editProps.originalArea?.info?.buildings
+            ) {
+              setAreaBuildingsError("Asunnot pakollisia");
+            } else {
+              setAreaBuildingsError("");
+            }
+
+            if (!areaQuarter || !editProps.originalArea?.info?.quarter) {
+              setAreaQuarterError("Kaupunginosa pakollinen");
+            } else {
+              setAreaQuarterError("");
+            }
+
+            areaMutation({
+              variables: {
+                areaId: editProps.originalArea?.id,
+                quarter: areaQuarter,
+                address: areaAddress,
+                buildings: parseInt(buildingAmount),
+                misc: areaMiscInfo,
+              },
+              refetchQueries: [{ query: ALL_AREAS }],
+              onError: (e) => {
+                console.log(e);
+              },
+            }).then(() => {
+              handleClose();
+            });
           }}
         >
           Valmis

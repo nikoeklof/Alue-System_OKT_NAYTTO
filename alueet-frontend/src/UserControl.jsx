@@ -79,9 +79,9 @@ const UserControl = ({ users, addUser, setUsers, refetch }) => {
 		console.log(user);
 		const { admin, userId } = user;
 		try {
-			const { data } = await editUser({ admin, userId });
+			const { data: dataUser } = await editUser({ admin, userId });
 			refetch();
-			console.log(data);
+			console.log(dataUser);
 		} catch (e) {
 			console.error(e);
 		}

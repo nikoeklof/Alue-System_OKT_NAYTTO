@@ -21,7 +21,6 @@ module.exports = `
     createUser (email: String!, password: String!): User
     changeUserPassword (password: String!): User
     changeUserAbout (aboutMe: String!): User
-    editUser (admin: Boolean, userId: String): User
     addUserRank (rank: String!): User
     removeUserRank (rank: String!): User
 

@@ -12,5 +12,6 @@ module.exports = `
 
   type Mutation {
     createGuest (email: String!): Guest
+    editGuest (email: String!, guestId: ID!): Guest
   }
-`
+`;

@@ -15,7 +15,7 @@ import {
 
 import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
-
+import useEditUser from './hooks/useEditUser';
 import theme from './style/theme';
 
 const styles = {
@@ -60,10 +60,11 @@ const columns = [
 	},
 ];
 
-const UserControl = ({ users, addUser, setUsers }) => {
+const UserControl = ({ users, addUser, setUsers, refetch }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
+	const [editUser] = useEditUser();
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -74,13 +75,23 @@ const UserControl = ({ users, addUser, setUsers }) => {
 		setPage(0);
 	};
 
-	const updateUser = (props) => {
-		const userList = users;
-		let userToUpdate = { ...props };
-		userList.forEach((user, i) => {
-			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
-		});
-		setUsers([...userList]);
+	const updateUser = async (user) => {
+		console.log(user);
+		const { admin, userId } = user;
+		try {
+			const { data } = await editUser({ admin, userId });
+			refetch();
+			console.log(data);
+		} catch (e) {
+			console.error(e);
+		}
+
+		// const userList = users;
+		// let userToUpdate = { ...props };
+		// userList.forEach((user, i) => {
+		// 	if (user.id === props.id) userList.splice(i, 1, userToUpdate);
+		// });
+		// setUsers([...userList]);
 	};
 
 	const removeUser = (props) => {

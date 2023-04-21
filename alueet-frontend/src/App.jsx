@@ -14,18 +14,19 @@ import AreaCreate from './components/AreaCreate';
 import UserProfile from './UserProfile';
 import LendList from './LendList';
 import { useQuery } from '@apollo/client';
-import { ALL_AREAS, ALL_USERS } from './queries';
+import { ALL_AREAS } from './queries';
+import useGetUsers from './hooks/useGetUsers';
 const App = () => {
 	const { loading: loadingAreas, data: dataAreas } = useQuery(ALL_AREAS, {
 		onError: (e) => {
 			console.error(e);
 		},
 	});
-	const { loading: loadingUsers, data: dataUsers } = useQuery(ALL_USERS, {
-		variables: { admin: null },
-		onError: (e) => console.error('userError: ' + e),
-	});
-
+	const {
+		data: dataUsers,
+		loading: loadingUsers,
+		refetch,
+	} = useGetUsers({ admin: null });
 	const [areas, setAreas] = useState(null);
 	const [users, setUsers] = useState(null);
 	const [layerContext, setLayerContext] = useState(null);
@@ -110,6 +111,7 @@ const App = () => {
 									users={users}
 									addUser={addUser}
 									setUsers={setUsers}
+									refetch={refetch}
 								/>
 							)
 						}

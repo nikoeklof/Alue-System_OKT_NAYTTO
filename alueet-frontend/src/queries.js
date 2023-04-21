@@ -114,6 +114,16 @@ export const CREATE_GUEST = gql`
 		}
 	}
 `;
+
+export const EDIT_GUEST = gql`
+	mutation editGuest($email: String!, $id: ID!) {
+		editGuest(email: $email, id: $id) {
+			email
+			id
+		}
+	}
+`;
+
 //needs testing
 export const MAKE_REQUEST = gql`
 	mutation makeRequest($areaId: ID!, $guestEmail: String!) {
@@ -138,6 +148,19 @@ export const CREATE_USER = gql`
 			guestAccount {
 				email
 				name
+			}
+		}
+	}
+`;
+
+export const EDIT_USER = gql`
+	mutation editUser($admin: Boolean, $userId: String) {
+		editUser(admin: $admin, userId: $userId) {
+			admin
+			disabled
+			guestAccount {
+				email
+				id
 			}
 		}
 	}

@@ -131,6 +131,7 @@ module.exports = {
 				});
 			});
 		},
+		
 		toggleUserDisabled: async (root, args, contextValue) => {
 			contextCheck(contextValue.authUser, true);
 

@@ -33,6 +33,7 @@ module.exports = {
         shareState: (root) => root.shareState,
         shareHistory: (root) => root.shareHistory
     },
+    
     Mutation: {
         createArea: (root, args, contextValue) => {
             //contextCheck(contextValue.authUser, true)

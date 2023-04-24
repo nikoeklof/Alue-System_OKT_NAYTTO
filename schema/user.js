@@ -4,6 +4,8 @@ module.exports = `
     admin: Boolean
     disabled: Boolean
     guestAccount: Guest
+    rank: [String]
+    aboutMe: String
   }
 
   type Token {

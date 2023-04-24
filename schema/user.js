@@ -23,6 +23,7 @@ module.exports = `
     changeUserAbout (aboutMe: String!): User
     addUserRank (rank: String!): User
     removeUserRank (rank: String!): User
+    deleteUser (email: String, userId: ID, guestId: ID): User
 
     toggleUserDisabled (userId: ID!): User
     toggleUserAdmin (userId: ID!): User

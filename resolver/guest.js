@@ -23,6 +23,26 @@ module.exports = {
                         invalidArgs: args,
                     })
                 })
-        }
+        },
+
+        deleteGuest: async (root, args) => {
+            const deletedValues = {}
+
+            if (args.guestId) {
+                deletedValues.user = await User.findOneAndDelete({ "guestAccount.id": args.guestId })
+                deletedValues.guest = await Guest.findByIdAndDelete(args.guestId)
+
+                return deletedValues
+            }
+
+            if (args.email) {
+                deletedValues.user = await User.findOneAndDelete({ "guestAccount.id": args.guestId })
+                deletedValues.guest = await Guest.findOneAndDelete({ email: args.email })
+
+                return deletedValues
+            }
+
+            throw new UserInputError("At least 1 argument is required")
+        },
     }
 }

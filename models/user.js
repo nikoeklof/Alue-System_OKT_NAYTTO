@@ -1,10 +1,17 @@
 const mongoose = require("mongoose")
 
 const schema = new mongoose.Schema({
-    guestId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        unique: true
+    guestAccount: {
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            unique: true
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true
+        },
     },
     password: {
         type: String,
@@ -16,7 +23,7 @@ const schema = new mongoose.Schema({
     },
     disabled: {
         type: Boolean,
-        default: true
+        default: false
     },
     rank: {
         type: [String],

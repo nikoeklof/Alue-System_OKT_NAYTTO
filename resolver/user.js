@@ -16,17 +16,12 @@ module.exports = {
     User: {
         admin: (root) => root.admin,
         disabled: (root) => root.disabled,
-        guestAccount: async (root) => await Guest.findById(root.guestId),
+        guestAccount: async (root) => await Guest.findById(root.guestAccount._id),
     },
 
     Mutation: {
         login: async (root, args) => {
-            const guest = await Guest.findOne({ email: args.email })
-
-            if (!guest)
-                throw new AuthenticationError("Invalid email")
-
-            const user = await User.findOne({ guestId: guest._id })
+            const user = await User.findOne({ "guestAccount.email": args.email })
 
             if (!user)
                 throw new AuthenticationError("User not found")
@@ -38,7 +33,7 @@ module.exports = {
                 throw new AuthenticationError("Invalid password")
 
             const userForToken = {
-                email: guest.email,
+                email: user.guestAccount.email,
                 id: user._id
             }
 
@@ -55,7 +50,10 @@ module.exports = {
                 throw new UserInputError("Invalid email, guest not found")
 
             const user = new User({
-                guestId: guest._id,
+                guestAccount: {
+                    _id: guest._id,
+                    email: guest.email
+                },
                 password: await bcrypt.hash(args.password, 10)
             })
 
@@ -65,6 +63,19 @@ module.exports = {
                         invalidArgs: args,
                     })
                 })
+        },
+
+        deleteUser: async (root, args) => {
+            if (args.userId)
+                return await User.findByIdAndDelete(args.userId)
+
+            if (args.email)
+                return await User.findOneAndDelete({ "guestAccount.email": args.email })
+
+            if (args.guestId)
+                return await User.findOneAndDelete({ "guestAccount.id": args.guestId })
+
+            throw new UserInputError("At least 1 argument is required")
         },
 
         changeUserPassword: async (root, args, contextValue) => {
@@ -111,7 +122,7 @@ module.exports = {
 
         removeUserRank: async (root, args, contextValue) => {
             const user = contextCheck(contextValue.authUser, false)
-            
+
             user.rank.splice(user.rank.indexOf(args.rank), 1)
 
             return user.save()

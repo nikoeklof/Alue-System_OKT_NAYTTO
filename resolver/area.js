@@ -125,10 +125,8 @@ module.exports = {
             if (area.shareState.shareRequests.includes(guest.email))
                 area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(guest.email), 1)
 
-            const authGuest = await Guest.findById(contextValue.authUser.guestId)
-
             area.shareState.isShared = true
-            area.shareState.sharedBy = authGuest.email
+            area.shareState.sharedBy = contextValue.authUser.guestAccount.email
             area.shareState.sharedTo = guest.email
             area.shareState.shareStartDate = new Date()
 
@@ -166,6 +164,7 @@ module.exports = {
 
             area.shareState = {
                 isShared: false,
+                shareRequests: area.shareState.shareRequests,
                 sharedBy: null,
                 sharedTo: null,
                 shareStartDate: null

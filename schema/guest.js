@@ -12,5 +12,6 @@ module.exports = `
 
   type Mutation {
     createGuest (email: String!): Guest
+    deleteGuest (email: String, guestId: ID): Guest
   }
 `

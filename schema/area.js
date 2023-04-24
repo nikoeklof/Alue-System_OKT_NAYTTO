@@ -34,7 +34,7 @@ module.exports = `
 
   type ShareState {
     isShared: Boolean!
-    sharedRequests: [Guest]
+    shareRequests: [String]
     sharedTo: String
     sharedBy: String
     shareStartDate: String

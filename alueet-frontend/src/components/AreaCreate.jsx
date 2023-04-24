@@ -105,6 +105,7 @@ const AreaCreate = ({ layerContext, setLayerContext }) => {
               canEdit={true}
               cities={cities}
               cityIndex={cityIndex}
+              cityFilter={cityFilter}
             />
           </Grid>
           <Grid item md={6} xs={12}>

@@ -30,4 +30,4 @@ module.exports = `
 
     login (email: String!, password: String!): Token
   }
-`
+`;

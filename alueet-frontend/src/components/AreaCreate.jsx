@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import theme from "../style/theme";
 import AreaMap from "../AreaMap";
 import CreateAreaForm from "./CreateAreaForm";
+
+import { FILTERED_AREAS } from "../queries";
+import { useQuery } from "@apollo/client";
+import { cities } from "../db/cities";
 
 const styles = {
   areas: {
@@ -59,13 +63,32 @@ const styles = {
   },
 };
 
-const AreaCreate = ({
-  areas,
-  addArea,
-  layerContext,
-  setLayerContext,
-  setAreas,
-}) => {
+const AreaCreate = ({ layerContext, setLayerContext }) => {
+  const [areas, setAreas] = useState(undefined);
+  const defaultFilter = localStorage.getItem("defaultFilter");
+  if (!defaultFilter) localStorage.setItem("defaultFilter", "Mikkeli");
+  const [cityIndex, setCityIndex] = useState(
+    cities.findIndex((city) => city.Kunta === defaultFilter)
+  );
+  const [cityFilter, setCityFilter] = useState(
+    defaultFilter ? defaultFilter : cities[0].Kunta
+  );
+  const [cityFilterInput, setCityFilterInput] = useState("");
+  const { data, loading, error } = useQuery(FILTERED_AREAS, {
+    variables: { cityName: cityFilter ? cityFilter : defaultFilter },
+    onError: (e) => {
+      console.log(error);
+    },
+  });
+
+  useEffect(() => {
+    setAreas(data?.allAreas);
+  }, [data, loading]);
+
+  useEffect(() => {
+    setCityIndex(cities.findIndex((city) => city.Kunta === cityFilter));
+  }, [cityFilter, cityIndex]);
+
   return (
     <Container>
       <Typography sx={styles.mainText} variant="h6">
@@ -80,10 +103,21 @@ const AreaCreate = ({
               layerContext={layerContext}
               setLayerContext={setLayerContext}
               canEdit={true}
+              cities={cities}
+              cityIndex={cityIndex}
             />
           </Grid>
           <Grid item md={6} xs={12}>
-            <CreateAreaForm layerContext={layerContext} />
+            <CreateAreaForm
+              layerContext={layerContext}
+              defaultFilter={defaultFilter}
+              cities={cities}
+              cityFilter={cityFilter}
+              setCityFilter={setCityFilter}
+              cityFilterInput={cityFilterInput}
+              setCityFilterInput={setCityFilterInput}
+              setCityIndex={setCityIndex}
+            />
           </Grid>
         </Grid>
       </Container>

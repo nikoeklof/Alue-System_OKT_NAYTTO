@@ -8,10 +8,9 @@ import {
   Typography,
   Autocomplete,
 } from "@mui/material";
-import { ALL_AREAS, CREATE_AREA } from "../queries";
+import { ALL_AREAS, CREATE_AREA, FILTERED_AREAS } from "../queries";
 import { useMutation } from "@apollo/client";
 import theme from "../style/theme";
-import { cities } from "../db/cities";
 
 const styles = {
   subText: {
@@ -38,11 +37,17 @@ const styles = {
   },
 };
 
-const CreateAreaForm = ({ layerContext }) => {
+const CreateAreaForm = ({
+  layerContext,
+  cities,
+  cityFilter,
+  setCityFilter,
+  cityFilterInput,
+  setCityFilterInput,
+}) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-  const [areaCity, setAreaCity] = useState(cities[0]);
-  const [areaCityFilter, setAreaCityFilter] = useState("");
+
   const [quarterName, setQuarterName] = useState("");
   const [miscInfo, setMiscInfo] = useState("");
   const [layer, setLayer] = useState(null);
@@ -72,7 +77,7 @@ const CreateAreaForm = ({ layerContext }) => {
     console.log(layer);
     layer.layer.remove();
 
-    if (!areaCity) setAreaCityError("Kaupunki on pakollinen");
+    if (!cityFilter) setAreaCityError("Kaupunki on pakollinen");
     else setAreaCityError("");
 
     if (!areaName) setAreaNameError("Alueen nimi on pakollinen");
@@ -82,7 +87,7 @@ const CreateAreaForm = ({ layerContext }) => {
       setAreaBuildingsError("Asuntojen määrä on pakollinen");
     else setAreaBuildingsError("");
 
-    if (areaName && apartmentAmount && areaCity && layer) {
+    if (areaName && apartmentAmount && cityFilter && layer) {
       setSuccessAlert(false);
       layerContext.layer.remove();
       const parsedCoords = [];
@@ -97,7 +102,7 @@ const CreateAreaForm = ({ layerContext }) => {
           mapId: layerContext?.layer._leaflet_id,
           address: areaName,
           buildings: parseInt(apartmentAmount),
-          cityName: areaCity,
+          cityName: cityFilter,
           latlngs: parsedCoords,
           quarter: quarterName,
           misc: miscInfo,
@@ -105,7 +110,7 @@ const CreateAreaForm = ({ layerContext }) => {
         onError: (e) => {
           console.log(e);
         },
-        refetchQueries: [{ query: ALL_AREAS }],
+        refetchQueries: [{ query: ALL_AREAS }, { query: FILTERED_AREAS }],
       });
     }
   };
@@ -141,16 +146,22 @@ const CreateAreaForm = ({ layerContext }) => {
         <Autocomplete
           disablePortal
           id="findCity"
-          options={cities}
-          value={areaCity}
+          options={cities.map((city, i) => city.Kunta)}
+          value={cityFilter}
+          sx={styles.textField}
           onChange={(e, newValue) => {
-            setAreaCity(newValue);
+            setCityFilter(newValue);
+            console.log(cityFilter);
           }}
-          inputValue={areaCityFilter}
-          onInputChange={(e, newValue) => setAreaCityFilter(newValue)}
-          sx={styles.search}
+          inputValue={cityFilterInput}
+          onInputChange={(e, newValue) => setCityFilterInput(newValue)}
           renderInput={(params) => (
-            <TextField {...params} label="Hae kaupunkia" />
+            <TextField
+              {...params}
+              error={!!areaCityError}
+              helperText={areaCityError}
+              label="Hae kaupunkia"
+            />
           )}
         />
         <TextField

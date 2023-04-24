@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Container } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import { users as initialUsers } from "./db/db";
-import { InfinitySpin } from "react-loader-spinner";
+
 import Main from "./Main";
 import Login from "./Login";
 
@@ -14,17 +14,8 @@ import UserControl from "./UserControl";
 import AreaCreate from "./components/AreaCreate";
 import UserProfile from "./UserProfile";
 import LendList from "./LendList";
-import { useQuery } from "@apollo/client";
-import { ALL_AREAS } from "./queries";
 
 const App = () => {
-  const { loading, data } = useQuery(ALL_AREAS, {
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  const [areas, setAreas] = useState(data?.allAreas);
   const [users, setUsers] = useState(initialUsers);
   const [layerContext, setLayerContext] = useState(null);
 
@@ -32,9 +23,6 @@ const App = () => {
     setUsers([...users, props]);
     console.log(users);
   };
-  useEffect(() => {
-    setAreas(data?.allAreas);
-  }, [loading, data]);
 
   return (
     <Router>
@@ -45,30 +33,7 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
 
-          <Route
-            path="/areaControl"
-            element={
-              !areas ? (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "45%",
-                  }}
-                >
-                  <InfinitySpin
-                    width="200"
-                    color="gray"
-                    ariaLabel="loading"
-                    wrapperStyle
-                    wrapperClass
-                  />
-                </div>
-              ) : (
-                <AreaControl areas={areas} setAreas={setAreas} />
-              )
-            }
-          />
+          <Route path="/areaControl" element={<AreaControl />} />
           <Route
             path="/userControl"
             element={
@@ -82,29 +47,10 @@ const App = () => {
           <Route
             path="/createArea"
             element={
-              !areas ? (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "45%",
-                  }}
-                >
-                  <InfinitySpin
-                    width="200"
-                    color="gray"
-                    ariaLabel="loading"
-                    wrapperStyle
-                    wrapperClass
-                  />
-                </div>
-              ) : (
-                <AreaCreate
-                  areas={areas}
-                  setLayerContext={setLayerContext}
-                  layerContext={layerContext}
-                />
-              )
+              <AreaCreate
+                setLayerContext={setLayerContext}
+                layerContext={layerContext}
+              />
             }
           />
           <Route path="/lendList" element={<LendList users={users} />} />

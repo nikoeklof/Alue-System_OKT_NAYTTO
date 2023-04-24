@@ -77,17 +77,24 @@ const styles = {
   },
 };
 
-const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
+const AreaControl = () => {
   const defaultFilter = localStorage.getItem("defaultFilter");
+  if (!defaultFilter || defaultFilter === "null")
+    localStorage.setItem("defaultFilter", "Mikkeli");
+
   const [selectedArea, setSelectedArea] = useState(undefined);
   const [hoverStatus, setHoverStatus] = useState(undefined);
   const [cityFilter, setCityFilter] = useState(
-    defaultFilter ? defaultFilter : cities[0]
+    defaultFilter ? defaultFilter : cities[0].Kunta
   );
   const [cityFilterInput, setCityFilterInput] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filteredAreas, setFilteredAreas] = useState(null);
+  const [cityIndex, setCityIndex] = useState(
+    cities.findIndex((city) => city.Kunta === defaultFilter)
+  );
+
   const { loading, data } = useQuery(FILTERED_AREAS, {
     variables: { cityName: cityFilter },
     onError: (e) => {
@@ -146,17 +153,19 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
       <Autocomplete
         disablePortal
         id="findCity"
-        options={cities}
+        options={cities.map((city) => city.Kunta)}
         value={cityFilter}
         onChange={(e, newValue) => {
+          if (newValue === "") return;
           setCityFilter(newValue);
           localStorage.setItem("defaultFilter", newValue);
+          setCityIndex(cities.findIndex((city) => city.Kunta === newValue));
         }}
         inputValue={cityFilterInput}
         onInputChange={(e, newValue) => setCityFilterInput(newValue)}
         sx={styles.search}
         renderInput={(params) => (
-          <TextField {...params} label="Hae kaupunkia" />
+          <TextField {...params} label="Hae kaupunkia..." />
         )}
       />
 
@@ -164,14 +173,15 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
             <AreaMap
-              areas={filteredAreas ? filteredAreas : areas}
+              areas={filteredAreas}
               selectedArea={selectedArea}
               setSelectedArea={setSelectedArea}
               clearSelected={clearSelected}
-              layerContext={layerContext}
-              setLayerContext={setLayerContext}
+              cityIndex={cityIndex}
               canEdit={false}
+              cityFilter={cityFilter}
               hoverStatus={hoverStatus}
+              cities={cities}
             />
           </Grid>
           <Grid item md={6} xs={12}>
@@ -204,7 +214,7 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
-                count={areas.length}
+                count={filteredAreas ? filteredAreas.length : 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 labelRowsPerPage="Rivejä per sivu:"

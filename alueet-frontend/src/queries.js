@@ -52,10 +52,6 @@ export const FILTERED_AREAS = gql`
         shareStartDate
         sharedBy
         sharedTo
-        sharedRequests {
-          email
-          id
-        }
       }
     }
   }

@@ -42,7 +42,7 @@ const CreateAreaForm = ({ layerContext }) => {
   const [areaCity, setAreaCity] = useState("");
   const [quarterName, setQuarterName] = useState("");
   const [miscInfo, setMiscInfo] = useState("");
-  const [layer, setLayer] = useState("");
+  const [layer, setLayer] = useState(null);
   const [areaNameError, setAreaNameError] = useState("");
   const [areaBuildingsError, setAreaBuildingsError] = useState("");
   const [areaCityError, setAreaCityError] = useState("");
@@ -55,6 +55,10 @@ const CreateAreaForm = ({ layerContext }) => {
       setLayer(layerContext);
       setErrorAlert(false);
       setSuccessAlert(true);
+    } else {
+      setLayer(null);
+      setErrorAlert(false);
+      setSuccessAlert(false);
     }
   }, [layerContext]);
 
@@ -105,7 +109,16 @@ const CreateAreaForm = ({ layerContext }) => {
 
   return (
     <>
+      {layer ? (
+        ""
+      ) : (
+        <Alert severity="success" sx={styles.alert} icon={false}>
+          {`←`}  Piirrä ensin alue
+        </Alert>
+      )}
+
       <Typography sx={styles.subText}>Alueen tiedot</Typography>
+
       <Divider sx={styles.divider} />
       <FormControl sx={styles.form}>
         {errorAlert ? (

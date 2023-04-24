@@ -2,6 +2,7 @@ const { UserInputError } = require('apollo-server');
 
 const Guest = require('../models/guest');
 const Area = require('../models/area');
+const User = require('../models/user');
 
 module.exports = {
     Query: {
@@ -26,20 +27,15 @@ module.exports = {
         },
 
         deleteGuest: async (root, args) => {
-            const deletedValues = {}
 
             if (args.guestId) {
-                deletedValues.user = await User.findOneAndDelete({ 'guestAccount.id': args.guestId })
-                deletedValues.guest = await Guest.findByIdAndDelete(args.guestId)
-
-                return deletedValues
+                await User.findOneAndDelete({ 'guestAccount.id': args.guestId })
+                return await Guest.findByIdAndDelete(args.guestId)
             }
 
             if (args.email) {
-                deletedValues.user = await User.findOneAndDelete({ 'guestAccount.id': args.guestId })
-                deletedValues.guest = await Guest.findOneAndDelete({ email: args.email })
-
-                return deletedValues
+                await User.findOneAndDelete({ 'guestAccount.email': args.email })
+                return await Guest.findOneAndDelete({ email: args.email })
             }
 
             throw new UserInputError('At least 1 argument is required')

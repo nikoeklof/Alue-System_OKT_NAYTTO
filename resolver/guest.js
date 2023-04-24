@@ -12,8 +12,7 @@ module.exports = {
 
     Guest: {
         email: (root) => root.email,
-        areas: async (root) =>
-            await Area.find({ ['shareState.sharedTo']: root.email }),
+        areas: async (root) => await Area.find({ ['shareState.sharedTo']: root.email }),
     },
 
     Mutation: {

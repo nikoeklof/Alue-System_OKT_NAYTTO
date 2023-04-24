@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Pane, useMap } from "react-leaflet";
 import DrawComponent from "./DrawComponent";
 import PolygonLayer from "./PolygonLayer";

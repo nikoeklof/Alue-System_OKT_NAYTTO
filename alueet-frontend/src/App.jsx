@@ -35,10 +35,6 @@ const App = () => {
 	const addArea = (props) => {
 		setAreas([...areas, props]);
 	};
-	const addUser = (props) => {
-		setUsers([...users, props]);
-		console.log(users);
-	};
 	useEffect(() => {
 		setAreas(dataAreas?.allAreas);
 	}, [loadingAreas, dataAreas]);
@@ -110,7 +106,6 @@ const App = () => {
 							) : (
 								<UserControl
 									users={users}
-									addUser={addUser}
 									setUsers={setUsers}
 									refetch={refetchUsers}
 								/>

@@ -17,7 +17,12 @@ import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
 import theme from './style/theme';
 import { useMutation } from '@apollo/client';
-import { TOGGLE_USER_ADMIN, EDIT_GUEST } from './queries';
+import {
+	TOGGLE_USER_ADMIN,
+	EDIT_GUEST,
+	CREATE_GUEST,
+	CREATE_USER,
+} from './queries';
 
 const styles = {
 	container: {
@@ -61,7 +66,7 @@ const columns = [
 	},
 ];
 
-const UserControl = ({ users, addUser, setUsers, refetch }) => {
+const UserControl = ({ users, setUsers, refetch }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
@@ -69,6 +74,12 @@ const UserControl = ({ users, addUser, setUsers, refetch }) => {
 		onError: (e) => console.error(e),
 	});
 	const [editGuest] = useMutation(EDIT_GUEST, {
+		onError: (e) => console.error(e),
+	});
+	const [createGuest] = useMutation(CREATE_GUEST, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const [createUser] = useMutation(CREATE_USER, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 
@@ -82,7 +93,6 @@ const UserControl = ({ users, addUser, setUsers, refetch }) => {
 	};
 
 	const updateUser = async (user) => {
-		console.log(user);
 		const { userId, guestId, email } = user;
 		await toggleUserAdmin({
 			variables: { userId: userId },
@@ -92,6 +102,15 @@ const UserControl = ({ users, addUser, setUsers, refetch }) => {
 				email: email,
 				guestId: guestId,
 			},
+		});
+		refetch();
+	};
+
+	const addUser = async (user) => {
+		const { email, password } = user;
+		await createGuest({ variables: { email: email } });
+		await createUser({
+			variables: { password: password, email: email },
 		});
 		refetch();
 	};

@@ -68,24 +68,12 @@ const CreateUserModal = ({ ...createProps }) => {
 		if (!email) setEmailError('Sähköposti on pakollinen');
 		else setEmailError('');
 
-		if (admin) {
-			const user = {
-				admin,
-				email,
-				password,
-				areas: {},
-			};
-			createProps.addUser(user);
-			handleClose();
-		} else {
-			const user = {
-				admin: false,
-				email,
-				areas: {},
-			};
-			createProps.addUser(user);
-			handleClose();
-		}
+		const user = {
+			email,
+			password,
+		};
+		createProps.addUser(user);
+		handleClose();
 	};
 
 	const handleChangeAdmin = () => {

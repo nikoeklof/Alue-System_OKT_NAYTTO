@@ -48,24 +48,13 @@ module.exports = {
 
             guest.email = args.email;
 
-            const user = await User.findOne({ "guestAccount._id": guest._id })
-            user.guestAccount.email = args.email
-            user.save
+            await User.updateOne({ "guestAccount._id": guest._id }, { $set: { "guestAccount.email": args.email } })
 
-            const newGuest = guest.save().catch((error) => {
+            return guest.save().catch((error) => {
                 throw new UserInputError(error.message, {
                     invalidArgs: args,
                 });
             });
-
-            
-            user.save().catch((error) => {
-                throw new UserInputError(error.message, {
-                    invalidArgs: args,
-                });
-            });
-
-            return newGuest
         }
     }
 }

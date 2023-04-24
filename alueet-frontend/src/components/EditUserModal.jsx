@@ -56,7 +56,6 @@ const EditUserModal = ({ ...editProps }) => {
 
 	const handleSubmit = () => {
 		const newUser = {
-			admin,
 			userId: editProps.originalUser.id,
 			guestId: editProps.originalUser.guestAccount.id,
 			email,

@@ -15,8 +15,9 @@ import {
 
 import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
-import useEditUser from './hooks/useEditUser';
 import theme from './style/theme';
+import { useMutation } from '@apollo/client';
+import { TOGGLE_USER_ADMIN, EDIT_GUEST } from './queries';
 
 const styles = {
 	container: {
@@ -64,7 +65,12 @@ const UserControl = ({ users, addUser, setUsers, refetch }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
-	const [editUser] = useEditUser();
+	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
+		onError: (e) => console.error(e),
+	});
+	const [editGuest] = useMutation(EDIT_GUEST, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -77,21 +83,17 @@ const UserControl = ({ users, addUser, setUsers, refetch }) => {
 
 	const updateUser = async (user) => {
 		console.log(user);
-		const { admin, userId } = user;
-		try {
-			const { data: dataUser } = await editUser({ admin, userId });
-			refetch();
-			console.log(dataUser);
-		} catch (e) {
-			console.error(e);
-		}
-
-		// const userList = users;
-		// let userToUpdate = { ...props };
-		// userList.forEach((user, i) => {
-		// 	if (user.id === props.id) userList.splice(i, 1, userToUpdate);
-		// });
-		// setUsers([...userList]);
+		const { userId, guestId, email } = user;
+		await toggleUserAdmin({
+			variables: { userId: userId },
+		});
+		await editGuest({
+			variables: {
+				email: email,
+				guestId: guestId,
+			},
+		});
+		refetch();
 	};
 
 	const removeUser = (props) => {

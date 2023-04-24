@@ -116,8 +116,8 @@ export const CREATE_GUEST = gql`
 `;
 
 export const EDIT_GUEST = gql`
-	mutation editGuest($email: String!, $id: ID!) {
-		editGuest(email: $email, id: $id) {
+	mutation editGuest($email: String!, $guestId: ID!) {
+		editGuest(email: $email, guestId: $guestId) {
 			email
 			id
 		}
@@ -153,22 +153,17 @@ export const CREATE_USER = gql`
 	}
 `;
 
-export const EDIT_USER = gql`
-	mutation editUser($admin: Boolean, $userId: String) {
-		editUser(admin: $admin, userId: $userId) {
-			admin
-			disabled
-			guestAccount {
-				email
-				id
-			}
+export const TOGGLE_USER_DISABLED = gql`
+	mutation toggleUserDisabled($userId: ID!) {
+		toggleUserDisabled(userId: $userId) {
+			id
 		}
 	}
 `;
 
-export const TOGGLE_USER_DISABLED = gql`
-	mutation toggleUserDisabled($userId: ID!) {
-		toggleUserDisabled(userId: $userId) {
+export const TOGGLE_USER_ADMIN = gql`
+	mutation toggleUserAdmin($userId: ID!) {
+		toggleUserAdmin(userId: $userId) {
 			id
 		}
 	}

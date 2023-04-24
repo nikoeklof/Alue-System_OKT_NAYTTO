@@ -3,20 +3,21 @@ import {
   Container,
   Grid,
   Typography,
-  TextField,
-  InputAdornment,
   Paper,
   TableContainer,
   Table,
   TableBody,
+  TextField,
   TablePagination,
+  Autocomplete,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+
 import theme from "./style/theme";
 import AreaMap from "./AreaMap";
 import AreaTableRowComponent from "./components/AreaTableRowComponent";
-import { ALLOW_AREA_REQUEST, MAKE_REQUEST } from "./queries";
-import { useMutation } from "@apollo/client";
+import { ALLOW_AREA_REQUEST, FILTERED_AREAS, MAKE_REQUEST } from "./queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { cities } from "./db/cities";
 
 const styles = {
   container: {
@@ -77,11 +78,23 @@ const styles = {
 };
 
 const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
+  const defaultFilter = localStorage.getItem("defaultFilter");
   const [selectedArea, setSelectedArea] = useState(undefined);
   const [hoverStatus, setHoverStatus] = useState(undefined);
-
+  const [cityFilter, setCityFilter] = useState(
+    defaultFilter ? defaultFilter : cities[0]
+  );
+  const [cityFilterInput, setCityFilterInput] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filteredAreas, setFilteredAreas] = useState(null);
+  const { loading, data } = useQuery(FILTERED_AREAS, {
+    variables: { cityName: cityFilter },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
   const [makeAreaRequest] = useMutation(MAKE_REQUEST, {
     onError: (e) => {
       console.log(e);
@@ -92,6 +105,10 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
       console.log(e);
     },
   });
+
+  useEffect(() => {
+    setFilteredAreas(data?.allAreas);
+  }, [data, loading, filteredAreas]);
 
   useEffect(() => {
     console.log(selectedArea);
@@ -106,16 +123,6 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
     setPage(0);
   };
 
-  const updateArea = (props) => {
-    const areaList = areas;
-    console.log(props);
-    var areaToUpdate = { ...props };
-    areaList.forEach((area, i) => {
-      if (area.id === props.id) areaList.splice(i, 1, areaToUpdate);
-    });
-
-    setAreas([...areaList]);
-  };
   const loanArea = async (props) => {
     makeAreaRequest({
       variables: { areaId: props.id, email: "nikoe123@outlook.com" },
@@ -135,24 +142,29 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
       <Typography sx={styles.mainText} variant="h6">
         Alueiden hallinta
       </Typography>
-      <TextField
-        label="Hae"
-        type="search"
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <SearchIcon />
-            </InputAdornment>
-          ),
+
+      <Autocomplete
+        disablePortal
+        id="findCity"
+        options={cities}
+        value={cityFilter}
+        onChange={(e, newValue) => {
+          setCityFilter(newValue);
+          localStorage.setItem("defaultFilter", newValue);
         }}
+        inputValue={cityFilterInput}
+        onInputChange={(e, newValue) => setCityFilterInput(newValue)}
         sx={styles.search}
+        renderInput={(params) => (
+          <TextField {...params} label="Hae kaupunkia" />
+        )}
       />
+
       <Container xs={styles.areas}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
             <AreaMap
-              areas={areas}
+              areas={filteredAreas ? filteredAreas : areas}
               selectedArea={selectedArea}
               setSelectedArea={setSelectedArea}
               clearSelected={clearSelected}
@@ -167,22 +179,25 @@ const AreaControl = ({ areas, setAreas, layerContext, setLayerContext }) => {
               <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader>
                   <TableBody>
-                    {areas
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                      .map((area) => (
-                        <AreaTableRowComponent
-                          key={area.id}
-                          area={area}
-                          setSelectedArea={setSelectedArea}
-                          selectedArea={selectedArea}
-                          setHoverStatus={setHoverStatus}
-                          loanArea={loanArea}
-                          updateArea={updateArea}
-                        />
-                      ))}
+                    {filteredAreas ? (
+                      filteredAreas
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((area) => (
+                          <AreaTableRowComponent
+                            key={area.id}
+                            area={area}
+                            setSelectedArea={setSelectedArea}
+                            selectedArea={selectedArea}
+                            setHoverStatus={setHoverStatus}
+                            loanArea={loanArea}
+                          />
+                        ))
+                    ) : (
+                      <></>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

@@ -26,6 +26,40 @@ export const ALL_GUESTS = gql`
     }
   }
 `;
+export const FILTERED_AREAS = gql`
+  query filteredAreas($cityName: String) {
+    allAreas(cityName: $cityName) {
+      id
+      info {
+        address
+        buildings
+        cityName
+        latlngs {
+          lat
+          lng
+        }
+        misc
+        quarter
+      }
+      shareHistory {
+        shareEndDate
+        shareStartDate
+        sharedBy
+        sharedTo
+      }
+      shareState {
+        isShared
+        shareStartDate
+        sharedBy
+        sharedTo
+        sharedRequests {
+          email
+          id
+        }
+      }
+    }
+  }
+`;
 
 export const ALL_AREAS = gql`
   query allAreas {

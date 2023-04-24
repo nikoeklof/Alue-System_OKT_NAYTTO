@@ -87,8 +87,6 @@ const AreaTableRowComponent = ({
   selectedArea,
   setHoverStatus,
   loanArea,
-
-  updateArea,
 }) => {
   const [open, setOpen] = useState(false);
   const [openDel, setOpenDel] = useState(false);
@@ -123,7 +121,7 @@ const AreaTableRowComponent = ({
   const editProps = {
     openEdit,
     handleCloseEditModal: () => setOpenEdit(false),
-    handleConfirm: (updatedArea) => updateArea(updatedArea),
+
     originalArea: area,
   };
   const lendProps = {

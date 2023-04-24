@@ -6,10 +6,12 @@ import {
   FormControl,
   TextField,
   Typography,
+  Autocomplete,
 } from "@mui/material";
 import { ALL_AREAS, CREATE_AREA } from "../queries";
 import { useMutation } from "@apollo/client";
 import theme from "../style/theme";
+import { cities } from "../db/cities";
 
 const styles = {
   subText: {
@@ -39,7 +41,8 @@ const styles = {
 const CreateAreaForm = ({ layerContext }) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-  const [areaCity, setAreaCity] = useState("");
+  const [areaCity, setAreaCity] = useState(cities[0]);
+  const [areaCityFilter, setAreaCityFilter] = useState("");
   const [quarterName, setQuarterName] = useState("");
   const [miscInfo, setMiscInfo] = useState("");
   const [layer, setLayer] = useState(null);
@@ -113,7 +116,7 @@ const CreateAreaForm = ({ layerContext }) => {
         ""
       ) : (
         <Alert severity="success" sx={styles.alert} icon={false}>
-          {`←`}  Piirrä ensin alue
+          {`←`} Piirrä ensin alue
         </Alert>
       )}
 
@@ -135,14 +138,20 @@ const CreateAreaForm = ({ layerContext }) => {
         ) : (
           ""
         )}
-        <TextField
-          onChange={(e) => setAreaCity(e.target.value)}
-          type="text"
-          label="Kaupunki"
-          required
-          error={!!areaCityError}
-          helperText={areaCityError}
-          sx={styles.textField}
+        <Autocomplete
+          disablePortal
+          id="findCity"
+          options={cities}
+          value={areaCity}
+          onChange={(e, newValue) => {
+            setAreaCity(newValue);
+          }}
+          inputValue={areaCityFilter}
+          onInputChange={(e, newValue) => setAreaCityFilter(newValue)}
+          sx={styles.search}
+          renderInput={(params) => (
+            <TextField {...params} label="Hae kaupunkia" />
+          )}
         />
         <TextField
           onChange={(e) => setAreaName(e.target.value)}

@@ -128,6 +128,15 @@ export const DELETE_GUEST = gql`
 	}
 `;
 
+export const EDIT_GUEST = gql`
+	mutation editGuest($email: String!, $guestId: ID!) {
+		editGuest(email: $email, guestId: $guestId) {
+			email
+			id
+		}
+	}
+`;
+
 //needs testing
 export const MAKE_REQUEST = gql`
 	mutation makeRequest($areaId: ID!, $email: String!) {
@@ -163,6 +172,15 @@ export const CREATE_USER = gql`
 export const DELETE_USER = gql`
 	mutation deleteUser($email: String, $userId: ID, $guestId: ID) {
 		deleteUser(email: $email, userId: $userId, guestId: $guestId) {
+			id
+		}
+	}
+`;
+
+export const TOGGLE_USER_ADMIN = gql`
+	mutation toggleUserAdmin($userId: ID!) {
+		toggleUserAdmin(userId: $userId) {
+			admin
 			id
 		}
 	}

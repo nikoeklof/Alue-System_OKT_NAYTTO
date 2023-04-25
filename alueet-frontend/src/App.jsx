@@ -17,9 +17,7 @@ import { useQuery } from '@apollo/client';
 import { ALL_AREAS, ALL_USERS } from './queries';
 const App = () => {
 	const { loading: loadingAreas, data: dataAreas } = useQuery(ALL_AREAS, {
-		onError: (e) => {
-			console.error(e);
-		},
+		onError: (e) => console.error(e),
 	});
 	const {
 		data: dataUsers,

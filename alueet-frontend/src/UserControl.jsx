@@ -22,6 +22,8 @@ import {
 	EDIT_GUEST,
 	CREATE_GUEST,
 	CREATE_USER,
+	DELETE_USER,
+	DELETE_GUEST,
 } from './queries';
 
 const styles = {
@@ -66,7 +68,7 @@ const columns = [
 	},
 ];
 
-const UserControl = ({ users, setUsers, refetch }) => {
+const UserControl = ({ users, refetch }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
@@ -77,10 +79,16 @@ const UserControl = ({ users, setUsers, refetch }) => {
 		onError: (e) => console.error(e),
 	});
 	const [createGuest] = useMutation(CREATE_GUEST, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+		onError: (e) => console.error(e),
 	});
 	const [createUser] = useMutation(CREATE_USER, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+		onError: (e) => console.error(e),
+	});
+	const [deleteGuest] = useMutation(DELETE_GUEST, {
+		onError: (e) => console.error(e),
+	});
+	const [deleteUser] = useMutation(DELETE_USER, {
+		onError: (e) => console.error(e),
 	});
 
 	const handleChangePage = (event, newPage) => {
@@ -109,18 +117,19 @@ const UserControl = ({ users, setUsers, refetch }) => {
 	const addUser = async (user) => {
 		const { email, password } = user;
 		await createGuest({ variables: { email: email } });
-		await createUser({
-			variables: { password: password, email: email },
-		});
+		await createUser({ variables: { password: password, email: email } });
 		refetch();
 	};
 
-	const removeUser = (props) => {
-		const userList = [];
-		users.forEach((user) => {
-			if (user.id !== props.id) userList.push(user);
+	const removeUser = async (user) => {
+		const userId = user.id;
+		const guestId = user.guestAccount.id;
+		const email = user.guestAccount.id;
+		await deleteGuest({ variables: { guestId: guestId, email: email } });
+		await deleteUser({
+			variables: { userId: userId, email: email, guestId: guestId },
 		});
-		setUsers([...userList]);
+		refetch();
 	};
 
 	const createProps = {

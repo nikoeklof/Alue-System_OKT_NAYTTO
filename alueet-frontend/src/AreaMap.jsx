@@ -5,6 +5,7 @@ import { LeafletMap } from "./components/LeafletMap";
 const AreaMap = ({
   canEdit,
   areas,
+
   setSelectedArea,
   selectedArea,
   clearSelected,

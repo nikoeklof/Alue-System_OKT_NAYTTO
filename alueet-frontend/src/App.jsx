@@ -17,7 +17,6 @@ import LendList from "./LendList";
 
 const App = () => {
   const [users, setUsers] = useState(initialUsers);
-  const [layerContext, setLayerContext] = useState(null);
 
   const addUser = (props) => {
     setUsers([...users, props]);
@@ -44,15 +43,7 @@ const App = () => {
               />
             }
           />
-          <Route
-            path="/createArea"
-            element={
-              <AreaCreate
-                setLayerContext={setLayerContext}
-                layerContext={layerContext}
-              />
-            }
-          />
+          <Route path="/createArea" element={<AreaCreate />} />
           <Route path="/lendList" element={<LendList users={users} />} />
           <Route path="/userProfile" element={<UserProfile />} />
         </Routes>

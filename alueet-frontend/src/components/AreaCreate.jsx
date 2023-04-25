@@ -63,8 +63,9 @@ const styles = {
   },
 };
 
-const AreaCreate = ({ layerContext, setLayerContext }) => {
+const AreaCreate = () => {
   const [areas, setAreas] = useState(undefined);
+  const [layerContext, setLayerContext] = useState(null);
   const defaultFilter = localStorage.getItem("defaultFilter");
   if (!defaultFilter) localStorage.setItem("defaultFilter", "Mikkeli");
   const [cityIndex, setCityIndex] = useState(
@@ -74,7 +75,7 @@ const AreaCreate = ({ layerContext, setLayerContext }) => {
     defaultFilter ? defaultFilter : cities[0].Kunta
   );
   const [cityFilterInput, setCityFilterInput] = useState("");
-  const { data, loading, error } = useQuery(FILTERED_AREAS, {
+  const { data, loading, error, refetch } = useQuery(FILTERED_AREAS, {
     variables: { cityName: cityFilter ? cityFilter : defaultFilter },
     onError: (e) => {
       console.log(error);
@@ -83,7 +84,7 @@ const AreaCreate = ({ layerContext, setLayerContext }) => {
 
   useEffect(() => {
     setAreas(data?.allAreas);
-  }, [data, loading]);
+  }, [data, loading, refetch]);
 
   useEffect(() => {
     setCityIndex(cities.findIndex((city) => city.Kunta === cityFilter));
@@ -111,6 +112,7 @@ const AreaCreate = ({ layerContext, setLayerContext }) => {
           <Grid item md={6} xs={12}>
             <CreateAreaForm
               layerContext={layerContext}
+              setLayerContext={setLayerContext}
               defaultFilter={defaultFilter}
               cities={cities}
               cityFilter={cityFilter}
@@ -118,6 +120,7 @@ const AreaCreate = ({ layerContext, setLayerContext }) => {
               cityFilterInput={cityFilterInput}
               setCityFilterInput={setCityFilterInput}
               setCityIndex={setCityIndex}
+              refetch={refetch}
             />
           </Grid>
         </Grid>

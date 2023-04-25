@@ -8,7 +8,7 @@ import {
   Typography,
   Autocomplete,
 } from "@mui/material";
-import { ALL_AREAS, CREATE_AREA, FILTERED_AREAS } from "../queries";
+import { CREATE_AREA } from "../queries";
 import { useMutation } from "@apollo/client";
 import theme from "../style/theme";
 
@@ -39,15 +39,16 @@ const styles = {
 
 const CreateAreaForm = ({
   layerContext,
+  setLayerContext,
   cities,
   cityFilter,
   setCityFilter,
   cityFilterInput,
   setCityFilterInput,
+  refetch,
 }) => {
   const [areaName, setAreaName] = useState("");
   const [apartmentAmount, setApartmentAmount] = useState("");
-
   const [quarterName, setQuarterName] = useState("");
   const [miscInfo, setMiscInfo] = useState("");
   const [layer, setLayer] = useState(null);
@@ -59,16 +60,18 @@ const CreateAreaForm = ({
   const [createArea] = useMutation(CREATE_AREA);
 
   useEffect(() => {
-    if (layerContext) {
+    if (layer === layerContext) {
+      return;
+    }
+    if (layerContext !== null) {
       setLayer(layerContext);
       setErrorAlert(false);
       setSuccessAlert(true);
     } else {
-      setLayer(null);
       setErrorAlert(false);
       setSuccessAlert(false);
     }
-  }, [layerContext]);
+  }, [layerContext, layer]);
 
   const handleSubmit = () => {
     if (!layer) setErrorAlert(true);
@@ -110,7 +113,10 @@ const CreateAreaForm = ({
         onError: (e) => {
           console.log(e);
         },
-        refetchQueries: [{ query: ALL_AREAS }, { query: FILTERED_AREAS }],
+        onCompleted: () => {
+          setLayerContext(null);
+          refetch({ cityName: cityFilter });
+        },
       });
     }
   };

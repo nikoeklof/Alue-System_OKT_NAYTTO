@@ -21,12 +21,22 @@ const httpLink = new HttpLink({
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
-  
+  const token = localStorage.getItem("token");
+
+  if (!token || token === "") {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+      },
+    }));
+    return forward(operation);
+  }
+
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
 
-      authorization: localStorage.getItem("token") || null,
+      authorization: token,
     },
   }));
 
@@ -39,7 +49,7 @@ const client = new ApolloClient({
   defaultOptions: {
     watchQuery: {
       fetchPolicy: "network-only",
-      initialFetchPolicy: "cache-and-network",
+      initialFetchPolicy: "network-only",
     },
   },
 });

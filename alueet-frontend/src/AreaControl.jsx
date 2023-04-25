@@ -95,7 +95,7 @@ const AreaControl = () => {
     cities.findIndex((city) => city.Kunta === defaultFilter)
   );
 
-  const { loading, data } = useQuery(FILTERED_AREAS, {
+  const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
     variables: { cityName: cityFilter },
     onError: (e) => {
       console.log(e);
@@ -174,6 +174,7 @@ const AreaControl = () => {
           <Grid item md={6} xs={12}>
             <AreaMap
               areas={filteredAreas}
+              setAreas={setFilteredAreas}
               selectedArea={selectedArea}
               setSelectedArea={setSelectedArea}
               clearSelected={clearSelected}
@@ -199,10 +200,12 @@ const AreaControl = () => {
                           <AreaTableRowComponent
                             key={area.id}
                             area={area}
+                            cityFilter={cityFilter}
                             setSelectedArea={setSelectedArea}
                             selectedArea={selectedArea}
                             setHoverStatus={setHoverStatus}
                             loanArea={loanArea}
+                            refetch={refetch}
                           />
                         ))
                     ) : (

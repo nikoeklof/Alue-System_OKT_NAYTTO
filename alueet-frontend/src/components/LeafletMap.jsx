@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Pane, useMap } from "react-leaflet";
 import DrawComponent from "./DrawComponent";
 import PolygonLayer from "./PolygonLayer";
 import { cities } from "../db/cities";
+
 export const LeafletMap = ({
   areas,
   setSelectedArea,
@@ -15,7 +16,7 @@ export const LeafletMap = ({
   cityFilter,
 }) => {
   const [cityCoords, setCityCoords] = useState(
-    cityIndex !== -1
+    cityIndex !== -1 || cityIndex !== undefined
       ? [cities[cityIndex]?.Latitude, cities[cityIndex]?.Longitude]
       : [cities[0]?.Latitude, cities[0]?.Longitude]
   );
@@ -38,7 +39,6 @@ export const LeafletMap = ({
       >
         <MapContainer
           // Map has to have a set height, otherwise does not render
-
           style={{
             height: "490px",
             width: "100%",
@@ -82,13 +82,14 @@ export const LeafletMap = ({
 };
 const SetViewOnCityIndexChange = ({
   coords,
-
   cityIndex,
   cities,
   cityFilter,
 }) => {
   const map = useMap();
+
   useEffect(() => {
+    if (cityIndex === -1) return;
     if (cityFilter === cities[cityIndex].Kunta) {
       map.flyTo(coords, 12, {
         animate: true,

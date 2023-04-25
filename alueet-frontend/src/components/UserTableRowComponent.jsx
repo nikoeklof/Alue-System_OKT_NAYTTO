@@ -65,7 +65,8 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 							{open ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>
 					</TableCell>
-					<TableCell>{user.guestAccount.email}</TableCell>
+					<TableCell>{user.username}</TableCell>
+					<TableCell>{user.email}</TableCell>
 					<TableCell align='right'>
 						{user.admin ? 'Kyllä' : 'Ei'}
 					</TableCell>

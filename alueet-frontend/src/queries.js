@@ -2,27 +2,15 @@ import { gql } from '@apollo/client';
 
 //  -----  querys  -----
 export const ALL_USERS = gql`
-	query allUsers {
-		allUsers {
+	query allUsers($disabled: Boolean, $admin: Boolean) {
+		allUsers(disabled: $disabled, admin: $admin) {
 			id
+			username
 			admin
 			guestAccount {
-				id
 				email
-				areas {
-					id
-					info {
-						address
-						buildings
-						cityName
-						latlngs {
-							lat
-							lng
-						}
-						misc
-						quarter
-					}
-				}
+				name
+				areas
 			}
 		}
 	}
@@ -33,19 +21,37 @@ export const ALL_GUESTS = gql`
 		allGuests {
 			id
 			email
-			areas {
-				id
-				info {
-					address
-					buildings
-					cityName
-					latlngs {
-						lat
-						lng
-					}
-					misc
-					quarter
+			name
+			areas
+		}
+	}
+`;
+export const FILTERED_AREAS = gql`
+	query filteredAreas($cityName: String) {
+		allAreas(cityName: $cityName) {
+			id
+			info {
+				address
+				buildings
+				cityName
+				latlngs {
+					lat
+					lng
 				}
+				misc
+				quarter
+			}
+			shareHistory {
+				shareEndDate
+				shareStartDate
+				sharedBy
+				sharedTo
+			}
+			shareState {
+				isShared
+				shareStartDate
+				sharedBy
+				sharedTo
 			}
 		}
 	}
@@ -56,14 +62,15 @@ export const ALL_AREAS = gql`
 		allAreas {
 			id
 			info {
-				address
-				buildings
-				cityName
+				misc
 				quarter
 				latlngs {
 					lat
 					lng
 				}
+				cityName
+				buildings
+				address
 			}
 			shareHistory {
 				shareEndDate
@@ -76,12 +83,10 @@ export const ALL_AREAS = gql`
 				shareStartDate
 				sharedBy
 				sharedRequests {
-					areas {
-						id
-					}
 					id
 					email
 				}
+				sharedTo
 			}
 		}
 	}
@@ -107,18 +112,10 @@ export const USER_COUNT = gql`
 
 //  -----  mutations  -----
 export const CREATE_GUEST = gql`
-	mutation createGuest($email: String!) {
-		createGuest(email: $email) {
+	mutation createGuest($email: String!, $name: String!) {
+		createGuest(email: $email, name: $name) {
 			email
-		}
-	}
-`;
-
-export const EDIT_GUEST = gql`
-	mutation editGuest($email: String!, $guestId: ID!) {
-		editGuest(email: $email, guestId: $guestId) {
-			email
-			id
+			name
 		}
 	}
 `;
@@ -133,21 +130,31 @@ export const DELETE_GUEST = gql`
 
 //needs testing
 export const MAKE_REQUEST = gql`
-	mutation makeRequest($areaId: ID!, $guestEmail: String!) {
-		makeRequest(areaId: $areaId, guestEmail: $guestEmail) {
-			shareState
+	mutation makeRequest($areaId: ID!, $email: String!) {
+		makeRequest(areaId: $areaId, email: $email) {
+			id
+			shareState {
+				isShared
+			}
 		}
 	}
 `;
 
 export const CREATE_USER = gql`
-	mutation createUser($password: String!, $email: String!) {
-		createUser(password: $password, email: $email) {
-			admin
-			id
+	mutation createUser(
+		$username: String!
+		$password: String!
+		$guestId: String!
+	) {
+		createUser(
+			username: $username
+			password: $password
+			guestId: $guestId
+		) {
+			username
 			guestAccount {
-				id
 				email
+				name
 			}
 		}
 	}
@@ -169,19 +176,18 @@ export const TOGGLE_USER_DISABLED = gql`
 	}
 `;
 
-export const TOGGLE_USER_ADMIN = gql`
-	mutation toggleUserAdmin($userId: ID!) {
-		toggleUserAdmin(userId: $userId) {
-			id
-		}
-	}
-`;
-
 //needs testing
 export const ALLOW_AREA_REQUEST = gql`
-	mutation allowAreaRequest($areaId: ID!, $guestId: ID!) {
-		allowAreaRequest(userId: $userId, guestId: $guestId) {
+	mutation allowAreaRequest($areaId: ID!, $email: String!) {
+		allowAreaRequest(areaId: $areaId, email: $email) {
 			id
+			shareState {
+				isShared
+			}
+			shareHistory {
+				sharedBy
+				sharedTo
+			}
 		}
 	}
 `;
@@ -228,33 +234,34 @@ export const CREATE_AREA = gql`
 `;
 
 export const EDIT_AREA = gql`
-	mutation editArea(
+	mutation (
 		$areaId: ID!
-		$type: String
 		$cityName: String
 		$quarter: String
 		$address: String
 		$buildings: Int
-		$homes: Int
-		$zone: String
-		$lan: String
-		$lon: String
 		$misc: String
 	) {
 		editArea(
 			areaId: $areaId
-			type: $type
 			cityName: $cityName
 			quarter: $quarter
 			address: $address
 			buildings: $buildings
-			homes: $homes
-			zone: $zone
-			lan: $lan
-			lon: $lon
 			misc: $misc
 		) {
 			id
+			info {
+				address
+				buildings
+				cityName
+				latlngs {
+					lat
+					lng
+				}
+				misc
+				quarter
+			}
 		}
 	}
 `;

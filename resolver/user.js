@@ -14,15 +14,15 @@ module.exports = {
 		me: (root, args, contextValue) => contextValue.authUser,
 	},
 
-    User: {
-        admin: (root) => root.admin,
-        disabled: (root) => root.disabled,
-        guestAccount: async (root) => await Guest.findById(root.guestAccount._id),
-    },
+	User: {
+		admin: (root) => root.admin,
+		disabled: (root) => root.disabled,
+		guestAccount: async (root) => await Guest.findById(root.guestAccount._id),
+	},
 
-    Mutation: {
-        login: async (root, args) => {
-            const user = await User.findOne({ 'guestAccount.email': args.email })
+	Mutation: {
+		login: async (root, args) => {
+			const user = await User.findOne({ 'guestAccount.email': args.email })
 
 			if (!user) throw new AuthenticationError('User not found');
 
@@ -32,10 +32,10 @@ module.exports = {
 			if (!(await bcrypt.compare(args.password, user.password)))
 				throw new AuthenticationError('Invalid password');
 
-            const userForToken = {
-                email: user.guestAccount.email,
-                id: user._id
-            };
+			const userForToken = {
+				email: user.guestAccount.email,
+				id: user._id
+			};
 
 			return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
 		},
@@ -51,13 +51,16 @@ module.exports = {
 			if (!guest)
 				throw new UserInputError('Invalid email, guest not found');
 
-            const user = new User({
-                guestAccount: {
-                    _id: guest._id,
-                    email: guest.email
-                },
-                password: await bcrypt.hash(args.password, 10)
-            });
+			if (await User.findOne({ 'guestAccount._id': guest._id }))
+				throw new UserInputError('An user account is already connected to this email');
+
+			const user = new User({
+				guestAccount: {
+					_id: guest._id,
+					email: guest.email
+				},
+				password: await bcrypt.hash(args.password, 10)
+			});
 
 			return user.save().catch((error) => {
 				throw new UserInputError(error.message, {
@@ -66,21 +69,21 @@ module.exports = {
 			});
 		},
 
-        deleteUser: async (root, args) => {
-            if (args.userId)
-                return await User.findByIdAndDelete(args.userId)
+		deleteUser: async (root, args) => {
+			if (args.userId)
+				return await User.findByIdAndDelete(args.userId)
 
-            if (args.email)
-                return await User.findOneAndDelete({ 'guestAccount.email': args.email })
+			if (args.email)
+				return await User.findOneAndDelete({ 'guestAccount.email': args.email })
 
-            if (args.guestId)
-                return await User.findOneAndDelete({ 'guestAccount.id': args.guestId })
+			if (args.guestId)
+				return await User.findOneAndDelete({ 'guestAccount.id': args.guestId })
 
-            throw new UserInputError('At least 1 argument is required')
-        },
+			throw new UserInputError('At least 1 argument is required')
+		},
 
-        changeUserPassword: async (root, args, contextValue) => {
-            const user = contextCheck(contextValue.authUser, false)
+		changeUserPassword: async (root, args, contextValue) => {
+			const user = contextCheck(contextValue.authUser, false)
 
 			if (args.password.length < 5)
 				throw new UserInputError(
@@ -120,8 +123,8 @@ module.exports = {
 			});
 		},
 
-        removeUserRank: async (root, args, contextValue) => {
-            const user = contextCheck(contextValue.authUser, false);
+		removeUserRank: async (root, args, contextValue) => {
+			const user = contextCheck(contextValue.authUser, false);
 
 			user.rank.splice(user.rank.indexOf(args.rank), 1);
 
@@ -131,7 +134,7 @@ module.exports = {
 				});
 			});
 		},
-		
+
 		toggleUserDisabled: async (root, args, contextValue) => {
 			contextCheck(contextValue.authUser, true);
 

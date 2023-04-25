@@ -14,9 +14,19 @@ import UserControl from "./UserControl";
 import AreaCreate from "./components/AreaCreate";
 import UserProfile from "./UserProfile";
 import LendList from "./LendList";
+import { useQuery } from "@apollo/client";
+import { ME } from "./queries";
 
 const App = () => {
   const [users, setUsers] = useState(initialUsers);
+  const { data, loading } = useQuery(ME);
+  const user = {
+    id: data?.me.guestAccount.id,
+    admin: data?.me.admin,
+    aboutMe: data?.me.aboutMe,
+    email: data?.me.guestAccount.email,
+    areas: data?.me.guestAccount.areas,
+  };
 
   const addUser = (props) => {
     setUsers([...users, props]);
@@ -26,7 +36,7 @@ const App = () => {
   return (
     <Router>
       <Container>
-        <NavBar />
+        <NavBar user={user} />
 
         <Routes>
           <Route path="/" element={<Main />} />
@@ -45,7 +55,10 @@ const App = () => {
           />
           <Route path="/createArea" element={<AreaCreate />} />
           <Route path="/lendList" element={<LendList users={users} />} />
-          <Route path="/userProfile" element={<UserProfile />} />
+          <Route
+            path="/userProfile"
+            element={<UserProfile user={!loading ? user : null} />}
+          />
         </Routes>
         <Footer />
       </Container>

@@ -11,6 +11,7 @@ import {
   TablePagination,
   Autocomplete,
 } from "@mui/material";
+import { InfinitySpin } from "react-loader-spinner";
 
 import theme from "./style/theme";
 import AreaMap from "./AreaMap";
@@ -186,12 +187,12 @@ const AreaControl = () => {
             />
           </Grid>
           <Grid item md={6} xs={12}>
-            <Paper sx={styles.form}>
-              <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader>
-                  <TableBody>
-                    {filteredAreas ? (
-                      filteredAreas
+            {filteredAreas ? (
+              <Paper sx={styles.form}>
+                <TableContainer sx={{ maxHeight: 440 }}>
+                  <Table stickyHeader>
+                    <TableBody>
+                      {filteredAreas
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
@@ -207,24 +208,38 @@ const AreaControl = () => {
                             loanArea={loanArea}
                             refetch={refetch}
                           />
-                        ))
-                    ) : (
-                      <></>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                component="div"
-                count={filteredAreas ? filteredAreas.length : 0}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                labelRowsPerPage="Rivejä per sivu:"
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </Paper>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                  component="div"
+                  count={filteredAreas ? filteredAreas.length : 1}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  labelRowsPerPage="Rivejä per sivu:"
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Paper>
+            ) : (
+              <div
+                style={{
+                  marginLeft: "30%",
+                  marginTop: "15%",
+                  paddingBottom: "0px",
+                }}
+              >
+                <InfinitySpin
+                  width="200"
+                  color="gray"
+                  wrapperStyle
+                  wrapperClass
+                  ariaLabel="loading"
+                />
+              </div>
+            )}
           </Grid>
         </Grid>
       </Container>

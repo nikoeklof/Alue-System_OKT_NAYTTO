@@ -49,6 +49,7 @@ export const FILTERED_AREAS = gql`
       }
       shareState {
         isShared
+        shareRequests
         shareStartDate
         sharedBy
         sharedTo

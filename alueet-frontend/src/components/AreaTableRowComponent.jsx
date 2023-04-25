@@ -20,8 +20,9 @@ import LendAreaModal from "./LendAreaModal";
 import ReturnAreaModal from "./ReturnAreaModal";
 import theme from "../style/theme";
 import { useRef } from "react";
-import { DELETE_AREA, FILTERED_AREAS } from "../queries";
+import { DELETE_AREA } from "../queries";
 import { useMutation } from "@apollo/client";
+
 
 const styles = {
   areas: {

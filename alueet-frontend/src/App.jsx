@@ -2,11 +2,10 @@ import React from "react";
 import { Container } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import { users as initialUsers } from "./db/db";
 
 import Main from "./Main";
 import Login from "./Login";
-
+import { users as initialUsers } from "./db/db";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import AreaControl from "./AreaControl";
@@ -28,11 +27,6 @@ const App = () => {
     areas: data?.me.guestAccount.areas,
   };
 
-  const addUser = (props) => {
-    setUsers([...users, props]);
-    console.log(users);
-  };
-
   return (
     <Router>
       <Container>
@@ -45,13 +39,7 @@ const App = () => {
           <Route path="/areaControl" element={<AreaControl />} />
           <Route
             path="/userControl"
-            element={
-              <UserControl
-                users={users}
-                addUser={addUser}
-                setUsers={setUsers}
-              />
-            }
+            element={<UserControl users={users} setUsers={setUsers} />}
           />
           <Route path="/createArea" element={<AreaCreate />} />
           <Route path="/lendList" element={<LendList users={users} />} />

@@ -2,3 +2,5 @@
 node_modules
 backend/Alue-System_OKT_NAYTTO/
 simple-cors-http-server.py
+package.json
+package-lock.json

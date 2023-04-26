@@ -9,8 +9,7 @@ const contextCheck = require('../util/contextCheck');
 module.exports = {
 	Query: {
 		userCount: () => User.collection.countDocuments(),
-		allUsers: async (root, args) =>
-			await User.find({ ...args, disabled: false }),
+		allUsers: async (root, args) => await User.find({ ...args }),
 		me: (root, args, contextValue) => contextValue.authUser,
 	},
 

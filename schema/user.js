@@ -14,7 +14,7 @@ module.exports = `
 
   type Query {
     userCount: Int!
-    allUsers (admin: Boolean): [User]!
+    allUsers (admin: Boolean, disabled: Boolean): [User]!
 
     me: User
   }

@@ -25,7 +25,7 @@ const App = () => {
 		onError: (e) => console.error(e),
 	});
 
-	const { data, loading } = useQuery(ME);
+  const { data, loading } = useQuery(ME);
 	const user = {
 		id: data?.me?.guestAccount.id,
 		admin: data?.me?.admin,
@@ -43,17 +43,11 @@ const App = () => {
 			<Container>
 				<NavBar user={user} />
 
-				<Routes>
-					<Route
-						path='/'
-						element={<Main />}
-					/>
-					<Route
-						path='/login'
-						element={<Login />}
-					/>
 
-					<Route
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+				<Route
 						path='/areaControl'
 						element={<AreaControl />}
 					/>
@@ -85,5 +79,4 @@ const App = () => {
 		</Router>
 	);
 };
-
 export default App;

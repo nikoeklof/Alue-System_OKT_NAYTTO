@@ -20,7 +20,7 @@ import LendAreaModal from './LendAreaModal';
 import ReturnAreaModal from './ReturnAreaModal';
 import theme from '../style/theme';
 import { useRef } from 'react';
-import { ALL_AREAS, DELETE_AREA } from '../queries';
+import { DELETE_AREA } from '../queries';
 import { useMutation } from '@apollo/client';
 
 const styles = {
@@ -29,6 +29,13 @@ const styles = {
 	},
 	tableHeadText: {
 		fontWeight: 'bold',
+	},
+	miscInfoHeadText: {
+		width: '100%',
+		mt: 1,
+		mb: 1,
+		pt: 1,
+		pb: 1,
 	},
 	selectMenu: {
 		display: 'flex',
@@ -87,6 +94,8 @@ const AreaTableRowComponent = ({
 	selectedArea,
 	setHoverStatus,
 	loanArea,
+	refetch,
+	cityFilter,
 }) => {
 	const [open, setOpen] = useState(false);
 	const [openDel, setOpenDel] = useState(false);
@@ -115,7 +124,7 @@ const AreaTableRowComponent = ({
 		handleConfirm: () =>
 			deleteArea({
 				variables: { areaId: area.id },
-				refetchQueries: [{ query: ALL_AREAS }],
+				onCompleted: () => refetch({ cityName: cityFilter }),
 			}),
 	};
 	const editProps = {
@@ -222,39 +231,43 @@ const AreaTableRowComponent = ({
 												</TableCell>
 												<TableCell>{area.id}</TableCell>
 											</TableRow>
-											<TableRow></TableRow>
 										</TableBody>
-										{area.info.misc ? (
-											<>
-												<TableHead>
-													<TableRow>
-														<TableCell
-															sx={
-																styles.tableHeadText
-															}
-														>
-															Lisätiedot:
-														</TableCell>
-													</TableRow>
-												</TableHead>
-												<TableBody>
-													<TableRow>
-														<TableCell scope='row'>
-															{area.info.misc}
-														</TableCell>
-													</TableRow>
-												</TableBody>
-											</>
-										) : (
-											<></>
-										)}
 									</Table>
+									{area.info.misc ? (
+										<Table>
+											<TableHead>
+												<TableRow>
+													<TableCell
+														sx={[
+															styles.tableHeadText,
+															styles.miscInfoHeadText,
+														]}
+													>
+														Lisätiedot:
+													</TableCell>
+												</TableRow>
+											</TableHead>
+											<TableBody>
+												<TableRow>
+													<TableCell
+														sx={
+															styles.miscInfoHeadText
+														}
+													>
+														{area.info.misc}
+													</TableCell>
+												</TableRow>
+											</TableBody>
+										</Table>
+									) : (
+										<></>
+									)}
+
 									<Grid sx={styles.buttons}>
 										<Button
 											variant='contained'
 											sx={styles.areaButton}
 											onClick={() => {
-												//setOpenLend(true)
 												loanArea(area);
 											}}
 										>

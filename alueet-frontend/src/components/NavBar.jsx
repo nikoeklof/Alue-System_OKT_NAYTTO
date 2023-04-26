@@ -112,10 +112,9 @@ const styles = {
 	},
 };
 
-const NavBar = ({ loggedUser }) => {
+const NavBar = ({ user }) => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
-	const user = loggedUser;
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -248,7 +247,7 @@ const NavBar = ({ loggedUser }) => {
 							onClick={handleOpenUserMenu}
 							sx={styles.user.link}
 						>
-							{user ? user.username : 'Aloitus'}
+							{user ? user.email : 'Aloitus'}
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}
@@ -262,7 +261,6 @@ const NavBar = ({ loggedUser }) => {
 						>
 							{user ? (
 								<Box>
-									{}
 									<Link
 										to='/userProfile'
 										style={styles.responsive.link}
@@ -273,7 +271,6 @@ const NavBar = ({ loggedUser }) => {
 											</Typography>
 										</MenuItem>
 									</Link>
-
 									<MenuItem>
 										<Typography textAlign='center'>
 											Kirjaudu ulos

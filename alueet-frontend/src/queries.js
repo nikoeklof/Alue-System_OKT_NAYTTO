@@ -44,6 +44,7 @@ export const FILTERED_AREAS = gql`
 			}
 			shareState {
 				isShared
+				shareRequests
 				shareStartDate
 				sharedBy
 				sharedTo
@@ -77,9 +78,54 @@ export const ALL_AREAS = gql`
 				isShared
 				shareStartDate
 				sharedBy
-				sharedRequests
+				shareRequests {
+					id
+					email
+				}
 				sharedTo
 			}
+		}
+	}
+`;
+export const ME = gql`
+	query me {
+		me {
+			aboutMe
+			admin
+			disabled
+			guestAccount {
+				id
+				email
+				areas {
+					id
+					info {
+						address
+						buildings
+						cityName
+						latlngs {
+							lat
+							lng
+						}
+						misc
+						quarter
+					}
+					shareState {
+						isShared
+						shareRequests
+						shareStartDate
+						sharedBy
+						sharedTo
+					}
+					shareHistory {
+						shareEndDate
+						shareStartDate
+						sharedBy
+						sharedTo
+					}
+				}
+			}
+			id
+			rank
 		}
 	}
 `;
@@ -285,8 +331,8 @@ export const DELETE_AREA = gql`
 `;
 //needs testing
 export const LOGIN = gql`
-	mutation login($username: String!, $password: String!) {
-		login(usernmae: $username, password: $password) {
+	mutation login($email: String!, $password: String!) {
+		login(email: $email, password: $password) {
 			value
 		}
 	}

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { InfinitySpin } from 'react-loader-spinner';
 import Main from './Main';
 import Login from './Login';
 
@@ -14,11 +13,10 @@ import AreaCreate from './components/AreaCreate';
 import UserProfile from './UserProfile';
 import LendList from './LendList';
 import { useQuery } from '@apollo/client';
-import { ALL_AREAS, ALL_USERS } from './queries';
+import { ALL_USERS, ME } from './queries';
+
 const App = () => {
-	const { loading: loadingAreas, data: dataAreas } = useQuery(ALL_AREAS, {
-		onError: (e) => console.error(e),
-	});
+	const [users, setUsers] = useState(null);
 	const {
 		data: dataUsers,
 		loading: loadingUsers,
@@ -26,16 +24,16 @@ const App = () => {
 	} = useQuery(ALL_USERS, {
 		onError: (e) => console.error(e),
 	});
-	const [areas, setAreas] = useState(null);
-	const [users, setUsers] = useState(null);
-	const [layerContext, setLayerContext] = useState(null);
 
-	const addArea = (props) => {
-		setAreas([...areas, props]);
+	const { data, loading } = useQuery(ME);
+	const user = {
+		id: data?.me?.guestAccount.id,
+		admin: data?.me?.admin,
+		aboutMe: data?.me?.aboutMe,
+		email: data?.me?.guestAccount.email,
+		areas: data?.me?.guestAccount.areas,
 	};
-	useEffect(() => {
-		setAreas(dataAreas?.allAreas);
-	}, [loadingAreas, dataAreas]);
+
 	useEffect(() => {
 		setUsers(dataUsers?.allUsers);
 	}, [loadingUsers, dataUsers]);
@@ -43,7 +41,7 @@ const App = () => {
 	return (
 		<Router>
 			<Container>
-				<NavBar />
+				<NavBar user={user} />
 
 				<Routes>
 					<Route
@@ -57,95 +55,29 @@ const App = () => {
 
 					<Route
 						path='/areaControl'
-						element={
-							!areas ? (
-								<div
-									style={{
-										position: 'absolute',
-										top: '50%',
-										left: '45%',
-									}}
-								>
-									<InfinitySpin
-										width='200'
-										color='gray'
-										ariaLabel='loading'
-										wrapperStyle
-										wrapperClass
-									/>
-								</div>
-							) : (
-								<AreaControl
-									areas={areas}
-									setAreas={setAreas}
-								/>
-							)
-						}
+						element={<AreaControl />}
 					/>
 					<Route
 						path='/userControl'
 						element={
-							!users ? (
-								<div
-									style={{
-										position: 'absolute',
-										top: '50%',
-										left: '45%',
-									}}
-								>
-									<InfinitySpin
-										width='200'
-										color='gray'
-										ariaLabel='loading'
-										wrapperStyle
-										wrapperClass
-									/>
-								</div>
-							) : (
-								<UserControl
-									users={users}
-									setUsers={setUsers}
-									refetch={refetchUsers}
-								/>
-							)
+							<UserControl
+								users={users}
+								setUsers={setUsers}
+								refetch={refetchUsers}
+							/>
 						}
 					/>
 					<Route
 						path='/createArea'
-						element={
-							!areas ? (
-								<div
-									style={{
-										position: 'absolute',
-										top: '50%',
-										left: '45%',
-									}}
-								>
-									<InfinitySpin
-										width='200'
-										color='gray'
-										ariaLabel='loading'
-										wrapperStyle
-										wrapperClass
-									/>
-								</div>
-							) : (
-								<AreaCreate
-									areas={areas}
-									addArea={addArea}
-									setLayerContext={setLayerContext}
-									layerContext={layerContext}
-								/>
-							)
-						}
+						element={<AreaCreate />}
 					/>
 					<Route
 						path='/lendList'
-						element={<LendList />}
+						element={<LendList users={users} />}
 					/>
 					<Route
 						path='/userProfile'
-						element={<UserProfile />}
+						element={<UserProfile user={!loading ? user : null} />}
 					/>
 				</Routes>
 				<Footer />

@@ -36,44 +36,33 @@ const styles = {
 	},
 };
 
-const UserProfile = ({ loggedUser, users, setUsers }) => {
+const UserProfile = ({ user }) => {
 	const [openDel, setDelOpen] = useState(false);
-	const [username, setUsername] = useState(loggedUser.username);
-	const [email, setEmail] = useState(loggedUser.email);
-	const [usernameError, setUsernameError] = useState('');
+
+	const [email, setEmail] = useState(user ? user.email : null);
 	const [emailError, setEmailError] = useState('');
 
-	const updatedUser = {
-		username,
-		email,
-		id: loggedUser.id,
-		admin: loggedUser.admin,
-		areas: loggedUser.areas,
-	};
+	// const updateUser = (props) => {
+	// 	const userList = users;
+	// 	let userToUpdate = { ...props };
 
-	const updateUser = (props) => {
-		const userList = users;
-		let userToUpdate = { ...props };
+	// 	if (!email) return setEmailError('Sähköposti tarvitaan');
+	// 	else setEmailError('');
 
-		if (!username) setUsernameError('Käyttäjänimi tarvitaan');
-		else setUsernameError('');
-		if (!email) setEmailError('Sähköposti tarvitaan');
-		else setEmailError('');
-
-		userList.forEach((user, i) => {
-			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
-		});
-		setUsers([...userList]);
-		console.log(userList);
-	};
+	// 	userList.forEach((user, i) => {
+	// 		if (user.id === props.id) userList.splice(i, 1, userToUpdate);
+	// 	});
+	// 	setUsers([...userList]);
+	// 	console.log(userList);
+	// };
 
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti tallentaa tiedot?',
 		handleConfirm: () => {
-			updateUser(updatedUser);
-			setUsernameError('');
+			//   updateUser(updatedUser);
+			//   setUsernameError("");
 			setEmailError('');
 			setDelOpen(false);
 		},
@@ -91,15 +80,15 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 				<Paper sx={styles.paper}>
 					<Typography>Vaihda käyttäjänimi</Typography>
 					<FormControl sx={styles.form}>
-						<TextField
-							label='Käyttäjänimi'
-							defaultValue={loggedUser.username}
-							onChange={(e) => setUsername(e.target.value)}
-							required
-							error={!username}
-							helperText={usernameError}
-							variant='outlined'
-						/>
+						{/* <TextField
+              label="Käyttäjänimi"
+              defaultValue={loggedUser.username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              error={!username}
+              helperText={usernameError}
+              variant="outlined"
+            /> */}
 					</FormControl>
 				</Paper>
 				<Paper sx={styles.paper}>
@@ -107,7 +96,7 @@ const UserProfile = ({ loggedUser, users, setUsers }) => {
 					<FormControl sx={styles.form}>
 						<TextField
 							label='Sähköposti'
-							defaultValue={loggedUser.email}
+							defaultValue={email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
 							error={!email}

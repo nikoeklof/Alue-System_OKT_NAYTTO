@@ -11,6 +11,7 @@ import {
 	TablePagination,
 	Autocomplete,
 } from '@mui/material';
+import { InfinitySpin } from 'react-loader-spinner';
 
 import theme from './style/theme';
 import AreaMap from './AreaMap';
@@ -95,7 +96,7 @@ const AreaControl = () => {
 		cities.findIndex((city) => city.Kunta === defaultFilter)
 	);
 
-	const { loading, data } = useQuery(FILTERED_AREAS, {
+	const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
 		variables: { cityName: cityFilter },
 		onError: (e) => {
 			console.log(e);
@@ -189,6 +190,7 @@ const AreaControl = () => {
 					>
 						<AreaMap
 							areas={filteredAreas}
+							setAreas={setFilteredAreas}
 							selectedArea={selectedArea}
 							setSelectedArea={setSelectedArea}
 							clearSelected={clearSelected}
@@ -204,12 +206,12 @@ const AreaControl = () => {
 						md={6}
 						xs={12}
 					>
-						<Paper sx={styles.form}>
-							<TableContainer sx={{ maxHeight: 440 }}>
-								<Table stickyHeader>
-									<TableBody>
-										{filteredAreas ? (
-											filteredAreas
+						{filteredAreas ? (
+							<Paper sx={styles.form}>
+								<TableContainer sx={{ maxHeight: 440 }}>
+									<Table stickyHeader>
+										<TableBody>
+											{filteredAreas
 												.slice(
 													page * rowsPerPage,
 													page * rowsPerPage +
@@ -219,6 +221,7 @@ const AreaControl = () => {
 													<AreaTableRowComponent
 														key={area.id}
 														area={area}
+														cityFilter={cityFilter}
 														setSelectedArea={
 															setSelectedArea
 														}
@@ -229,25 +232,44 @@ const AreaControl = () => {
 															setHoverStatus
 														}
 														loanArea={loanArea}
+														refetch={refetch}
 													/>
-												))
-										) : (
-											<></>
-										)}
-									</TableBody>
-								</Table>
-							</TableContainer>
-							<TablePagination
-								rowsPerPageOptions={[5, 10, 25, 50, 100]}
-								component='div'
-								count={filteredAreas ? filteredAreas.length : 0}
-								rowsPerPage={rowsPerPage}
-								page={page}
-								labelRowsPerPage='Rivejä per sivu:'
-								onPageChange={handleChangePage}
-								onRowsPerPageChange={handleChangeRowsPerPage}
-							/>
-						</Paper>
+												))}
+										</TableBody>
+									</Table>
+								</TableContainer>
+								<TablePagination
+									rowsPerPageOptions={[5, 10, 25, 50, 100]}
+									component='div'
+									count={
+										filteredAreas ? filteredAreas.length : 1
+									}
+									rowsPerPage={rowsPerPage}
+									page={page}
+									labelRowsPerPage='Rivejä per sivu:'
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={
+										handleChangeRowsPerPage
+									}
+								/>
+							</Paper>
+						) : (
+							<div
+								style={{
+									marginLeft: '30%',
+									marginTop: '15%',
+									paddingBottom: '0px',
+								}}
+							>
+								<InfinitySpin
+									width='200'
+									color='gray'
+									wrapperStyle
+									wrapperClass
+									ariaLabel='loading'
+								/>
+							</div>
+						)}
 					</Grid>
 				</Grid>
 			</Container>

@@ -11,7 +11,7 @@ import {
 
 import theme from '../style/theme';
 import { useMutation } from '@apollo/client';
-import { ALL_AREAS, EDIT_AREA } from '../queries';
+import { EDIT_AREA, FILTERED_AREAS } from '../queries';
 
 const styles = {
 	modal: {
@@ -185,7 +185,7 @@ const EditAreaModal = ({ ...editProps }) => {
 								buildings: parseInt(buildingAmount),
 								misc: areaMiscInfo,
 							},
-							refetchQueries: [{ query: ALL_AREAS }],
+							refetchQueries: () => [{ query: FILTERED_AREAS }],
 							onError: (e) => {
 								console.log(e);
 							},

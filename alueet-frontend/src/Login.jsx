@@ -8,9 +8,12 @@ import {
 	TextField,
 	Paper,
 	Divider,
+	Alert,
 } from '@mui/material';
+import { LOGIN } from './queries';
 
 import theme from './style/theme';
+import { useMutation } from '@apollo/client';
 
 const styles = {
 	container: {
@@ -39,6 +42,10 @@ const styles = {
 		borderColor: theme.bgColor.secondary,
 		mb: 2,
 	},
+	alert: {
+		m: 0.5,
+		mb: 1,
+	},
 };
 
 const Login = () => {
@@ -46,19 +53,31 @@ const Login = () => {
 	const [password, setPassword] = useState('');
 	const [passwordError, setPasswordError] = useState('');
 	const [usernameError, setUsernameError] = useState('');
+	const [invalidCredentialsError, setInvalidCredentialsError] = useState('');
+	const [login] = useMutation(LOGIN);
 
-	const handleSubmit = () => {
-		const user = {
-			username: username,
-			password: password,
-		};
-
-		if (!password) setPasswordError('Tarvitaan salasana');
-		else setPasswordError('');
-		if (!username) setUsernameError('Tarvitaan käyttäjätunnus');
+	const handleSubmit = async () => {
+		if (username.length === 0)
+			return setUsernameError('Tarvitaan Sähköposti');
 		else setUsernameError('');
-
-		console.log(user);
+		if (password.length === 0)
+			return setPasswordError('Tarvitaan salasana');
+		else setPasswordError('');
+		login({
+			variables: { email: username, password: password },
+			onError: () => {
+				console.log(localStorage.getItem('token'));
+				return setInvalidCredentialsError(
+					'Tarkista sähköposti ja salasana'
+				);
+			},
+		}).then((res) => {
+			if (res.data !== undefined) {
+				setInvalidCredentialsError('');
+				return localStorage.setItem('token', res.data.login.value);
+			}
+			return;
+		});
 	};
 
 	return (
@@ -73,11 +92,25 @@ const Login = () => {
 						Kirjaudu sisään
 					</Typography>
 					<Divider sx={styles.divider} />
+					{invalidCredentialsError.length > 0 ? (
+						<Alert
+							severity='error'
+							sx={styles.alert}
+							icon={false}
+						>
+							{invalidCredentialsError}
+						</Alert>
+					) : (
+						<></>
+					)}
 					<FormControl>
 						<TextField
-							label='Käyttäjänimi'
+							label='Sähköposti'
 							variant='outlined'
-							onChange={(e) => setUsername(e.target.value)}
+							onChange={(e) => {
+								setUsername(e.target.value);
+								if (username.length === 0) setUsernameError('');
+							}}
 							required
 							error={!!usernameError}
 							helperText={usernameError}
@@ -88,7 +121,10 @@ const Login = () => {
 						<TextField
 							label='Salasana'
 							type='password'
-							onChange={(e) => setPassword(e.target.value)}
+							onChange={(e) => {
+								setPassword(e.target.value);
+								if (password.length === 0) setPasswordError('');
+							}}
 							required
 							error={!!passwordError}
 							helperText={passwordError}

@@ -9,9 +9,9 @@ import {
 	TextField,
 } from '@mui/material';
 
-import theme from '../style/theme';
-import { useMutation } from '@apollo/client';
-import { ALL_AREAS, EDIT_AREA } from '../queries';
+import theme from "../style/theme";
+import { useMutation } from "@apollo/client";
+import { EDIT_AREA, FILTERED_AREAS } from "../queries";
 
 const styles = {
 	modal: {
@@ -177,28 +177,28 @@ const EditAreaModal = ({ ...editProps }) => {
 							setAreaQuarterError('');
 						}
 
-						areaMutation({
-							variables: {
-								areaId: editProps.originalArea?.id,
-								quarter: areaQuarter,
-								address: areaAddress,
-								buildings: parseInt(buildingAmount),
-								misc: areaMiscInfo,
-							},
-							refetchQueries: [{ query: ALL_AREAS }],
-							onError: (e) => {
-								console.log(e);
-							},
-						}).then(() => {
-							handleClose();
-						});
-					}}
-				>
-					Valmis
-				</Button>
-			</Box>
-		</Modal>
-	);
+            areaMutation({
+              variables: {
+                areaId: editProps.originalArea?.id,
+                quarter: areaQuarter,
+                address: areaAddress,
+                buildings: parseInt(buildingAmount),
+                misc: areaMiscInfo,
+              },
+              refetchQueries: () => [{ query: FILTERED_AREAS }],
+              onError: (e) => {
+                console.log(e);
+              },
+            }).then(() => {
+              handleClose();
+            });
+          }}
+        >
+          Valmis
+        </Button>
+      </Box>
+    </Modal>
+  );
 };
 
 export default EditAreaModal;

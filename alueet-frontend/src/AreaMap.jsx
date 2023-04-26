@@ -3,17 +3,18 @@ import React from 'react';
 import { LeafletMap } from './components/LeafletMap';
 
 const AreaMap = ({
-	canEdit,
-	areas,
-	setSelectedArea,
-	selectedArea,
-	clearSelected,
-	layerContext,
-	setLayerContext,
-	hoverStatus,
-	cityIndex,
-	cities,
-	cityFilter,
+  canEdit,
+  areas,
+
+  setSelectedArea,
+  selectedArea,
+  clearSelected,
+  layerContext,
+  setLayerContext,
+  hoverStatus,
+  cityIndex,
+  cities,
+  cityFilter,
 }) => {
 	return (
 		<div>

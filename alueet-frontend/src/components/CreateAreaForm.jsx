@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import {
-	Alert,
-	Button,
-	Divider,
-	FormControl,
-	TextField,
-	Typography,
-	Autocomplete,
-} from '@mui/material';
-import { ALL_AREAS, CREATE_AREA, FILTERED_AREAS } from '../queries';
-import { useMutation } from '@apollo/client';
-import theme from '../style/theme';
+  Alert,
+  Button,
+  Divider,
+  FormControl,
+  TextField,
+  Typography,
+  Autocomplete,
+} from "@mui/material";
+import { CREATE_AREA } from "../queries";
+import { useMutation } from "@apollo/client";
+import theme from "../style/theme";
 
 const styles = {
 	subText: {
@@ -38,37 +38,40 @@ const styles = {
 };
 
 const CreateAreaForm = ({
-	layerContext,
-	cities,
-	cityFilter,
-	setCityFilter,
-	cityFilterInput,
-	setCityFilterInput,
+  layerContext,
+  setLayerContext,
+  cities,
+  cityFilter,
+  setCityFilter,
+  cityFilterInput,
+  setCityFilterInput,
+  refetch,
 }) => {
-	const [areaName, setAreaName] = useState('');
-	const [apartmentAmount, setApartmentAmount] = useState('');
+  const [areaName, setAreaName] = useState("");
+  const [apartmentAmount, setApartmentAmount] = useState("");
+  const [quarterName, setQuarterName] = useState("");
+  const [miscInfo, setMiscInfo] = useState("");
+  const [layer, setLayer] = useState(null);
+  const [areaNameError, setAreaNameError] = useState("");
+  const [areaBuildingsError, setAreaBuildingsError] = useState("");
+  const [areaCityError, setAreaCityError] = useState("");
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [createArea] = useMutation(CREATE_AREA);
 
-	const [quarterName, setQuarterName] = useState('');
-	const [miscInfo, setMiscInfo] = useState('');
-	const [layer, setLayer] = useState(null);
-	const [areaNameError, setAreaNameError] = useState('');
-	const [areaBuildingsError, setAreaBuildingsError] = useState('');
-	const [areaCityError, setAreaCityError] = useState('');
-	const [errorAlert, setErrorAlert] = useState(false);
-	const [successAlert, setSuccessAlert] = useState(false);
-	const [createArea] = useMutation(CREATE_AREA);
-
-	useEffect(() => {
-		if (layerContext) {
-			setLayer(layerContext);
-			setErrorAlert(false);
-			setSuccessAlert(true);
-		} else {
-			setLayer(null);
-			setErrorAlert(false);
-			setSuccessAlert(false);
-		}
-	}, [layerContext]);
+  useEffect(() => {
+    if (layer === layerContext) {
+      return;
+    }
+    if (layerContext !== null) {
+      setLayer(layerContext);
+      setErrorAlert(false);
+      setSuccessAlert(true);
+    } else {
+      setErrorAlert(false);
+      setSuccessAlert(false);
+    }
+  }, [layerContext, layer]);
 
 	const handleSubmit = () => {
 		if (!layer) setErrorAlert(true);
@@ -87,36 +90,36 @@ const CreateAreaForm = ({
 			setAreaBuildingsError('Asuntojen määrä on pakollinen');
 		else setAreaBuildingsError('');
 
-		if (areaName && apartmentAmount && cityFilter && layer) {
-			setSuccessAlert(false);
-			layerContext.layer.remove();
-			const parsedCoords = [];
-			layerContext?.coords.forEach((coord) => {
-				parsedCoords.push({
-					lat: coord.lat.toString(),
-					lng: coord.lng.toString(),
-				});
-			});
-			createArea({
-				variables: {
-					mapId: layerContext?.layer._leaflet_id,
-					address: areaName,
-					buildings: parseInt(apartmentAmount),
-					cityName: cityFilter,
-					latlngs: parsedCoords,
-					quarter: quarterName,
-					misc: miscInfo,
-				},
-				onError: (e) => {
-					console.log(e);
-				},
-				refetchQueries: [
-					{ query: ALL_AREAS },
-					{ query: FILTERED_AREAS },
-				],
-			});
-		}
-	};
+    if (areaName && apartmentAmount && cityFilter && layer) {
+      setSuccessAlert(false);
+      layerContext.layer.remove();
+      const parsedCoords = [];
+      layerContext?.coords.forEach((coord) => {
+        parsedCoords.push({
+          lat: coord.lat.toString(),
+          lng: coord.lng.toString(),
+        });
+      });
+      createArea({
+        variables: {
+          mapId: layerContext?.layer._leaflet_id,
+          address: areaName,
+          buildings: parseInt(apartmentAmount),
+          cityName: cityFilter,
+          latlngs: parsedCoords,
+          quarter: quarterName,
+          misc: miscInfo,
+        },
+        onError: (e) => {
+          console.log(e);
+        },
+        onCompleted: () => {
+          setLayerContext(null);
+          refetch({ cityName: cityFilter });
+        },
+      });
+    }
+  };
 
 	return (
 		<>

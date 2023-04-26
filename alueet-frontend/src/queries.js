@@ -27,69 +27,112 @@ export const ALL_GUESTS = gql`
 	}
 `;
 export const FILTERED_AREAS = gql`
-	query filteredAreas($cityName: String) {
-		allAreas(cityName: $cityName) {
-			id
-			info {
-				address
-				buildings
-				cityName
-				latlngs {
-					lat
-					lng
-				}
-				misc
-				quarter
-			}
-			shareHistory {
-				shareEndDate
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-			shareState {
-				isShared
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-		}
-	}
+  query filteredAreas($cityName: String) {
+    allAreas(cityName: $cityName) {
+      id
+      info {
+        address
+        buildings
+        cityName
+        latlngs {
+          lat
+          lng
+        }
+        misc
+        quarter
+      }
+      shareHistory {
+        shareEndDate
+        shareStartDate
+        sharedBy
+        sharedTo
+      }
+      shareState {
+        isShared
+        shareRequests
+        shareStartDate
+        sharedBy
+        sharedTo
+      }
+    }
+  }
 `;
 
 export const ALL_AREAS = gql`
-	query allAreas {
-		allAreas {
-			id
-			info {
-				misc
-				quarter
-				latlngs {
-					lat
-					lng
-				}
-				cityName
-				buildings
-				address
-			}
-			shareHistory {
-				shareEndDate
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-			shareState {
-				isShared
-				shareStartDate
-				sharedBy
-				sharedRequests {
-					id
-					email
-				}
-				sharedTo
-			}
-		}
-	}
+  query allAreas {
+    allAreas {
+      id
+      info {
+        misc
+        quarter
+        latlngs {
+          lat
+          lng
+        }
+        cityName
+        buildings
+        address
+      }
+      shareHistory {
+        shareEndDate
+        shareStartDate
+        sharedBy
+        sharedTo
+      }
+      shareState {
+        isShared
+        shareStartDate
+        sharedBy
+        shareRequests {
+          id
+          email
+        }
+        sharedTo
+      }
+    }
+  }
+`;
+export const ME = gql`
+  query me {
+    me {
+      aboutMe
+      admin
+      disabled
+      guestAccount {
+        id
+        email
+        areas {
+          id
+          info {
+            address
+            buildings
+            cityName
+            latlngs {
+              lat
+              lng
+            }
+            misc
+            quarter
+          }
+          shareState {
+            isShared
+            shareRequests
+            shareStartDate
+            sharedBy
+            sharedTo
+          }
+          shareHistory {
+            shareEndDate
+            shareStartDate
+            sharedBy
+            sharedTo
+          }
+        }
+      }
+      id
+      rank
+    }
+  }
 `;
 
 export const GUEST_COUNT = gql`
@@ -293,9 +336,9 @@ export const DELETE_AREA = gql`
 `;
 //needs testing
 export const LOGIN = gql`
-	mutation login($username: String!, $password: String!) {
-		login(usernmae: $username, password: $password) {
-			value
-		}
-	}
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      value
+    }
+  }
 `;

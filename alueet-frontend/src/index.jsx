@@ -20,28 +20,38 @@ const httpLink = new HttpLink({
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-	// add the authorization to the headers
+  // add the authorization to the headers
+  const token = localStorage.getItem("token");
 
-	operation.setContext(({ headers = {} }) => ({
-		headers: {
-			...headers,
+  if (!token || token === "") {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+      },
+    }));
+    return forward(operation);
+  }
 
-			authorization: localStorage.getItem('token') || null,
-		},
-	}));
+  operation.setContext(({ headers = {} }) => ({
+    headers: {
+      ...headers,
+
+      authorization: token,
+    },
+  }));
 
 	return forward(operation);
 });
 
 const client = new ApolloClient({
-	link: concat(authMiddleware, httpLink),
-	cache: new InMemoryCache(),
-	defaultOptions: {
-		watchQuery: {
-			fetchPolicy: 'network-only',
-			initialFetchPolicy: 'cache-and-network',
-		},
-	},
+  link: concat(authMiddleware, httpLink),
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: "network-only",
+      initialFetchPolicy: "network-only",
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(

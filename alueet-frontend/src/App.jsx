@@ -15,20 +15,29 @@ import UserProfile from './UserProfile';
 import LendList from './LendList';
 import { useQuery } from '@apollo/client';
 import { ALL_AREAS, ALL_USERS } from './queries';
+import Main from "./Main";
+import Login from "./Login";
+
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+import AreaControl from "./AreaControl";
+import UserControl from "./UserControl";
+import AreaCreate from "./components/AreaCreate";
+import UserProfile from "./UserProfile";
+import LendList from "./LendList";
+import { useQuery } from "@apollo/client";
+import { ME } from "./queries";
+
 const App = () => {
-	const { loading: loadingAreas, data: dataAreas } = useQuery(ALL_AREAS, {
-		onError: (e) => console.error(e),
-	});
-	const {
-		data: dataUsers,
-		loading: loadingUsers,
-		refetch: refetchUsers,
-	} = useQuery(ALL_USERS, {
-		onError: (e) => console.error(e),
-	});
-	const [areas, setAreas] = useState(null);
-	const [users, setUsers] = useState(null);
-	const [layerContext, setLayerContext] = useState(null);
+  const [users, setUsers] = useState(initialUsers);
+  const { data, loading } = useQuery(ME);
+  const user = {
+    id: data?.me.guestAccount.id,
+    admin: data?.me.admin,
+    aboutMe: data?.me.aboutMe,
+    email: data?.me.guestAccount.email,
+    areas: data?.me.guestAccount.areas,
+  };
 
 	const addArea = (props) => {
 		setAreas([...areas, props]);
@@ -40,10 +49,10 @@ const App = () => {
 		setUsers(dataUsers?.allUsers);
 	}, [loadingUsers, dataUsers]);
 
-	return (
-		<Router>
-			<Container>
-				<NavBar />
+  return (
+    <Router>
+      <Container>
+        <NavBar user={user} />
 
 				<Routes>
 					<Route
@@ -55,103 +64,28 @@ const App = () => {
 						element={<Login />}
 					/>
 
-					<Route
-						path='/areaControl'
-						element={
-							!areas ? (
-								<div
-									style={{
-										position: 'absolute',
-										top: '50%',
-										left: '45%',
-									}}
-								>
-									<InfinitySpin
-										width='200'
-										color='gray'
-										ariaLabel='loading'
-										wrapperStyle
-										wrapperClass
-									/>
-								</div>
-							) : (
-								<AreaControl
-									areas={areas}
-									setAreas={setAreas}
-								/>
-							)
-						}
-					/>
-					<Route
-						path='/userControl'
-						element={
-							!users ? (
-								<div
-									style={{
-										position: 'absolute',
-										top: '50%',
-										left: '45%',
-									}}
-								>
-									<InfinitySpin
-										width='200'
-										color='gray'
-										ariaLabel='loading'
-										wrapperStyle
-										wrapperClass
-									/>
-								</div>
-							) : (
-								<UserControl
-									users={users}
-									setUsers={setUsers}
-									refetch={refetchUsers}
-								/>
-							)
-						}
-					/>
-					<Route
-						path='/createArea'
-						element={
-							!areas ? (
-								<div
-									style={{
-										position: 'absolute',
-										top: '50%',
-										left: '45%',
-									}}
-								>
-									<InfinitySpin
-										width='200'
-										color='gray'
-										ariaLabel='loading'
-										wrapperStyle
-										wrapperClass
-									/>
-								</div>
-							) : (
-								<AreaCreate
-									areas={areas}
-									addArea={addArea}
-									setLayerContext={setLayerContext}
-									layerContext={layerContext}
-								/>
-							)
-						}
-					/>
-					<Route
-						path='/lendList'
-						element={<LendList />}
-					/>
-					<Route
-						path='/userProfile'
-						element={<UserProfile />}
-					/>
-				</Routes>
-				<Footer />
-			</Container>
-		</Router>
-	);
+          <Route path="/areaControl" element={<AreaControl />} />
+          <Route
+            path="/userControl"
+            element={
+              <UserControl
+                users={users}
+                addUser={addUser}
+                setUsers={setUsers}
+              />
+            }
+          />
+          <Route path="/createArea" element={<AreaCreate />} />
+          <Route path="/lendList" element={<LendList users={users} />} />
+          <Route
+            path="/userProfile"
+            element={<UserProfile user={!loading ? user : null} />}
+          />
+        </Routes>
+        <Footer />
+      </Container>
+    </Router>
+  );
 };
 
 export default App;

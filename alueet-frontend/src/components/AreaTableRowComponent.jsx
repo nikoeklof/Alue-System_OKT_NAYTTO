@@ -1,18 +1,18 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect } from 'react';
 import {
-  Grid,
-  Typography,
-  Button,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  Collapse,
-  Box,
-} from "@mui/material";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+	Grid,
+	Typography,
+	Button,
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
+	IconButton,
+	Collapse,
+	Box,
+} from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 import DeleteWarningModal from "./DeleteWarningModal";
 import EditAreaModal from "./EditAreaModal";
@@ -98,25 +98,25 @@ const AreaTableRowComponent = ({
   refetch,
   cityFilter,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [openDel, setOpenDel] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openLend, setOpenLend] = useState(false);
-  const [openReturn, setOpenReturn] = useState(false);
-  const scrollRef = useRef(null);
-  const [deleteArea] = useMutation(DELETE_AREA);
-  const loaned = area.loaned;
+	const [open, setOpen] = useState(false);
+	const [openDel, setOpenDel] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
+	const [openLend, setOpenLend] = useState(false);
+	const [openReturn, setOpenReturn] = useState(false);
+	const scrollRef = useRef(null);
+	const [deleteArea] = useMutation(DELETE_AREA);
+	const loaned = area.loaned;
 
-  useEffect(() => {
-    if (area.id !== selectedArea?.id) {
-      setOpen(false);
-    } else {
-      setOpen(true);
-      setTimeout(() => {
-        scrollRef.current?.scrollIntoView(true, { behavior: "smooth" });
-      }, 250);
-    }
-  }, [area.id, selectedArea?.id]);
+	useEffect(() => {
+		if (area.id !== selectedArea?.id) {
+			setOpen(false);
+		} else {
+			setOpen(true);
+			setTimeout(() => {
+				scrollRef.current?.scrollIntoView(true, { behavior: 'smooth' });
+			}, 250);
+		}
+	}, [area.id, selectedArea?.id]);
 
   const delProps = {
     openDel,
@@ -132,16 +132,16 @@ const AreaTableRowComponent = ({
     openEdit,
     handleCloseEditModal: () => setOpenEdit(false),
 
-    originalArea: area,
-  };
-  const lendProps = {
-    openLend,
-    handleCloseLendModal: () => setOpenLend(false),
-  };
-  const returnProps = {
-    openReturn,
-    handleCloseReturnModal: () => setOpenReturn(false),
-  };
+		originalArea: area,
+	};
+	const lendProps = {
+		openLend,
+		handleCloseLendModal: () => setOpenLend(false),
+	};
+	const returnProps = {
+		openReturn,
+		handleCloseReturnModal: () => setOpenReturn(false),
+	};
 
   if (area) {
     return (
@@ -241,34 +241,34 @@ const AreaTableRowComponent = ({
                         : "Lainaa alue"}
                     </Button>
 
-                    <Button
-                      variant="contained"
-                      sx={styles.areaButton}
-                      onClick={() => {
-                        setOpenEdit(true);
-                      }}
-                    >
-                      Muokkaa tietoja
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={styles.areaButton}
-                      onClick={() => setOpenDel(true)}
-                    >
-                      Poista alue
-                    </Button>
-                  </Grid>
-                </Box>
-              </Collapse>
-            </TableCell>
-          </TableRow>
-        </Fragment>
-        <DeleteWarningModal {...delProps} />
-        <EditAreaModal {...editProps} />
-        <LendAreaModal {...lendProps} />
-        <ReturnAreaModal {...returnProps} />
-      </>
-    );
-  }
+										<Button
+											variant='contained'
+											sx={styles.areaButton}
+											onClick={() => {
+												setOpenEdit(true);
+											}}
+										>
+											Muokkaa tietoja
+										</Button>
+										<Button
+											variant='contained'
+											sx={styles.areaButton}
+											onClick={() => setOpenDel(true)}
+										>
+											Poista alue
+										</Button>
+									</Grid>
+								</Box>
+							</Collapse>
+						</TableCell>
+					</TableRow>
+				</Fragment>
+				<DeleteWarningModal {...delProps} />
+				<EditAreaModal {...editProps} />
+				<LendAreaModal {...lendProps} />
+				<ReturnAreaModal {...returnProps} />
+			</>
+		);
+	}
 };
 export default AreaTableRowComponent;

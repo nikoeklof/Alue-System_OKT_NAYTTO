@@ -1,22 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
 import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-  concat,
-  ApolloLink,
-} from "@apollo/client";
+	ApolloClient,
+	ApolloProvider,
+	HttpLink,
+	InMemoryCache,
+	concat,
+	ApolloLink,
+} from '@apollo/client';
 
 // Remember to include these two stylesheets for leaflet and leaflet-draw
-import "leaflet/dist/leaflet.css";
-import "leaflet-draw/dist/leaflet.draw.css";
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-draw/dist/leaflet.draw.css';
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:3001",
+	uri: 'http://localhost:3001',
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -40,7 +40,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
     },
   }));
 
-  return forward(operation);
+	return forward(operation);
 });
 
 const client = new ApolloClient({
@@ -54,8 +54,8 @@ const client = new ApolloClient({
   },
 });
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<ApolloProvider client={client}>
+		<App />
+	</ApolloProvider>
 );

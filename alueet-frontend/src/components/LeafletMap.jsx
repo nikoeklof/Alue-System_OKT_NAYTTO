@@ -5,15 +5,15 @@ import PolygonLayer from "./PolygonLayer";
 import { cities } from "../db/cities";
 
 export const LeafletMap = ({
-  areas,
-  setSelectedArea,
-  selectedArea,
-  clearSelected,
-  setLayerContext,
-  canEdit,
-  hoverStatus,
-  cityIndex,
-  cityFilter,
+	areas,
+	setSelectedArea,
+	selectedArea,
+	clearSelected,
+	setLayerContext,
+	canEdit,
+	hoverStatus,
+	cityIndex,
+	cityFilter,
 }) => {
   const [cityCoords, setCityCoords] = useState(
     cityIndex !== -1 || cityIndex !== undefined
@@ -21,11 +21,14 @@ export const LeafletMap = ({
       : [cities[0]?.Latitude, cities[0]?.Longitude]
   );
 
-  useEffect(() => {
-    if (cityIndex !== -1) {
-      setCityCoords([cities[cityIndex].Latitude, cities[cityIndex].Longitude]);
-    }
-  }, [cityIndex]);
+	useEffect(() => {
+		if (cityIndex !== -1) {
+			setCityCoords([
+				cities[cityIndex].Latitude,
+				cities[cityIndex].Longitude,
+			]);
+		}
+	}, [cityIndex]);
 
   return (
     <div>
@@ -98,5 +101,5 @@ const SetViewOnCityIndexChange = ({
     }
   }, [cityFilter, cityIndex, coords, map, cities]);
 
-  return;
+	return;
 };

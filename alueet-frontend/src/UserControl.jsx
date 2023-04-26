@@ -17,6 +17,15 @@ import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
 
 import theme from './style/theme';
+import { useMutation } from '@apollo/client';
+import {
+	TOGGLE_USER_ADMIN,
+	EDIT_GUEST,
+	CREATE_GUEST,
+	CREATE_USER,
+	DELETE_USER,
+	DELETE_GUEST,
+} from './queries';
 
 const styles = {
 	container: {
@@ -42,11 +51,6 @@ const styles = {
 
 const columns = [
 	{
-		id: 'name',
-		label: 'Nimi',
-		minWidth: 120,
-	},
-	{
 		id: 'email',
 		label: 'Sähköposti',
 		minWidth: 170,
@@ -65,10 +69,28 @@ const columns = [
 	},
 ];
 
-const UserControl = ({ users, addUser, setUsers }) => {
+const UserControl = ({ users, refetch }) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
+	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
+		onError: (e) => console.error(e),
+	});
+	const [editGuest] = useMutation(EDIT_GUEST, {
+		onError: (e) => console.error(e),
+	});
+	const [createGuest] = useMutation(CREATE_GUEST, {
+		onError: (e) => console.error(e),
+	});
+	const [createUser] = useMutation(CREATE_USER, {
+		onError: (e) => console.error(e),
+	});
+	const [deleteGuest] = useMutation(DELETE_GUEST, {
+		onError: (e) => console.error(e),
+	});
+	const [deleteUser] = useMutation(DELETE_USER, {
+		onError: (e) => console.error(e),
+	});
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -79,21 +101,36 @@ const UserControl = ({ users, addUser, setUsers }) => {
 		setPage(0);
 	};
 
-	const updateUser = (props) => {
-		const userList = users;
-		let userToUpdate = { ...props };
-		userList.forEach((user, i) => {
-			if (user.id === props.id) userList.splice(i, 1, userToUpdate);
+	const updateUser = async (user) => {
+		const { userId, guestId, email } = user;
+		await toggleUserAdmin({
+			variables: { userId: userId },
 		});
-		setUsers([...userList]);
+		await editGuest({
+			variables: {
+				email: email,
+				guestId: guestId,
+			},
+		});
+		refetch();
 	};
 
-	const removeUser = (props) => {
-		const userList = [];
-		users.forEach((user) => {
-			if (user.id !== props.id) userList.push(user);
+	const addUser = async (user) => {
+		const { email, password } = user;
+		await createGuest({ variables: { email: email } });
+		await createUser({ variables: { password: password, email: email } });
+		refetch();
+	};
+
+	const removeUser = async (user) => {
+		const userId = user.id;
+		const guestId = user.guestAccount.id;
+		const email = user.guestAccount.id;
+		await deleteGuest({ variables: { guestId: guestId, email: email } });
+		await deleteUser({
+			variables: { userId: userId, email: email, guestId: guestId },
 		});
-		setUsers([...userList]);
+		refetch();
 	};
 
 	const createProps = {

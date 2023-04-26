@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { LeafletMap } from "./components/LeafletMap";
+import { LeafletMap } from './components/LeafletMap';
 
 const AreaMap = ({
   canEdit,
@@ -16,24 +16,24 @@ const AreaMap = ({
   cities,
   cityFilter,
 }) => {
-  return (
-    <div>
-      <LeafletMap
-        selectedArea={selectedArea}
-        setSelectedArea={setSelectedArea}
-        cities={cities}
-        cityIndex={cityIndex}
-        areas={areas ? areas : null}
-        addArea={canEdit}
-        layerContext={canEdit ? layerContext : null}
-        setLayerContext={canEdit ? setLayerContext : null}
-        canEdit={canEdit}
-        clearSelected={clearSelected}
-        hoverStatus={hoverStatus}
-        cityFilter={cityFilter}
-      />
-    </div>
-  );
+	return (
+		<div>
+			<LeafletMap
+				selectedArea={selectedArea}
+				setSelectedArea={setSelectedArea}
+				cities={cities}
+				cityIndex={cityIndex}
+				areas={areas ? areas : null}
+				addArea={canEdit}
+				layerContext={canEdit ? layerContext : null}
+				setLayerContext={canEdit ? setLayerContext : null}
+				canEdit={canEdit}
+				clearSelected={clearSelected}
+				hoverStatus={hoverStatus}
+				cityFilter={cityFilter}
+			/>
+		</div>
+	);
 };
 
 export default AreaMap;

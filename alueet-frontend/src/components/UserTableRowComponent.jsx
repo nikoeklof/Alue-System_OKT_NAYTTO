@@ -27,7 +27,6 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 	const [open, setOpen] = useState(false);
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
-
 	const areaArray = [];
 
 	for (const area in user.areas) {
@@ -65,8 +64,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 							{open ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>
 					</TableCell>
-					<TableCell>{user.username}</TableCell>
-					<TableCell>{user.email}</TableCell>
+					<TableCell>{user.guestAccount.email}</TableCell>
 					<TableCell align='right'>
 						{user.admin ? 'Kyllä' : 'Ei'}
 					</TableCell>

@@ -80,10 +80,10 @@ const UserControl = ({ users, refetch }) => {
 		onError: (e) => console.error(e),
 	});
 	const [createGuest] = useMutation(CREATE_GUEST, {
-		onError: (e) => console.error(e),
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [createUser] = useMutation(CREATE_USER, {
-		onError: (e) => console.error(e),
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [deleteGuest] = useMutation(DELETE_GUEST, {
 		onError: (e) => console.error(e),

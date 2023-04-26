@@ -43,42 +43,29 @@ const styles = {
 };
 
 const EditUserModal = ({ ...editProps }) => {
-	const [username, setUsername] = useState(editProps.originalUser?.username);
-	const [email, setEmail] = useState(editProps.originalUser?.email);
+	const [email, setEmail] = useState(
+		editProps.originalUser?.guestAccount.email
+	);
 	const [admin, setAdmin] = useState(editProps.originalUser?.admin);
-	const [usernameError, setUsernameError] = useState('');
 	const [emailError, setEmailError] = useState('');
 
 	const handleClose = () => {
-		setUsernameError('');
 		setEmailError('');
 		editProps.handleEditModalClose();
 	};
 
 	const handleSubmit = () => {
 		const newUser = {
-			id: editProps.originalUser.id,
-			username,
+			userId: editProps.originalUser.id,
+			guestId: editProps.originalUser.guestAccount.id,
 			email,
-			admin,
-			areas: editProps.originalUser.areas,
 		};
 
-		if (!email || !newUser.email) setEmailError('Sähköposti on pakollinen');
+		if (!email) setEmailError('Sähköposti on pakollinen');
 		else setEmailError('');
-		if (newUser.admin || admin) {
-			if (!username || !newUser.username)
-				setUsernameError('Käyttäjänimi on pakollinen');
-			else setUsernameError('');
-		}
 
-		if (newUser.email && !newUser.admin) {
+		if (email) {
 			editProps.handleConfirm(newUser);
-			handleClose();
-		}
-		if (newUser.email && newUser.username && newUser.admin) {
-			editProps.handleConfirm(newUser);
-			setUsernameError('');
 			setEmailError('');
 			handleClose();
 		}
@@ -100,25 +87,12 @@ const EditUserModal = ({ ...editProps }) => {
 				</Typography>
 				<FormGroup>
 					<FormControl>
-						{admin ? (
-							<TextField
-								label='Käyttäjänimi'
-								variant='outlined'
-								defaultValue={editProps.originalUser?.username}
-								onChange={(e) => setUsername(e.target.value)}
-								required
-								error={!username}
-								helperText={usernameError}
-								sx={styles.input}
-							/>
-						) : (
-							''
-						)}
-
 						<TextField
 							label='Sähköposti'
 							variant='outlined'
-							defaultValue={editProps.originalUser?.email}
+							defaultValue={
+								editProps.originalUser?.guestAccount.email
+							}
 							onChange={(e) => setEmail(e.target.value)}
 							required
 							error={!email}

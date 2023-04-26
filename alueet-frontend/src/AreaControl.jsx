@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Grid,
-  Typography,
-  Paper,
-  TableContainer,
-  Table,
-  TableBody,
-  TextField,
-  TablePagination,
-  Autocomplete,
-} from "@mui/material";
-import { InfinitySpin } from "react-loader-spinner";
+	Container,
+	Grid,
+	Typography,
+	Paper,
+	TableContainer,
+	Table,
+	TableBody,
+	TextField,
+	TablePagination,
+	Autocomplete,
+} from '@mui/material';
+import { InfinitySpin } from 'react-loader-spinner';
 
 import theme from './style/theme';
 import AreaMap from './AreaMap';
@@ -96,12 +96,12 @@ const AreaControl = () => {
 		cities.findIndex((city) => city.Kunta === defaultFilter)
 	);
 
-  const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
-    variables: { cityName: cityFilter },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+	const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
+		variables: { cityName: cityFilter },
+		onError: (e) => {
+			console.log(e);
+		},
+	});
 
 	const [makeAreaRequest] = useMutation(MAKE_REQUEST, {
 		onError: (e) => {
@@ -178,81 +178,103 @@ const AreaControl = () => {
 				)}
 			/>
 
-      <Container xs={styles.areas}>
-        <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
-            <AreaMap
-              areas={filteredAreas}
-              setAreas={setFilteredAreas}
-              selectedArea={selectedArea}
-              setSelectedArea={setSelectedArea}
-              clearSelected={clearSelected}
-              cityIndex={cityIndex}
-              canEdit={false}
-              cityFilter={cityFilter}
-              hoverStatus={hoverStatus}
-              cities={cities}
-            />
-          </Grid>
-          <Grid item md={6} xs={12}>
-            {filteredAreas ? (
-              <Paper sx={styles.form}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                  <Table stickyHeader>
-                    <TableBody>
-                      {filteredAreas
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                        .map((area) => (
-                          <AreaTableRowComponent
-                            key={area.id}
-                            area={area}
-                            cityFilter={cityFilter}
-                            setSelectedArea={setSelectedArea}
-                            selectedArea={selectedArea}
-                            setHoverStatus={setHoverStatus}
-                            loanArea={loanArea}
-                            refetch={refetch}
-                          />
-                        ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                  component="div"
-                  count={filteredAreas ? filteredAreas.length : 1}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  labelRowsPerPage="Rivejä per sivu:"
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </Paper>
-            ) : (
-              <div
-                style={{
-                  marginLeft: "30%",
-                  marginTop: "15%",
-                  paddingBottom: "0px",
-                }}
-              >
-                <InfinitySpin
-                  width="200"
-                  color="gray"
-                  wrapperStyle
-                  wrapperClass
-                  ariaLabel="loading"
-                />
-              </div>
-            )}
-          </Grid>
-        </Grid>
-      </Container>
-    </Container>
-  );
+			<Container xs={styles.areas}>
+				<Grid
+					container
+					spacing={3}
+				>
+					<Grid
+						item
+						md={6}
+						xs={12}
+					>
+						<AreaMap
+							areas={filteredAreas}
+							setAreas={setFilteredAreas}
+							selectedArea={selectedArea}
+							setSelectedArea={setSelectedArea}
+							clearSelected={clearSelected}
+							cityIndex={cityIndex}
+							canEdit={false}
+							cityFilter={cityFilter}
+							hoverStatus={hoverStatus}
+							cities={cities}
+						/>
+					</Grid>
+					<Grid
+						item
+						md={6}
+						xs={12}
+					>
+						{filteredAreas ? (
+							<Paper sx={styles.form}>
+								<TableContainer sx={{ maxHeight: 440 }}>
+									<Table stickyHeader>
+										<TableBody>
+											{filteredAreas
+												.slice(
+													page * rowsPerPage,
+													page * rowsPerPage +
+														rowsPerPage
+												)
+												.map((area) => (
+													<AreaTableRowComponent
+														key={area.id}
+														area={area}
+														cityFilter={cityFilter}
+														setSelectedArea={
+															setSelectedArea
+														}
+														selectedArea={
+															selectedArea
+														}
+														setHoverStatus={
+															setHoverStatus
+														}
+														loanArea={loanArea}
+														refetch={refetch}
+													/>
+												))}
+										</TableBody>
+									</Table>
+								</TableContainer>
+								<TablePagination
+									rowsPerPageOptions={[5, 10, 25, 50, 100]}
+									component='div'
+									count={
+										filteredAreas ? filteredAreas.length : 1
+									}
+									rowsPerPage={rowsPerPage}
+									page={page}
+									labelRowsPerPage='Rivejä per sivu:'
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={
+										handleChangeRowsPerPage
+									}
+								/>
+							</Paper>
+						) : (
+							<div
+								style={{
+									marginLeft: '30%',
+									marginTop: '15%',
+									paddingBottom: '0px',
+								}}
+							>
+								<InfinitySpin
+									width='200'
+									color='gray'
+									wrapperStyle
+									wrapperClass
+									ariaLabel='loading'
+								/>
+							</div>
+						)}
+					</Grid>
+				</Grid>
+			</Container>
+		</Container>
+	);
 };
 
 export default AreaControl;

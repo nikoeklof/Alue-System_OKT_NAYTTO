@@ -64,27 +64,27 @@ const styles = {
 };
 
 const AreaCreate = () => {
-  const [areas, setAreas] = useState(undefined);
-  const [layerContext, setLayerContext] = useState(null);
-  const defaultFilter = localStorage.getItem("defaultFilter");
-  if (!defaultFilter) localStorage.setItem("defaultFilter", "Mikkeli");
-  const [cityIndex, setCityIndex] = useState(
-    cities.findIndex((city) => city.Kunta === defaultFilter)
-  );
-  const [cityFilter, setCityFilter] = useState(
-    defaultFilter ? defaultFilter : cities[0].Kunta
-  );
-  const [cityFilterInput, setCityFilterInput] = useState("");
-  const { data, loading, error, refetch } = useQuery(FILTERED_AREAS, {
-    variables: { cityName: cityFilter ? cityFilter : defaultFilter },
-    onError: (e) => {
-      console.log(error);
-    },
-  });
+	const [areas, setAreas] = useState(undefined);
+	const [layerContext, setLayerContext] = useState(null);
+	const defaultFilter = localStorage.getItem('defaultFilter');
+	if (!defaultFilter) localStorage.setItem('defaultFilter', 'Mikkeli');
+	const [cityIndex, setCityIndex] = useState(
+		cities.findIndex((city) => city.Kunta === defaultFilter)
+	);
+	const [cityFilter, setCityFilter] = useState(
+		defaultFilter ? defaultFilter : cities[0].Kunta
+	);
+	const [cityFilterInput, setCityFilterInput] = useState('');
+	const { data, loading, error, refetch } = useQuery(FILTERED_AREAS, {
+		variables: { cityName: cityFilter ? cityFilter : defaultFilter },
+		onError: () => {
+			console.log(error);
+		},
+	});
 
-  useEffect(() => {
-    setAreas(data?.allAreas);
-  }, [data, loading, refetch]);
+	useEffect(() => {
+		setAreas(data?.allAreas);
+	}, [data, loading, refetch]);
 
 	useEffect(() => {
 		setCityIndex(cities.findIndex((city) => city.Kunta === cityFilter));
@@ -99,37 +99,48 @@ const AreaCreate = () => {
 				Alueen luonti
 			</Typography>
 
-      <Container xs={styles.areas}>
-        <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
-            <AreaMap
-              areas={areas}
-              layerContext={layerContext}
-              setLayerContext={setLayerContext}
-              canEdit={true}
-              cities={cities}
-              cityIndex={cityIndex}
-              cityFilter={cityFilter}
-            />
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <CreateAreaForm
-              layerContext={layerContext}
-              setLayerContext={setLayerContext}
-              defaultFilter={defaultFilter}
-              cities={cities}
-              cityFilter={cityFilter}
-              setCityFilter={setCityFilter}
-              cityFilterInput={cityFilterInput}
-              setCityFilterInput={setCityFilterInput}
-              setCityIndex={setCityIndex}
-              refetch={refetch}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-    </Container>
-  );
+			<Container xs={styles.areas}>
+				<Grid
+					container
+					spacing={3}
+				>
+					<Grid
+						item
+						md={6}
+						xs={12}
+					>
+						<AreaMap
+							areas={areas}
+							layerContext={layerContext}
+							setLayerContext={setLayerContext}
+							canEdit={true}
+							cities={cities}
+							cityIndex={cityIndex}
+							cityFilter={cityFilter}
+						/>
+					</Grid>
+					<Grid
+						item
+						md={6}
+						xs={12}
+					>
+						<CreateAreaForm
+							layerContext={layerContext}
+							setLayerContext={setLayerContext}
+							defaultFilter={defaultFilter}
+							cities={cities}
+							cityFilter={cityFilter}
+							setCityFilter={setCityFilter}
+							cityFilterInput={cityFilterInput}
+							setCityFilterInput={setCityFilterInput}
+							setCityIndex={setCityIndex}
+							refetch={refetch}
+						/>
+					</Grid>
+				</Grid>
+			</Container>
+		</Container>
+	);
 };
 
 export default AreaCreate;

@@ -44,8 +44,6 @@ const styles = {
 
 const CreateUserModal = ({ ...createProps }) => {
 	const [admin, setAdmin] = useState(false);
-	const [guest, setGuest] = useState(false);
-	const [ready, setReady] = useState(true);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [emailError, setEmailError] = useState('');
@@ -57,8 +55,6 @@ const CreateUserModal = ({ ...createProps }) => {
 		setEmail('');
 		setPassword('');
 		setAdmin(false);
-		setGuest(false);
-		setReady(true);
 		createProps.handleCreateModalClose();
 	};
 
@@ -68,38 +64,16 @@ const CreateUserModal = ({ ...createProps }) => {
 		if (!email) setEmailError('Sähköposti on pakollinen');
 		else setEmailError('');
 
-		if (admin) {
-			const user = {
-				admin,
-				email,
-				password,
-				areas: {},
-			};
-			createProps.addUser(user);
-			handleClose();
-		} else {
-			const user = {
-				admin: false,
-				email,
-				areas: {},
-			};
-			createProps.addUser(user);
-			handleClose();
-		}
+		const user = {
+			email,
+			password,
+		};
+		createProps.addUser(user);
+		handleClose();
 	};
 
 	const handleChangeAdmin = () => {
-		setEmail('');
-		setPassword('');
 		setAdmin(!admin);
-		setReady(!ready);
-	};
-
-	const handleChangeGuest = () => {
-		setEmail('');
-		setPassword('');
-		setGuest(!guest);
-		setReady(!ready);
 	};
 
 	return (
@@ -118,68 +92,31 @@ const CreateUserModal = ({ ...createProps }) => {
 				</Typography>
 				<FormGroup>
 					<FormControl>
+						<TextField
+							label='Sähköposti'
+							variant='outlined'
+							type='email'
+							onChange={(e) => setEmail(e.target.value)}
+							required
+							error={!email}
+							helperText={emailError}
+							sx={styles.input}
+						/>
+						<TextField
+							label='Salasana'
+							variant='outlined'
+							type='password'
+							onChange={(e) => setPassword(e.target.value)}
+							required
+							error={!password}
+							helperText={passwordError}
+							sx={styles.input}
+						/>
 						<FormControlLabel
-							control={
-								<Switch
-									disabled={guest}
-									onChange={handleChangeAdmin}
-								/>
-							}
+							control={<Switch onChange={handleChangeAdmin} />}
 							label='Admin'
 							sx={styles.input}
 						/>
-						<FormControlLabel
-							control={
-								<Switch
-									disabled={admin}
-									onChange={handleChangeGuest}
-								/>
-							}
-							label='Vieras'
-							sx={styles.input}
-						/>
-						{admin ? (
-							<>
-								<TextField
-									label='Sähköposti'
-									variant='outlined'
-									type='email'
-									onChange={(e) => setEmail(e.target.value)}
-									required
-									error={!email}
-									helperText={emailError}
-									sx={styles.input}
-								/>
-								<TextField
-									label='Salasana'
-									variant='outlined'
-									type='password'
-									onChange={(e) =>
-										setPassword(e.target.value)
-									}
-									required
-									error={!password}
-									helperText={passwordError}
-									sx={styles.input}
-								/>
-							</>
-						) : (
-							''
-						)}
-						{guest ? (
-							<TextField
-								label='Sähköposti'
-								variant='outlined'
-								type='email'
-								onChange={(e) => setEmail(e.target.value)}
-								required
-								error={!email}
-								helperText={emailError}
-								sx={styles.input}
-							/>
-						) : (
-							''
-						)}
 					</FormControl>
 				</FormGroup>
 				<Button
@@ -190,7 +127,6 @@ const CreateUserModal = ({ ...createProps }) => {
 					Peruuta
 				</Button>
 				<Button
-					disabled={ready}
 					sx={styles.button}
 					variant='contained'
 					onClick={() => handleSubmit()}

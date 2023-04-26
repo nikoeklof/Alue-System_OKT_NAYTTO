@@ -2,15 +2,12 @@ import { gql } from '@apollo/client';
 
 //  -----  querys  -----
 export const ALL_USERS = gql`
-	query allUsers($disabled: Boolean, $admin: Boolean) {
-		allUsers(disabled: $disabled, admin: $admin) {
+	query allUsers($admin: Boolean) {
+		allUsers(admin: $admin) {
 			id
-			username
 			admin
 			guestAccount {
 				email
-				name
-				areas
 			}
 		}
 	}
@@ -21,8 +18,6 @@ export const ALL_GUESTS = gql`
 		allGuests {
 			id
 			email
-			name
-			areas
 		}
 	}
 `;
@@ -82,10 +77,7 @@ export const ALL_AREAS = gql`
 				isShared
 				shareStartDate
 				sharedBy
-				sharedRequests {
-					id
-					email
-				}
+				sharedRequests
 				sharedTo
 			}
 		}

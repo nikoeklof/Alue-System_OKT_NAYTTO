@@ -7,6 +7,7 @@ export const ALL_USERS = gql`
 			id
 			admin
 			guestAccount {
+				id
 				email
 			}
 		}
@@ -150,10 +151,9 @@ export const USER_COUNT = gql`
 
 //  -----  mutations  -----
 export const CREATE_GUEST = gql`
-	mutation createGuest($email: String!, $name: String!) {
-		createGuest(email: $email, name: $name) {
+	mutation createGuest($email: String!) {
+		createGuest(email: $email) {
 			email
-			name
 		}
 	}
 `;
@@ -188,20 +188,12 @@ export const MAKE_REQUEST = gql`
 `;
 
 export const CREATE_USER = gql`
-	mutation createUser(
-		$username: String!
-		$password: String!
-		$guestId: String!
-	) {
-		createUser(
-			username: $username
-			password: $password
-			guestId: $guestId
-		) {
-			username
+	mutation createUser($password: String!, $email: String!) {
+		createUser(password: $password, email: $email) {
+			id
 			guestAccount {
 				email
-				name
+				id
 			}
 		}
 	}

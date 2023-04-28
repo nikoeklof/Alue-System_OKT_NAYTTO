@@ -91,7 +91,7 @@ module.exports = {
 					'Password must have at least minimum 5 letters'
 				);
 
-			user.security.password = await bcrypt.hash(args.password, 10);
+			user.password = await bcrypt.hash(args.password, 10);
 
 			return user.save().catch((error) => {
 				throw new UserInputError(error.message, {
@@ -122,6 +122,39 @@ module.exports = {
 				return await User.findOneAndDelete({ email: args.email })
 
 			throw new UserInputError('At least 1 argument is required')
+		},
+
+		editUserEmailAsAdmin: async (root, args, contextValue) => {
+			contextCheck(contextValue.authUser, 2)
+
+			const user = await User.findById(args.userId)
+
+			user.email = args.email
+
+			return user.save().catch((error) => {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				});
+			});
+		},
+
+		editUserPasswordAsAdmin: async (root, args, contextValue) => {
+			contextCheck(contextValue.authUser, 2)
+
+			const user = await User.findById(args.userId)
+
+			if (args.password.length < 5)
+				throw new UserInputError(
+					'Password must have at least minimum 5 letters'
+				);
+
+			user.password = await bcrypt.hash(args.password, 10);
+
+			return user.save().catch((error) => {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				});
+			});
 		},
 
 		toggleUserDisabled: async (root, args, contextValue) => {

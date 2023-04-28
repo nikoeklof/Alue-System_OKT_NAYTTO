@@ -31,6 +31,9 @@ module.exports = `
     editUserAbout (aboutMe: String!): User
     deleteUser (email: String, userId: ID, guestId: ID): User
 
+    editUserEmailAsAdmin (userId: ID!, email: String!): User
+    editUserPasswordAsAdmin (userId: ID!, password: String!): User
+
     toggleUserDisabled (userId: ID!): User
     toggleUserWorker (userId: ID!): User
     toggleUserAdmin (userId: ID!): User

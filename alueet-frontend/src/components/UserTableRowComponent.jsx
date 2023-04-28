@@ -15,6 +15,7 @@ import {
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 import EditUserModal from './EditUserModal';
+import ChangeDisabledModal from './ChangeDisabledModal';
 import DeleteWarningModal from './DeleteWarningModal';
 
 const styles = {
@@ -27,6 +28,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 	const [open, setOpen] = useState(false);
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
+	const [openChangeDisabled, setOpenChangeDisabled] = useState(false);
 	const areaArray = [];
 
 	for (const area in user.areas) {
@@ -45,6 +47,12 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 		warningText: 'Haluatko varmasti poistaa käyttäjän?',
 		handleConfirm: () => removeUser(user),
 	};
+	const changeDisabledProps = {
+		openChangeDisabled,
+		handleCloseChangeDisabledModal: () => setOpenChangeDisabled(false),
+		handleConfirm: () => console.log(openChangeDisabled),
+		originalUser: user,
+	};
 
 	return (
 		<>
@@ -55,7 +63,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 					onClick={() => setOpen(!open)}
 					sx={{ '& > *': { borderBottom: 'unset' } }}
 				>
-					<TableCell>
+					<TableCell style={{ maxWidth: 5 }}>
 						<IconButton
 							aria-label='expand row'
 							size='small'
@@ -81,48 +89,70 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 							unmountOnExit
 						>
 							<Box sx={{ margin: 1 }}>
-								<Typography
-									variant='h6'
-									gutterBottom
-									component='div'
-								>
-									Alueet
-								</Typography>
-								<Table
-									size='small'
-									aria-label='areas'
-								>
-									<TableHead>
-										<TableRow>
-											<TableCell>Nimi</TableCell>
-											<TableCell>ID</TableCell>
-										</TableRow>
-									</TableHead>
-									<TableBody>
-										{areaArray.map((area) => {
-											return (
-												<TableRow key={user.areas.id}>
-													<TableCell
-														component='th'
-														scope='row'
-													>
-														Fetch from backend
-													</TableCell>
-													<TableCell>
-														{area}
-													</TableCell>
+								{!user.disabled ? (
+									<>
+										<Typography
+											variant='h6'
+											gutterBottom
+											component='div'
+										>
+											Alueet
+										</Typography>
+										<Table
+											size='small'
+											aria-label='areas'
+										>
+											<TableHead>
+												<TableRow>
+													<TableCell>Nimi</TableCell>
+													<TableCell>ID</TableCell>
 												</TableRow>
-											);
-										})}
-									</TableBody>
-								</Table>
-								<Button
-									variant='contained'
-									sx={styles.button}
-									onClick={() => setEditOpen(true)}
-								>
-									Muokkaa Käyttäjää
-								</Button>
+											</TableHead>
+											<TableBody>
+												{areaArray.map((area) => {
+													return (
+														<TableRow
+															key={user.areas.id}
+														>
+															<TableCell
+																component='th'
+																scope='row'
+															>
+																Fetch from
+																backend
+															</TableCell>
+															<TableCell>
+																{area}
+															</TableCell>
+														</TableRow>
+													);
+												})}
+											</TableBody>
+										</Table>
+									</>
+								) : (
+									''
+								)}
+								{!user.disabled ? (
+									<Button
+										variant='contained'
+										sx={styles.button}
+										onClick={() => setEditOpen(true)}
+									>
+										Muokkaa Käyttäjää
+									</Button>
+								) : (
+									<Button
+										variant='contained'
+										sx={styles.button}
+										onClick={() =>
+											setOpenChangeDisabled(true)
+										}
+									>
+										Ota käyttäjä käyttöön
+									</Button>
+								)}
+
 								<Button
 									variant='contained'
 									sx={styles.button}
@@ -136,6 +166,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 				</TableRow>
 			</Fragment>
 			<EditUserModal {...editProps} />
+			<ChangeDisabledModal {...changeDisabledProps} />
 			<DeleteWarningModal {...delProps} />
 		</>
 	);

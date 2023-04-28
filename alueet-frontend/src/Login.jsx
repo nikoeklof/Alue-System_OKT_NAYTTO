@@ -14,6 +14,7 @@ import { LOGIN } from './queries';
 
 import theme from './style/theme';
 import { useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
 const styles = {
 	container: {
@@ -55,7 +56,7 @@ const Login = () => {
 	const [usernameError, setUsernameError] = useState('');
 	const [invalidCredentialsError, setInvalidCredentialsError] = useState('');
 	const [login] = useMutation(LOGIN);
-
+	const navigate = useNavigate();
 	const handleSubmit = async () => {
 		if (username.length === 0)
 			return setUsernameError('Tarvitaan Sähköposti');
@@ -66,7 +67,6 @@ const Login = () => {
 		login({
 			variables: { email: username, password: password },
 			onError: () => {
-				console.log(localStorage.getItem('token'));
 				return setInvalidCredentialsError(
 					'Tarkista sähköposti ja salasana'
 				);
@@ -74,7 +74,9 @@ const Login = () => {
 		}).then((res) => {
 			if (res.data !== undefined) {
 				setInvalidCredentialsError('');
-				return localStorage.setItem('token', res.data.login.value);
+				localStorage.setItem('token', res.data.login.value);
+				navigate('/');
+				return navigate(0);
 			}
 			return;
 		});

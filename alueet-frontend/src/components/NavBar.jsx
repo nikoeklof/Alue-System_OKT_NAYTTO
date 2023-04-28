@@ -11,6 +11,7 @@ import {
 	IconButton,
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 import theme from '../style/theme';
 
@@ -115,7 +116,7 @@ const styles = {
 const NavBar = ({ user }) => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const [anchorElUser, setAnchorElUser] = useState(null);
-
+	const navigate = useNavigate();
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -128,6 +129,10 @@ const NavBar = ({ user }) => {
 
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
+	};
+	const logOut = () => {
+		navigate('/');
+		navigate(0);
 	};
 
 	return (
@@ -247,7 +252,7 @@ const NavBar = ({ user }) => {
 							onClick={handleOpenUserMenu}
 							sx={styles.user.link}
 						>
-							{user ? user.email : 'Aloitus'}
+							{user ? user.guestAccount.email : 'Aloitus'}
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}
@@ -271,7 +276,12 @@ const NavBar = ({ user }) => {
 											</Typography>
 										</MenuItem>
 									</Link>
-									<MenuItem>
+									<MenuItem
+										onClick={() => {
+											localStorage.setItem('token', '');
+											return logOut();
+										}}
+									>
 										<Typography textAlign='center'>
 											Kirjaudu ulos
 										</Typography>

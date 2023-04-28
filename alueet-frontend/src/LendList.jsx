@@ -12,6 +12,7 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
+import { InfinitySpin } from 'react-loader-spinner';
 
 import theme from './style/theme';
 
@@ -68,7 +69,7 @@ const LendList = ({ users }) => {
 		warningText,
 	};
 
-	return (
+	return users ? (
 		<Container sx={styles.container}>
 			<Typography
 				variant='h6'
@@ -109,7 +110,7 @@ const LendList = ({ users }) => {
 											<TableCell
 												style={{ minWidth: 170 }}
 											>
-												{user.email}
+												{user.guestAccount.email}
 											</TableCell>
 											<TableCell
 												style={{ mindWidth: 170 }}
@@ -163,6 +164,22 @@ const LendList = ({ users }) => {
 			</Paper>
 			<DeleteWarningModal {...delProps} />
 		</Container>
+	) : (
+		<div
+			style={{
+				marginLeft: '40%',
+				marginTop: '15%',
+				paddingBottom: '0px',
+			}}
+		>
+			<InfinitySpin
+				width='200'
+				color='gray'
+				wrapperStyle
+				wrapperClass
+				ariaLabel='loading'
+			/>
+		</div>
 	);
 };
 

@@ -17,6 +17,7 @@ import { ALL_USERS, ME } from './queries';
 const App = () => {
 	const [users, setUsers] = useState(null);
 	const [usersDisabled, setUsersDisabled] = useState(null);
+	const [loggedUser, setLoggedUser] = useState(null);
 	const {
 		data: dataUsers,
 		loading: loadingUsers,
@@ -35,14 +36,7 @@ const App = () => {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 
-	const { data, loading } = useQuery(ME);
-	const user = {
-		id: data?.me?.guestAccount.id,
-		admin: data?.me?.admin,
-		aboutMe: data?.me?.aboutMe,
-		email: data?.me?.guestAccount.email,
-		areas: data?.me?.guestAccount.areas,
-	};
+	const { data: loggedUserData, loading: loadingUserData } = useQuery(ME);
 
 	useEffect(() => {
 		setUsers(dataUsers?.allUsers);
@@ -51,10 +45,14 @@ const App = () => {
 		setUsersDisabled(dataUsersDisabled?.allUsers);
 	}, [loadingUsersDisabled, dataUsersDisabled, refetchUsersDisabled]);
 
+	useEffect(() => {
+		setLoggedUser(loggedUserData?.me);
+	}, [loggedUser, loggedUserData]);
+
 	return (
 		<Router>
 			<Container>
-				<NavBar user={user} />
+				<NavBar user={loggedUser ? loggedUser : null} />
 
 				<Routes>
 					<Route
@@ -76,7 +74,7 @@ const App = () => {
 								users={users}
 								usersDisabled={usersDisabled}
 								setUsers={setUsers}
-								refetchUsers={refetchUsers}
+								refetch={refetchUsers}
 								refetchUsersDisabled={refetchUsersDisabled}
 							/>
 						}
@@ -91,7 +89,11 @@ const App = () => {
 					/>
 					<Route
 						path='/userProfile'
-						element={<UserProfile user={!loading ? user : null} />}
+						element={
+							<UserProfile
+								user={!loadingUserData ? loggedUser : null}
+							/>
+						}
 					/>
 				</Routes>
 				<Footer />

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
 import Main from './Main';
 import Login from './Login';
 
@@ -17,12 +16,23 @@ import { ALL_USERS, ME } from './queries';
 
 const App = () => {
 	const [users, setUsers] = useState(null);
+	const [usersDisabled, setUsersDisabled] = useState(null);
 	const {
 		data: dataUsers,
 		loading: loadingUsers,
 		refetch: refetchUsers,
 	} = useQuery(ALL_USERS, {
-		onError: (e) => console.error(e),
+		variables: { disabled: false },
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+
+	const {
+		data: dataUsersDisabled,
+		loading: loadingUsersDisabled,
+		refetch: refetchUsersDisabled,
+	} = useQuery(ALL_USERS, {
+		variables: { disabled: true },
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 
 	const { data, loading } = useQuery(ME);
@@ -36,7 +46,10 @@ const App = () => {
 
 	useEffect(() => {
 		setUsers(dataUsers?.allUsers);
-	}, [loadingUsers, dataUsers]);
+	}, [loadingUsers, dataUsers, refetchUsers]);
+	useEffect(() => {
+		setUsersDisabled(dataUsersDisabled?.allUsers);
+	}, [loadingUsersDisabled, dataUsersDisabled, refetchUsersDisabled]);
 
 	return (
 		<Router>
@@ -62,8 +75,10 @@ const App = () => {
 						element={
 							<UserControl
 								users={users}
+								usersDisabled={usersDisabled}
 								setUsers={setUsers}
-								refetch={refetchUsers}
+								refetchUsers={refetchUsers}
+								refetchUsersDisabled={refetchUsersDisabled}
 							/>
 						}
 					/>

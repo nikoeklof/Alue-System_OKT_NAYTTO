@@ -55,7 +55,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 					onClick={() => setOpen(!open)}
 					sx={{ '& > *': { borderBottom: 'unset' } }}
 				>
-					<TableCell>
+					<TableCell style={{ maxWidth: 5 }}>
 						<IconButton
 							aria-label='expand row'
 							size='small'
@@ -81,48 +81,68 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 							unmountOnExit
 						>
 							<Box sx={{ margin: 1 }}>
-								<Typography
-									variant='h6'
-									gutterBottom
-									component='div'
-								>
-									Alueet
-								</Typography>
-								<Table
-									size='small'
-									aria-label='areas'
-								>
-									<TableHead>
-										<TableRow>
-											<TableCell>Nimi</TableCell>
-											<TableCell>ID</TableCell>
-										</TableRow>
-									</TableHead>
-									<TableBody>
-										{areaArray.map((area) => {
-											return (
-												<TableRow key={user.areas.id}>
-													<TableCell
-														component='th'
-														scope='row'
-													>
-														Fetch from backend
-													</TableCell>
-													<TableCell>
-														{area}
-													</TableCell>
+								{!user.disabled ? (
+									<>
+										<Typography
+											variant='h6'
+											gutterBottom
+											component='div'
+										>
+											Alueet
+										</Typography>
+										<Table
+											size='small'
+											aria-label='areas'
+										>
+											<TableHead>
+												<TableRow>
+													<TableCell>Nimi</TableCell>
+													<TableCell>ID</TableCell>
 												</TableRow>
-											);
-										})}
-									</TableBody>
-								</Table>
-								<Button
-									variant='contained'
-									sx={styles.button}
-									onClick={() => setEditOpen(true)}
-								>
-									Muokkaa Käyttäjää
-								</Button>
+											</TableHead>
+											<TableBody>
+												{areaArray.map((area) => {
+													return (
+														<TableRow
+															key={user.areas.id}
+														>
+															<TableCell
+																component='th'
+																scope='row'
+															>
+																Fetch from
+																backend
+															</TableCell>
+															<TableCell>
+																{area}
+															</TableCell>
+														</TableRow>
+													);
+												})}
+											</TableBody>
+										</Table>
+									</>
+								) : (
+									''
+								)}
+								{!user.disabled ? (
+									<Button
+										variant='contained'
+										sx={styles.button}
+										onClick={() => setEditOpen(true)}
+									>
+										Muokkaa Käyttäjää
+									</Button>
+								) : (
+									<Button
+										variant='contained'
+										sx={styles.button}
+										onClick={() => console.log('clock')}
+									>
+										Ota käyttäjä käyttöön
+									</Button>
+								)}
+
 								<Button
 									variant='contained'
 									sx={styles.button}

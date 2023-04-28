@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import {
 	Button,
 	Container,
+	Collapse,
+	Divider,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -12,7 +15,10 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
+import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
+import { InfinitySpin } from 'react-loader-spinner';
 
+import DisabledUsersTable from './components/DisabledUsersTable';
 import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
 
@@ -25,6 +31,7 @@ import {
 	CREATE_USER,
 	DELETE_USER,
 	DELETE_GUEST,
+	TOGGLE_USER_DISABLED,
 } from './queries';
 
 const styles = {
@@ -39,13 +46,26 @@ const styles = {
 		mb: 2,
 		pb: 2,
 	},
+	subText: {
+		my: 1,
+		pb: 1,
+		px: 2,
+	},
 	button: {
-		m: 1,
+		mt: 2,
+		mx: 1,
 	},
 	form: {
 		mt: 2,
 		width: '100%',
 		overflow: 'hidden',
+	},
+	divider: {
+		borderColor: theme.bgColor.secondary,
+	},
+	icon: {
+		float: 'right',
+		pb: 2,
 	},
 };
 
@@ -64,20 +84,29 @@ const columns = [
 	{
 		id: 'id',
 		label: 'ID',
-		minWidth: 60,
+		minWidth: 170,
 		align: 'right',
 	},
 ];
 
-const UserControl = ({ users, refetch }) => {
+const UserControl = ({
+	users,
+	usersDisabled,
+	refetchUsers,
+	refetchUsersDisabled,
+}) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
+	const [checkedNotDisabled, setCheckedNotDisabled] = useState(false);
 	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
-		onError: (e) => console.error(e),
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const [toggleUserDisabled] = useMutation(TOGGLE_USER_DISABLED, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [editGuest] = useMutation(EDIT_GUEST, {
-		onError: (e) => console.error(e),
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [createGuest] = useMutation(CREATE_GUEST, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
@@ -86,10 +115,10 @@ const UserControl = ({ users, refetch }) => {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [deleteGuest] = useMutation(DELETE_GUEST, {
-		onError: (e) => console.error(e),
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [deleteUser] = useMutation(DELETE_USER, {
-		onError: (e) => console.error(e),
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 
 	const handleChangePage = (event, newPage) => {
@@ -106,20 +135,31 @@ const UserControl = ({ users, refetch }) => {
 		await toggleUserAdmin({
 			variables: { userId: userId },
 		});
+		await toggleUserDisabled({
+			variables: { userId: userId },
+		});
 		await editGuest({
 			variables: {
 				email: email,
 				guestId: guestId,
 			},
 		});
-		refetch();
+		refetchUsers();
+		refetchUsersDisabled();
+	};
+
+	const updateUserDisabled = async (userId) => {
+		await toggleUserDisabled({
+			variables: { userId: userId },
+		});
 	};
 
 	const addUser = async (user) => {
 		const { email, password } = user;
 		await createGuest({ variables: { email: email } });
 		await createUser({ variables: { password: password, email: email } });
-		refetch();
+		refetchUsers();
+		refetchUsersDisabled();
 	};
 
 	const removeUser = async (user) => {
@@ -130,7 +170,8 @@ const UserControl = ({ users, refetch }) => {
 		await deleteUser({
 			variables: { userId: userId, email: email, guestId: guestId },
 		});
-		refetch();
+		refetchUsers();
+		refetchUsersDisabled();
 	};
 
 	const createProps = {
@@ -139,14 +180,111 @@ const UserControl = ({ users, refetch }) => {
 		addUser,
 	};
 
+	const disabledProps = {
+		usersDisabled,
+		columns,
+		styles,
+		updateUserDisabled,
+	};
+
 	return (
 		<Container sx={styles.container}>
 			<Typography
-				variant='h6'
+				variant='h5'
 				sx={styles.mainText}
 			>
 				Käyttäjien hallinta
 			</Typography>
+			{users ? (
+				<Paper
+					sx={styles.form}
+					onClick={() => setCheckedNotDisabled(!checkedNotDisabled)}
+				>
+					<Typography
+						variant='h6'
+						sx={styles.subText}
+					>
+						Käytössä
+						<IconButton sx={styles.icon}>
+							{checkedNotDisabled ? <RemoveIcon /> : <AddIcon />}
+						</IconButton>
+					</Typography>
+					<Collapse in={checkedNotDisabled}>
+						<Divider sx={styles.divider} />
+						<TableContainer sx={{ maxHeight: 440 }}>
+							<Table
+								stickyHeader
+								aria-label='sticky label'
+							>
+								<TableHead>
+									<TableRow>
+										<TableCell />
+										{columns.map((column) => (
+											<TableCell
+												key={column.id}
+												align={column.align}
+												style={{
+													minWidth: column.minWidth,
+												}}
+											>
+												{column.label}
+											</TableCell>
+										))}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{users
+										.slice(
+											page * rowsPerPage,
+											page * rowsPerPage + rowsPerPage
+										)
+										.map((user) => {
+											const rowProps = {
+												user,
+												updateUser,
+												removeUser,
+											};
+
+											return (
+												<UserTableRowComponent
+													key={user.id}
+													{...rowProps}
+												/>
+											);
+										})}
+								</TableBody>
+							</Table>
+						</TableContainer>
+						<TablePagination
+							rowsPerPageOptions={[5, 10, 25, 50, 100]}
+							component='div'
+							count={users.length}
+							rowsPerPage={rowsPerPage}
+							page={page}
+							labelRowsPerPage='Rivejä per sivu:'
+							onPageChange={handleChangePage}
+							onRowsPerPageChange={handleChangeRowsPerPage}
+						/>
+					</Collapse>
+				</Paper>
+			) : (
+				<div
+					style={{
+						marginLeft: '30%',
+						marginTop: '15%',
+						paddingBottom: '0px',
+					}}
+				>
+					<InfinitySpin
+						width='200'
+						color='gray'
+						wrapperStyle
+						wrapperClass
+						ariaLabel='loading'
+					/>
+				</div>
+			)}
+			<DisabledUsersTable {...disabledProps} />
 			<Button
 				variant='contained'
 				sx={styles.button}
@@ -154,60 +292,6 @@ const UserControl = ({ users, refetch }) => {
 			>
 				Luo Käyttäjä
 			</Button>
-			<Paper sx={styles.form}>
-				<TableContainer sx={{ maxHeight: 440 }}>
-					<Table
-						stickyHeader
-						aria-label='sticky label'
-					>
-						<TableHead>
-							<TableRow>
-								<TableCell />
-								{columns.map((column) => (
-									<TableCell
-										key={column.id}
-										align={column.align}
-										style={{ minWidth: column.minWidth }}
-									>
-										{column.label}
-									</TableCell>
-								))}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{users
-								.slice(
-									page * rowsPerPage,
-									page * rowsPerPage + rowsPerPage
-								)
-								.map((user) => {
-									const rowProps = {
-										user,
-										updateUser,
-										removeUser,
-									};
-
-									return (
-										<UserTableRowComponent
-											key={user.id}
-											{...rowProps}
-										/>
-									);
-								})}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				<TablePagination
-					rowsPerPageOptions={[5, 10, 25, 50, 100]}
-					component='div'
-					count={users.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					labelRowsPerPage='Rivejä per sivu:'
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
-			</Paper>
 			<CreateUserModal {...createProps} />
 		</Container>
 	);

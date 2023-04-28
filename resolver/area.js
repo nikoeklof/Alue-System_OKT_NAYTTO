@@ -1,7 +1,7 @@
 const { UserInputError } = require("apollo-server")
 
 const Area = require("../models/area")
-const Guest = require("../models/guest")
+const User = require("../models/user")
 
 const contextCheck = require("../util/contextCheck")
 const mailer = require("../util/mail")
@@ -36,7 +36,7 @@ module.exports = {
     
     Mutation: {
         createArea: (root, args, contextValue) => {
-            //contextCheck(contextValue.authUser, true)
+            //contextCheck(contextValue.authUser, 2)
 
             const area = new Area({
                 info: {
@@ -53,7 +53,7 @@ module.exports = {
         },
 
         editArea: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, true)
+            contextCheck(contextValue.authUser, 2)
 
             const area = await Area.findById(args.areaId)
 
@@ -71,7 +71,7 @@ module.exports = {
         },
 
         deleteArea: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, true)
+            contextCheck(contextValue.authUser, 2)
 
             return await Area.findByIdAndDelete(args.areaId)
                 .catch(error => {
@@ -81,39 +81,36 @@ module.exports = {
                 })
         },
 
-        makeRequest: async (root, args) => {
-            const guest = await Guest.findOne({ email: args.email })
-
-            if (!guest)
-                throw new UserInputError("Guest not found")
+        makeRequest: async (root, args, contextValue) => {
+            const user = contextCheck(contextValue.authUser, 0)
 
             const area = await Area.findById(args.areaId)
 
             if (!area)
                 throw new UserInputError("Area not found")
 
-            if (area.shareState.shareRequests.includes(guest.email))
+            if (area.shareState.shareRequests.includes(user.email))
                 throw new UserInputError("You have already reguested this area")
 
-            if (area.shareState.sharedTo == guest.email)
+            if (area.shareState.sharedTo == user.email)
                 throw new UserInputError("Area is already being shared to you")
 
-            area.shareState.shareRequests.push(guest.email)
+            area.shareState.shareRequests.push(user.email)
 
             area.save()
 
-            //mailer(guest.email, area.info, 0)
+            //mailer(user.email, area.info, 0)
 
             return area
         },
 
         allowAreaRequest: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, false)
+            const authUser = contextCheck(contextValue.authUser, 1)
 
-            const guest = await Guest.findOne({ email: args.email })
+            const user = await User.findOne({ email: args.email })
 
-            if (!guest)
-                throw new UserInputError("Guest not found")
+            if (!user)
+                throw new UserInputError("User not found")
 
             const area = await Area.findById(args.areaId)
 
@@ -123,12 +120,12 @@ module.exports = {
             if (area.shareState.isShared == true)
                 throw new UserInputError("Area is currently being shared")
 
-            if (area.shareState.shareRequests.includes(guest.email))
-                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(guest.email), 1)
+            if (area.shareState.shareRequests.includes(user.email))
+                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user.email), 1)
 
             area.shareState.isShared = true
-            area.shareState.sharedBy = contextValue.authUser.guestAccount.email
-            area.shareState.sharedTo = guest.email
+            area.shareState.sharedBy = authUser.email
+            area.shareState.sharedTo = user.email
             area.shareState.shareStartDate = new Date()
 
             area.save()
@@ -138,13 +135,13 @@ module.exports = {
                     })
                 })
 
-            //mailer(guest.email, area.info, 1)
+            //mailer(user.email, area.info, 1)
 
             return area
         },
 
         returnSharedArea: async (root, args, contextValue) => {
-            contextCheck(contextValue.authUser, false)
+            contextCheck(contextValue.authUser, 1)
 
             const area = await Area.findById(args.areaId)
 
@@ -178,9 +175,9 @@ module.exports = {
                     })
                 })
 
-            const guest = await Guest.findOne({ email: shareEnd.sharedTo })
+            const user = await User.findOne({ email: shareEnd.sharedTo })
 
-            //mailer(guest.email, area.info, 2)
+            //mailer(user.email, area.info, 2)
 
             return area
         }

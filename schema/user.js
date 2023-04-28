@@ -1,11 +1,12 @@
 module.exports = `
   type User {
     id: ID!
+    email: String
     admin: Boolean
+    worker: Boolean
     disabled: Boolean
-    guestAccount: Guest
-    rank: [String]
     aboutMe: String
+    areas: [Area]
   }
 
   type Token {
@@ -21,13 +22,13 @@ module.exports = `
 
   type Mutation {
     createUser (email: String!, password: String!): User
-    changeUserPassword (password: String!): User
-    changeUserAbout (aboutMe: String!): User
-    addUserRank (rank: String!): User
-    removeUserRank (rank: String!): User
+    editUserEmail ( email: String!): User
+    editUserPassword (password: String!): User
+    editUserAbout (aboutMe: String!): User
     deleteUser (email: String, userId: ID, guestId: ID): User
 
     toggleUserDisabled (userId: ID!): User
+    toggleUserWorker (userId: ID!): User
     toggleUserAdmin (userId: ID!): User
 
     login (email: String!, password: String!): Token

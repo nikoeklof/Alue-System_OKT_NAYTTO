@@ -34,7 +34,6 @@ const server = new ApolloServer({
               console.log("Operation type: " + operation.operation)
               console.log("Operation name: " + operation.loc.source.body.replace(/(\r\n|\n|\r)/gm, "").replace(/\s+/g, ' ').trim())
               console.log("Variables: " + JSON.stringify(requestContext.request.variables))
-              console.log("***")
             }
           }
         }
@@ -50,7 +49,7 @@ startStandaloneServer(server, {
     if (auth) {
       const decodedToken = jwt.verify(auth, process.env.JWT_SECRET)
       const authUser = await User.findById(decodedToken.id)
-      if (!authUser.disabled)
+      if (!authUser.rank.disabled)
         return { authUser }
     }
   },

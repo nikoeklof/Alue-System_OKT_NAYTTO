@@ -50,7 +50,7 @@ module.exports = `
     editArea (areaId: ID!, cityName: String, quarter: String, address: String, buildings: Int, misc: String): Area
     deleteArea (areaId: ID!): Area
 
-    makeRequest (areaId: ID!, email: String!): Area
+    makeRequest (areaId: ID!): Area
     allowAreaRequest (areaId: ID!, email: String!): Area
     returnSharedArea (areaId: ID!): Area
   }

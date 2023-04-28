@@ -82,6 +82,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
                   {usersDisabled
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((user) => {
+						
                       const rowProps = {
                         user,
                       };

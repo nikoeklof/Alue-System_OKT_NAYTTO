@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+	Box,
 	Collapse,
 	Divider,
 	IconButton,
@@ -46,20 +47,24 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 	if (usersDisabled) {
 		return (
 			<>
-				<Paper
-					sx={styles.form}
-					onClick={() => setCheckedDisabled(!checkedDisabled)}
-				>
-					<Typography
-						variant='h6'
-						sx={styles.subText}
+				<Paper sx={styles.form}>
+					<Box onClick={() => setCheckedDisabled(!checkedDisabled)}>
+						<Typography
+							variant='h6'
+							sx={styles.subText}
+						>
+							Ei käytössä
+							<IconButton sx={styles.icon}>
+								{checkedDisabled ? <RemoveIcon /> : <AddIcon />}
+							</IconButton>
+						</Typography>
+					</Box>
+
+					<Collapse
+						in={checkedDisabled}
+						timeout='auto'
+						unmountOnExit
 					>
-						Ei käytössä
-						<IconButton sx={styles.icon}>
-							{checkedDisabled ? <RemoveIcon /> : <AddIcon />}
-						</IconButton>
-					</Typography>
-					<Collapse in={checkedDisabled}>
 						<Divider sx={styles.divider} />
 						<TableContainer sx={{ maxHeight: 440 }}>
 							<Table

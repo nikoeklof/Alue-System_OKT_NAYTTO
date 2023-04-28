@@ -14,6 +14,7 @@ import {
 	TablePagination,
 	TableRow,
 	Typography,
+	Box,
 } from '@mui/material';
 import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 import { InfinitySpin } from 'react-loader-spinner';
@@ -196,19 +197,27 @@ const UserControl = ({
 				Käyttäjien hallinta
 			</Typography>
 			{users ? (
-				<Paper
-					sx={styles.form}
-					onClick={() => setCheckedNotDisabled(!checkedNotDisabled)}
-				>
-					<Typography
-						variant='h6'
-						sx={styles.subText}
+				<Paper sx={styles.form}>
+					<Box
+						onClick={() =>
+							setCheckedNotDisabled(!checkedNotDisabled)
+						}
 					>
-						Käytössä
-						<IconButton sx={styles.icon}>
-							{checkedNotDisabled ? <RemoveIcon /> : <AddIcon />}
-						</IconButton>
-					</Typography>
+						<Typography
+							variant='h6'
+							sx={styles.subText}
+						>
+							Käytössä
+							<IconButton sx={styles.icon}>
+								{checkedNotDisabled ? (
+									<RemoveIcon />
+								) : (
+									<AddIcon />
+								)}
+							</IconButton>
+						</Typography>
+					</Box>
+
 					<Collapse in={checkedNotDisabled}>
 						<Divider sx={styles.divider} />
 						<TableContainer sx={{ maxHeight: 440 }}>

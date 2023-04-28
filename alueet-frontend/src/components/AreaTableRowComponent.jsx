@@ -185,11 +185,14 @@ const AreaTableRowComponent = ({
                     Info
                   </Typography>
                   <Table size="small" aria-label="areas">
-                    <TableHead></TableHead>
-                    <TableRow>
-                      <TableCell sx={styles.tableHeadText}>Alueen ID</TableCell>
-                      <TableCell>{area.id}</TableCell>
-                    </TableRow>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={styles.tableHeadText}>
+                          Alueen ID
+                        </TableCell>
+                        <TableCell>{area.id}</TableCell>
+                      </TableRow>
+                    </TableHead>
                   </Table>
                   <Table size="small" aria-label="areas">
                     <TableHead>

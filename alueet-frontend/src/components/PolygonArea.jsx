@@ -20,9 +20,14 @@ const PolygonArea = ({
   const map = useMap();
 
   useEffect(() => {
+    if (selectedArea?.id === props.id)
+      map.flyTo(props.info.latlngs[0], 14, { animate: 0.5 });
+    else return;
+  }, [selectedArea?.id, props.id, props.info.latlngs, map]);
+
+  useEffect(() => {
     if (props.id === hoverStatus) {
       if (props.id === selectedArea?.id) {
-        map.flyTo(props.info.latlngs[0], 14, { animate: true });
         return setCurrentColor(hoverColorOnSelected);
       }
       if (props.shareState.isShared) {
@@ -31,20 +36,12 @@ const PolygonArea = ({
       return setCurrentColor(hoverColorDefault);
     } else {
       if (props.id === selectedArea?.id) {
-        map.flyTo(props.info.latlngs[0], 14, { animate: true });
         return setCurrentColor("red");
       }
       if (props.shareState.isShared) return setCurrentColor("green");
       return setCurrentColor("blue");
     }
-  }, [
-    hoverStatus,
-    props.id,
-    props.shareState.isShared,
-    selectedArea?.id,
-    map,
-    props.info.latlngs,
-  ]);
+  }, [hoverStatus, props.id, props.shareState.isShared, selectedArea?.id]);
 
   return (
     <Polygon

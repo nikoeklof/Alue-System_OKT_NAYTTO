@@ -15,6 +15,7 @@ import {
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 import EditUserModal from './EditUserModal';
+import ChangeDisabledModal from './ChangeDisabledModal';
 import DeleteWarningModal from './DeleteWarningModal';
 
 const styles = {
@@ -27,6 +28,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 	const [open, setOpen] = useState(false);
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
+	const [openChangeDisabled, setOpenChangeDisabled] = useState(false);
 	const areaArray = [];
 
 	for (const area in user.areas) {
@@ -44,6 +46,12 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti poistaa käyttäjän?',
 		handleConfirm: () => removeUser(user),
+	};
+	const changeDisabledProps = {
+		openChangeDisabled,
+		handleCloseChangeDisabledModal: () => setOpenChangeDisabled(false),
+		handleConfirm: () => console.log(openChangeDisabled),
+		originalUser: user,
 	};
 
 	return (
@@ -137,7 +145,9 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 									<Button
 										variant='contained'
 										sx={styles.button}
-										onClick={() => console.log('clock')}
+										onClick={() =>
+											setOpenChangeDisabled(true)
+										}
 									>
 										Ota käyttäjä käyttöön
 									</Button>
@@ -156,6 +166,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 				</TableRow>
 			</Fragment>
 			<EditUserModal {...editProps} />
+			<ChangeDisabledModal {...changeDisabledProps} />
 			<DeleteWarningModal {...delProps} />
 		</>
 	);

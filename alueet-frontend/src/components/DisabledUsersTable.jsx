@@ -42,7 +42,6 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
     warningText: "Haluatko laittaa käyttäjän käyttöön?",
     handleConfirm: (user) => updateUserDisabled(user.id),
   };
-  console.log(usersDisabled);
 
   if (usersDisabled) {
     return (
@@ -82,7 +81,6 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
                   {usersDisabled
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((user) => {
-						
                       const rowProps = {
                         user,
                       };

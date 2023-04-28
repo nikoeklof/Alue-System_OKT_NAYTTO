@@ -46,6 +46,7 @@ const EditUserModal = ({ ...editProps }) => {
 	const [email, setEmail] = useState(
 		editProps.originalUser?.guestAccount.email
 	);
+	const [disabled, setDisabled] = useState(editProps.originalUser.disabled);
 	const [admin, setAdmin] = useState(editProps.originalUser?.admin);
 	const [emailError, setEmailError] = useState('');
 
@@ -59,6 +60,7 @@ const EditUserModal = ({ ...editProps }) => {
 			userId: editProps.originalUser.id,
 			guestId: editProps.originalUser.guestAccount.id,
 			email,
+			disabled,
 		};
 
 		if (!email) setEmailError('Sähköposti on pakollinen');
@@ -107,6 +109,18 @@ const EditUserModal = ({ ...editProps }) => {
 								/>
 							}
 							label='Admin'
+							sx={styles.input}
+						/>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={disabled}
+									onChange={(e) =>
+										setDisabled(e.target.checked)
+									}
+								/>
+							}
+							label='Disabled'
 							sx={styles.input}
 						/>
 					</FormControl>

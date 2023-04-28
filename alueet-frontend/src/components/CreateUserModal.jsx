@@ -1,45 +1,45 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-  Box,
-  Typography,
-  Modal,
-  Button,
-  FormGroup,
-  FormControl,
-  TextField,
-  FormControlLabel,
-  Switch,
-} from "@mui/material";
+	Box,
+	Typography,
+	Modal,
+	Button,
+	FormGroup,
+	FormControl,
+	TextField,
+	FormControlLabel,
+	Switch,
+} from '@mui/material';
 
-import theme from "../style/theme";
+import theme from '../style/theme';
 
 const styles = {
-  modal: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "50%",
-    backgroundColor: theme.bgColor.default,
-    boxShadow: 24,
-    borderRadius: 2,
-    px: 4,
-    py: 3,
-  },
-  header: {
-    mb: 2,
-    pb: 1,
-    borderBottom: "1px solid",
-    borderColor: theme.color.primary,
-  },
-  input: {
-    m: 0.5,
-  },
-  button: {
-    float: "right",
-    m: 0.5,
-    mt: 2,
-  },
+	modal: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: '50%',
+		backgroundColor: theme.bgColor.default,
+		boxShadow: 24,
+		borderRadius: 2,
+		px: 4,
+		py: 3,
+	},
+	header: {
+		mb: 2,
+		pb: 1,
+		borderBottom: '1px solid',
+		borderColor: theme.color.primary,
+	},
+	input: {
+		m: 0.5,
+	},
+	button: {
+		float: 'right',
+		m: 0.5,
+		mt: 2,
+	},
 };
 
 const CreateUserModal = ({ ...createProps }) => {
@@ -58,11 +58,11 @@ const CreateUserModal = ({ ...createProps }) => {
 		createProps.handleCreateModalClose();
 	};
 
-  const handleSubmit = () => {
-    if (!password) setPasswordError("Salasana on pakollinen");
-    else setPasswordError("");
-    if (!email) setEmailError("Sähköposti on pakollinen");
-    else setEmailError("");
+	const handleSubmit = () => {
+		if (!password) setPasswordError('Salasana on pakollinen');
+		else setPasswordError('');
+		if (!email) setEmailError('Sähköposti on pakollinen');
+		else setEmailError('');
 
 		const user = {
 			email,

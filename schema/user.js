@@ -2,11 +2,15 @@ module.exports = `
   type User {
     id: ID!
     email: String
-    admin: Boolean
-    worker: Boolean
-    disabled: Boolean
+    rank: Rank
     aboutMe: String
     areas: [Area]
+  }
+
+  type Rank {
+    disabled: Boolean
+    worker: Boolean
+    admin: Boolean
   }
 
   type Token {
@@ -15,7 +19,7 @@ module.exports = `
 
   type Query {
     userCount: Int!
-    allUsers (admin: Boolean, disabled: Boolean): [User]!
+    allUsers (admin: Boolean, disabled: Boolean, worker: Boolean): [User]!
 
     me: User
   }

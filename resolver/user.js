@@ -8,15 +8,26 @@ const contextCheck = require('../util/contextCheck');
 module.exports = {
 	Query: {
 		userCount: () => User.collection.countDocuments(),
-		allUsers: async (root, args) => await User.find(args),
+		allUsers: async (root, args) => {
+			const newArgs = {}
+
+			if (args.admin)
+				newArgs["rank.admin"] = args.admin
+
+			if (args.disabled)
+				newArgs["rank.disabled"] = args.disabled
+
+			if (args.worker)
+				newArgs["rank.worker"] = args.worker
+
+			return await User.find(newArgs)
+		},
 		me: (root, args, contextValue) => contextValue.authUser,
 	},
 
 	User: {
 		email: (root) => root.email,
-		admin: (root) => root.rank.admin,
-		worker: (root) => root.rank.worker,
-		disabled: (root) => root.rank.disabled,
+		rank: (root) => root.rank,
 		areas: async (root) => await Area.find({ ['shareState.sharedTo']: root.email }),
 	},
 

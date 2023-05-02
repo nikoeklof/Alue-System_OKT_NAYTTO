@@ -2,27 +2,20 @@ import { gql } from "@apollo/client";
 
 //  -----  querys  -----
 export const ALL_USERS = gql`
-  query allUsers($admin: Boolean, $disabled: Boolean) {
-    allUsers(admin: $admin, disabled: $disabled) {
-      id
-      admin
-      disabled
-      guestAccount {
-        id
-        email
-      }
-    }
-  }
+	query allUsers($admin: Boolean, $disabled: Boolean) {
+		allUsers(admin: $admin, disabled: $disabled) {
+			id
+			email
+			rank {
+				admin
+				worker
+				disabled
+			}
+			aboutMe
+		}
+	}
 `;
 
-export const ALL_GUESTS = gql`
-  query {
-    allGuests {
-      id
-      email
-    }
-  }
-`;
 export const FILTERED_AREAS = gql`
   query filteredAreas($cityName: String) {
     allAreas(cityName: $cityName) {
@@ -132,12 +125,6 @@ export const ME = gql`
   }
 `;
 
-export const GUEST_COUNT = gql`
-  query {
-    guestCount
-  }
-`;
-
 export const AREA_COUNT = gql`
   query {
     areaCount
@@ -151,27 +138,18 @@ export const USER_COUNT = gql`
 `;
 
 //  -----  mutations  -----
+export const EDIT_USER_EMAIL_AS_ADMIN = gql`
+	mutation editUserEmailAsAdmin($userId: ID!, $email: String!) {
+		editUserEmailAsAdmin(userId: $userId, email: $email) {
+			id
+			email
+		}
+	}
+=======
 export const CREATE_GUEST = gql`
   mutation createGuest($email: String!) {
     createGuest(email: $email) {
       email
-    }
-  }
-`;
-
-export const DELETE_GUEST = gql`
-  mutation deleteGuest($email: String, $guestId: ID) {
-    deleteGuest(email: $email, guestId: $guestId) {
-      id
-    }
-  }
-`;
-
-export const EDIT_GUEST = gql`
-  mutation editGuest($email: String!, $guestId: ID!) {
-    editGuest(email: $email, guestId: $guestId) {
-      email
-      id
     }
   }
 `;
@@ -189,32 +167,34 @@ export const MAKE_REQUEST = gql`
 `;
 
 export const CREATE_USER = gql`
-  mutation createUser($password: String!, $email: String!) {
-    createUser(password: $password, email: $email) {
-      id
-      guestAccount {
-        email
-        id
-      }
-    }
-  }
+	mutation createUser($password: String!, $email: String!) {
+		createUser(password: $password, email: $email) {
+			id
+			email
+			rank {
+				admin
+				disabled
+				worker
+			}
+			aboutMe
+		}
+	}
 `;
 
 export const DELETE_USER = gql`
-  mutation deleteUser($email: String, $userId: ID, $guestId: ID) {
-    deleteUser(email: $email, userId: $userId, guestId: $guestId) {
-      id
-    }
-  }
+	mutation deleteUser($email: String, $userId: ID) {
+		deleteUser(email: $email, userId: $userId) {
+			id
+		}
+	}
 `;
 
 export const TOGGLE_USER_ADMIN = gql`
-  mutation toggleUserAdmin($userId: ID!) {
-    toggleUserAdmin(userId: $userId) {
-      admin
-      id
-    }
-  }
+	mutation toggleUserAdmin($userId: ID!) {
+		toggleUserAdmin(userId: $userId) {
+			id
+		}
+	}
 `;
 
 export const TOGGLE_USER_DISABLED = gql`

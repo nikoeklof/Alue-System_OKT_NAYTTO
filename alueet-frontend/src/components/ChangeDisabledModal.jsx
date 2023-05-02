@@ -72,7 +72,7 @@ const ChangeDisabledModal = ({ ...changeDisabledProps }) => {
 						onClick={() => {
 							setDisabled(!disabled);
 							toggleDisabled();
-							changeDisabledProps.closeChangeDisabledModal();
+							handleClose();
 						}}
 					>
 						Vaihda

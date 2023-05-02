@@ -53,35 +53,52 @@ const App = () => {
     <Router>
       <Container>
         <NavBar user={loggedUser ? loggedUser : null} />
-
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/areaControl" element={<AreaControl />} />
-          <Route
-            path="/userControl"
-            element={
-              <UserControl
-                users={users}
-                usersDisabled={usersDisabled}
-                setUsers={setUsers}
-                refetchUsers={refetchUsers}
-                refetchUsersDisabled={refetchUsersDisabled}
-              />
-            }
-          />
-          <Route path="/createArea" element={<AreaCreate />} />
-          <Route path="/lendList" element={<LendList users={users} />} />
-          <Route
-            path="/userProfile"
-            element={
-              <UserProfile user={!loadingUserData ? loggedUser : null} />
-            }
-          />
-        </Routes>
-        <Footer />
-      </Container>
-    </Router>
-  );
+        
+				<Routes>
+					<Route
+						path='/'
+						element={<Main />}
+					/>
+					<Route
+						path='/login'
+						element={<Login />}
+					/>
+					<Route
+						path='/areaControl'
+						element={<AreaControl />}
+					/>
+					<Route
+						path='/userControl'
+						element={
+							<UserControl
+								users={users}
+								usersDisabled={usersDisabled}
+								setUsers={setUsers}
+								refetchUsers={refetchUsers}
+								refetchUsersDisabled={refetchUsersDisabled}
+							/>
+						}
+					/>
+					<Route
+						path='/createArea'
+						element={<AreaCreate />}
+					/>
+					<Route
+						path='/lendList'
+						element={<LendList users={users} />}
+					/>
+					<Route
+						path='/userProfile'
+						element={
+							<UserProfile
+								user={!loadingUserData ? loggedUser : null}
+							/>
+						}
+					/>
+				</Routes>
+				<Footer />
+			</Container>
+		</Router>
+	);
 };
 export default App;

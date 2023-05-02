@@ -21,11 +21,18 @@ import DeleteWarningModal from "./DeleteWarningModal";
 import UserTableRowComponent from "./UserTableRowComponent";
 
 const DisabledUsersTable = ({ ...disabledProps }) => {
-  const { usersDisabled, columns, styles, updateUserDisabled } = disabledProps;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [open, setOpen] = useState(false);
-  const [checkedDisabled, setCheckedDisabled] = useState(false);
+	const {
+		usersDisabled,
+		columns,
+		styles,
+		updateUserDisabled,
+		removeUser,
+		updateUser,
+	} = disabledProps;
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [open, setOpen] = useState(false);
+	const [checkedDisabled, setCheckedDisabled] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -56,34 +63,46 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
             </Typography>
           </Box>
 
-          <Collapse in={checkedDisabled} timeout="auto" unmountOnExit>
-            <Divider sx={styles.divider} />
-            <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky label">
-                <TableHead>
-                  <TableRow>
-                    <TableCell style={{ maxWidth: 5 }} />
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        align={column.align}
-                        style={{
-                          minWidth: column.minWidth,
-                        }}
-                      >
-                        {column.label}
-                      </TableCell>
-                    ))}
-                    <TableCell />
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {usersDisabled
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((user) => {
-                      const rowProps = {
-                        user,
-                      };
+					<Collapse
+						in={checkedDisabled}
+						timeout='auto'
+						unmountOnExit
+					>
+						<Divider sx={styles.divider} />
+						<TableContainer sx={{ maxHeight: 440 }}>
+							<Table
+								stickyHeader
+								aria-label='sticky label'
+							>
+								<TableHead>
+									<TableRow>
+										<TableCell style={{ maxWidth: 5 }} />
+										{columns.map((column) => (
+											<TableCell
+												key={column.id}
+												align={column.align}
+												style={{
+													minWidth: column.minWidth,
+												}}
+											>
+												{column.label}
+											</TableCell>
+										))}
+										<TableCell />
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{usersDisabled
+										.slice(
+											page * rowsPerPage,
+											page * rowsPerPage + rowsPerPage
+										)
+										.map((user) => {
+											const rowProps = {
+												user,
+												updateUser,
+												removeUser,
+											};
 
                       return (
                         <UserTableRowComponent key={user.id} {...rowProps} />

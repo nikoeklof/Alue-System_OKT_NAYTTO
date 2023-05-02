@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-	Box,
-	Collapse,
-	Divider,
-	IconButton,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TablePagination,
-	TableRow,
-	Typography,
-} from '@mui/material';
-import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
-import { InfinitySpin } from 'react-loader-spinner';
+  Box,
+  Collapse,
+  Divider,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { Remove as RemoveIcon, Add as AddIcon } from "@mui/icons-material";
+import { InfinitySpin } from "react-loader-spinner";
 
-import DeleteWarningModal from './DeleteWarningModal';
-import UserTableRowComponent from './UserTableRowComponent';
+import DeleteWarningModal from "./DeleteWarningModal";
+import UserTableRowComponent from "./UserTableRowComponent";
 
 const DisabledUsersTable = ({ ...disabledProps }) => {
 	const {
@@ -34,37 +34,34 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 	const [open, setOpen] = useState(false);
 	const [checkedDisabled, setCheckedDisabled] = useState(false);
 
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(+event.target.value);
-		setPage(0);
-	};
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
-	const delProps = {
-		openDel: open,
-		handleCloseDelModal: () => setOpen(false),
-		warningText: 'Haluatko laittaa käyttäjän käyttöön?',
-		handleConfirm: (user) => updateUserDisabled(user.id),
-	};
+  const delProps = {
+    openDel: open,
+    handleCloseDelModal: () => setOpen(false),
+    warningText: "Haluatko laittaa käyttäjän käyttöön?",
+    handleConfirm: (user) => updateUserDisabled(user.id),
+  };
 
-	if (usersDisabled) {
-		return (
-			<>
-				<Paper sx={styles.form}>
-					<Box onClick={() => setCheckedDisabled(!checkedDisabled)}>
-						<Typography
-							variant='h6'
-							sx={styles.subText}
-						>
-							Ei käytössä
-							<IconButton sx={styles.icon}>
-								{checkedDisabled ? <RemoveIcon /> : <AddIcon />}
-							</IconButton>
-						</Typography>
-					</Box>
+  if (usersDisabled) {
+    return (
+      <>
+        <Paper sx={styles.form}>
+          <Box onClick={() => setCheckedDisabled(!checkedDisabled)}>
+            <Typography variant="h6" sx={styles.subText}>
+              Ei käytössä
+              <IconButton sx={styles.icon}>
+                {checkedDisabled ? <RemoveIcon /> : <AddIcon />}
+              </IconButton>
+            </Typography>
+          </Box>
 
 					<Collapse
 						in={checkedDisabled}
@@ -107,50 +104,47 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 												removeUser,
 											};
 
-											return (
-												<UserTableRowComponent
-													key={user.id}
-													{...rowProps}
-												/>
-											);
-										})}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5, 10, 25, 50, 100]}
-							component='div'
-							count={usersDisabled.length}
-							rowsPerPage={rowsPerPage}
-							page={page}
-							labelRowsPerPage='Rivejä per sivu:'
-							onPageChange={handleChangePage}
-							onRowsPerPageChange={handleChangeRowsPerPage}
-						/>
-					</Collapse>
-				</Paper>
-				<DeleteWarningModal {...delProps} />
-			</>
-		);
-	} else {
-		return (
-			<div
-				style={{
-					marginLeft: '30%',
-					marginTop: '15%',
-					paddingBottom: '0px',
-				}}
-			>
-				<InfinitySpin
-					width='200'
-					color='gray'
-					wrapperStyle
-					wrapperClass
-					ariaLabel='loading'
-				/>
-			</div>
-		);
-	}
+                      return (
+                        <UserTableRowComponent key={user.id} {...rowProps} />
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              component="div"
+              count={usersDisabled.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              labelRowsPerPage="Rivejä per sivu:"
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Collapse>
+        </Paper>
+        <DeleteWarningModal {...delProps} />
+      </>
+    );
+  } else {
+    return (
+      <div
+        style={{
+          marginLeft: "30%",
+          marginTop: "15%",
+          paddingBottom: "0px",
+        }}
+      >
+        <InfinitySpin
+          width="200"
+          color="gray"
+          wrapperStyle
+          wrapperClass
+          ariaLabel="loading"
+        />
+      </div>
+    );
+  }
 };
 
 export default DisabledUsersTable;

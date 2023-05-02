@@ -99,7 +99,7 @@ module.exports = {
 
             area.save()
 
-            //mailer(user.email, area.info, 0)
+            mailer(user.email, area.info, 0)
 
             return area
         },
@@ -135,7 +135,7 @@ module.exports = {
                     })
                 })
 
-            //mailer(user.email, area.info, 1)
+            mailer(user.email, area.info, 1)
 
             return area
         },
@@ -177,7 +177,7 @@ module.exports = {
 
             const user = await User.findOne({ email: shareEnd.sharedTo })
 
-            //mailer(user.email, area.info, 2)
+            mailer(user.email, area.info, 2)
 
             return area
         }

@@ -181,22 +181,14 @@ function main(area, header) {
                                             ${area.quarter}
                                         </td>
                                     </tr>
+                                </Table>
+                                <Table id="compress">
                                     <tr>
                                         <td style="text-align: right" id="item">
                                             <h3>Katuosoite:</h3>
                                         </td>
                                         <td style="text-align: left" id="item">
                                             ${area.address}
-                                        </td>
-                                    </tr>
-                                </Table>
-                                <Table id="compress">
-                                    <tr>
-                                        <td style="text-align: right" id="item">
-                                            <h3>Alueen tyyppi:</h3>
-                                        </td>
-                                        <td style="text-align: left" id="item">
-                                            ${area.type}
                                         </td>
                                     </tr>
                                     <tr>
@@ -240,7 +232,7 @@ function main(area, header) {
                         <table>
                             <tr id="centerHeader">
                                 <td>
-                                    <h2 style="text-decoration: underline #454545 1px;">Huom! Jos et ole pyytänyt tätäaluetta</h2>
+                                    <h2 style="text-decoration: underline #454545 1px;">Huom! Jos et ole pyytänyt tätä aluetta</h2>
                                 </td>
                             </tr>
                             <tr id="centerHeader">

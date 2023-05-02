@@ -1,9 +1,13 @@
-const nodeMailer = require("nodemailer")
-const { google } = require("googleapis")
+const nodemailer = require("nodemailer")
 require("dotenv").config()
 const messageCreator = require("./messageCreator")
 
-function auth() {
+// For Google accounts
+
+/*
+const { google } = require("googleapis")
+
+function googleAuth() {
     const OAuth2 = google.auth.OAuth2
 
     const OAuth2_client = new OAuth2(
@@ -15,7 +19,7 @@ function auth() {
 
     const accessToken = OAuth2_client.getAccessToken()
 
-    return nodeMailer.createTransport({
+    return nodemailer.createTransport({
         service: "gmail",
         auth: {
             type: "OAuth2",
@@ -27,9 +31,26 @@ function auth() {
         }
     })
 }
+*/
+
+// For fake emails, check "Preview Url" in console once sent
+
+async function createTestAccount() {
+    let testAccount = await nodemailer.createTestAccount()
+
+    return nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false,
+        auth: {
+            user: testAccount.user,
+            pass: testAccount.pass,
+        },
+    })
+}
 
 async function main(receiverEmail, area, type) {
-    const transporter = auth()
+    let transporter = await createTestAccount()
 
     let subject
 
@@ -43,21 +64,20 @@ async function main(receiverEmail, area, type) {
         case 2:
             subject = "Sinulle jaettu alue on nyt palautettu"
             break
-        case 3:
-            subject = "Test mail"
-            break
         default:
             subject = "Muistutus viesti"
     }
-    
+
     const html = messageCreator(area, subject)
 
-    const info = transporter.sendMail({
-        from: "Alueet - jako huomautus <" + process.env.EMAIL_SENDER + ">",
+    let info = await transporter.sendMail({
+        from: "Alueet - jako huomautus <jakoSupport@mail.com>",
         to: receiverEmail,
         subject: subject,
         html: html
     })
+
+    console.log("Preview URL: ", nodemailer.getTestMessageUrl(info));
 
     transporter.close()
 }

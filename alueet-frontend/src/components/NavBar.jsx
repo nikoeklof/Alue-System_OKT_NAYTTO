@@ -252,7 +252,7 @@ const NavBar = ({ user }) => {
 							onClick={handleOpenUserMenu}
 							sx={styles.user.link}
 						>
-							{user ? user.guestAccount.email : 'Aloitus'}
+							{user ? user.email : 'Aloitus'}
 						</Button>
 						<Menu
 							sx={styles.normal.menu.sx}

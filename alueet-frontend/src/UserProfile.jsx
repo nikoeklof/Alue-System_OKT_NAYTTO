@@ -11,6 +11,8 @@ import {
 
 import theme from './style/theme';
 import DeleteWarningModal from './components/DeleteWarningModal';
+import { useMutation } from '@apollo/client';
+import { EDIT_USER_EMAIL, EDIT_USER_PASSWORD } from './queries';
 
 const styles = {
 	container: {
@@ -38,32 +40,42 @@ const styles = {
 
 const UserProfile = ({ user }) => {
 	const [openDel, setDelOpen] = useState(false);
-
 	const [email, setEmail] = useState(user ? user.email : null);
+	const [password, setPassword] = useState('');
 	const [emailError, setEmailError] = useState('');
+	const [editUserEmail] = useMutation(EDIT_USER_EMAIL, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const [editUserPassword] = useMutation(EDIT_USER_PASSWORD, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
 
-	// const updateUser = (props) => {
-	// 	const userList = users;
-	// 	let userToUpdate = { ...props };
+	const updateEmail = async () => {
+		if (!email) return setEmailError('Sähköposti tarvitaan');
+		else setEmailError('');
 
-	// 	if (!email) return setEmailError('Sähköposti tarvitaan');
-	// 	else setEmailError('');
-
-	// 	userList.forEach((user, i) => {
-	// 		if (user.id === props.id) userList.splice(i, 1, userToUpdate);
-	// 	});
-	// 	setUsers([...userList]);
-	// 	console.log(userList);
-	// };
+		await editUserEmail({
+			variables: {
+				email: email,
+			},
+		});
+		if (password) {
+			await editUserPassword({
+				variables: {
+					password: password,
+				},
+			});
+		}
+	};
 
 	const delProps = {
 		openDel,
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti tallentaa tiedot?',
 		handleConfirm: () => {
-			//   updateUser(updatedUser);
-			//   setUsernameError("");
+			updateEmail();
 			setEmailError('');
+			setPassword('');
 			setDelOpen(false);
 		},
 	};
@@ -77,20 +89,6 @@ const UserProfile = ({ user }) => {
 				Profiilin tiedot
 			</Typography>
 			<FormGroup>
-				<Paper sx={styles.paper}>
-					<Typography>Vaihda käyttäjänimi</Typography>
-					<FormControl sx={styles.form}>
-						{/* <TextField
-              label="Käyttäjänimi"
-              defaultValue={loggedUser.username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              error={!username}
-              helperText={usernameError}
-              variant="outlined"
-            /> */}
-					</FormControl>
-				</Paper>
 				<Paper sx={styles.paper}>
 					<Typography>Vaihda sähköposti</Typography>
 					<FormControl sx={styles.form}>
@@ -110,7 +108,10 @@ const UserProfile = ({ user }) => {
 					<FormControl sx={styles.form}>
 						<TextField
 							label='Salasana'
+							type='password'
 							variant='outlined'
+							defaultValue={password}
+							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</FormControl>
 				</Paper>

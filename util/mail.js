@@ -1,11 +1,9 @@
 const nodemailer = require("nodemailer")
+const { google } = require("googleapis")
 require("dotenv").config()
 const messageCreator = require("./messageCreator")
 
 // For Google accounts
-
-/*
-const { google } = require("googleapis")
 
 function googleAuth() {
     const OAuth2 = google.auth.OAuth2
@@ -31,7 +29,6 @@ function googleAuth() {
         }
     })
 }
-*/
 
 // For fake emails, check "Preview Url" in console once sent
 
@@ -50,7 +47,12 @@ async function createTestAccount() {
 }
 
 async function main(receiverEmail, area, type) {
-    let transporter = await createTestAccount()
+    let transporter
+
+    if (process.env.USE_GMAIL === "1")
+        transporter = googleAuth()
+    else
+        transporter = await createTestAccount()
 
     let subject
 

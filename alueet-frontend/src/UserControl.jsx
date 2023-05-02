@@ -27,11 +27,9 @@ import theme from './style/theme';
 import { useMutation } from '@apollo/client';
 import {
 	TOGGLE_USER_ADMIN,
-	EDIT_GUEST,
-	CREATE_GUEST,
 	CREATE_USER,
 	DELETE_USER,
-	DELETE_GUEST,
+	EDIT_USER_EMAIL_AS_ADMIN,
 	TOGGLE_USER_DISABLED,
 } from './queries';
 
@@ -106,16 +104,10 @@ const UserControl = ({
 	const [toggleUserDisabled] = useMutation(TOGGLE_USER_DISABLED, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
-	const [editGuest] = useMutation(EDIT_GUEST, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [createGuest] = useMutation(CREATE_GUEST, {
+	const [editUserEmailAsAdmin] = useMutation(EDIT_USER_EMAIL_AS_ADMIN, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [createUser] = useMutation(CREATE_USER, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [deleteGuest] = useMutation(DELETE_GUEST, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [deleteUser] = useMutation(DELETE_USER, {
@@ -132,17 +124,17 @@ const UserControl = ({
 	};
 
 	const updateUser = async (user) => {
-		const { userId, guestId, email } = user;
+		const { userId, email } = user;
 		await toggleUserAdmin({
 			variables: { userId: userId },
 		});
 		await toggleUserDisabled({
 			variables: { userId: userId },
 		});
-		await editGuest({
+		await editUserEmailAsAdmin({
 			variables: {
+				userId: userId,
 				email: email,
-				guestId: guestId,
 			},
 		});
 		refetchUsers();
@@ -157,7 +149,6 @@ const UserControl = ({
 
 	const addUser = async (user) => {
 		const { email, password } = user;
-		await createGuest({ variables: { email: email } });
 		await createUser({ variables: { password: password, email: email } });
 		refetchUsers();
 		refetchUsersDisabled();
@@ -165,11 +156,9 @@ const UserControl = ({
 
 	const removeUser = async (user) => {
 		const userId = user.id;
-		const guestId = user.guestAccount.id;
-		const email = user.guestAccount.id;
-		await deleteGuest({ variables: { guestId: guestId, email: email } });
+		const email = user.email;
 		await deleteUser({
-			variables: { userId: userId, email: email, guestId: guestId },
+			variables: { userId: userId, email: email },
 		});
 		refetchUsers();
 		refetchUsersDisabled();
@@ -186,6 +175,8 @@ const UserControl = ({
 		columns,
 		styles,
 		updateUserDisabled,
+		removeUser,
+		updateUser,
 	};
 
 	return (

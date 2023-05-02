@@ -1,5 +1,5 @@
+/* eslint-disable indent */
 import React, { Fragment, useState } from 'react';
-
 import {
 	Box,
 	Button,
@@ -13,7 +13,6 @@ import {
 	Typography,
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-
 import EditUserModal from './EditUserModal';
 import ChangeDisabledModal from './ChangeDisabledModal';
 import DeleteWarningModal from './DeleteWarningModal';
@@ -29,11 +28,6 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
 	const [openChangeDisabled, setOpenChangeDisabled] = useState(false);
-	const areaArray = [];
-
-	for (const area in user.areas) {
-		areaArray.push(user.areas[area]);
-	}
 
 	const editProps = {
 		openEdit,
@@ -50,7 +44,6 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 	const changeDisabledProps = {
 		openChangeDisabled,
 		handleCloseChangeDisabledModal: () => setOpenChangeDisabled(false),
-		handleConfirm: () => console.log(openChangeDisabled),
 		originalUser: user,
 	};
 
@@ -72,9 +65,9 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 							{open ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>
 					</TableCell>
-					<TableCell>{user.guestAccount.email}</TableCell>
+					<TableCell>{user.email}</TableCell>
 					<TableCell align='right'>
-						{user.admin ? 'Kyllä' : 'Ei'}
+						{user.rank.admin ? 'Kyllä' : 'Ei'}
 					</TableCell>
 					<TableCell align='right'>{user.id}</TableCell>
 				</TableRow>
@@ -89,7 +82,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 							unmountOnExit
 						>
 							<Box sx={{ margin: 1 }}>
-								{!user.disabled ? (
+								{!user.rank.disabled ? (
 									<>
 										<Typography
 											variant='h6'
@@ -109,31 +102,41 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 												</TableRow>
 											</TableHead>
 											<TableBody>
-												{areaArray.map((area) => {
-													return (
-														<TableRow
-															key={user.areas.id}
-														>
-															<TableCell
-																component='th'
-																scope='row'
-															>
-																Fetch from
-																backend
-															</TableCell>
-															<TableCell>
-																{area}
-															</TableCell>
-														</TableRow>
-													);
-												})}
+												{user.areas
+													? user.areas.map((area) => {
+															return (
+																<TableRow
+																	key={
+																		area.id
+																	}
+																>
+																	<TableCell
+																		component='th'
+																		scope='row'
+																	>
+																		{
+																			area
+																				.info
+																				.quarter
+																		}
+																	</TableCell>
+																	<TableCell>
+																		{
+																			area.id
+																		}
+																	</TableCell>
+																</TableRow>
+															);
+															// eslint-disable-next-line no-mixed-spaces-and-tabs
+													  })
+													: ''}
 											</TableBody>
 										</Table>
 									</>
 								) : (
 									''
 								)}
-								{!user.disabled ? (
+								{!user.rank.disabled ? (
 									<Button
 										variant='contained'
 										sx={styles.button}
@@ -152,7 +155,6 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 										Ota käyttäjä käyttöön
 									</Button>
 								)}
-
 								<Button
 									variant='contained'
 									sx={styles.button}

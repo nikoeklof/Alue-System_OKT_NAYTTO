@@ -43,11 +43,11 @@ const styles = {
 };
 
 const EditUserModal = ({ ...editProps }) => {
-	const [email, setEmail] = useState(
-		editProps.originalUser?.guestAccount.email
+	const [email, setEmail] = useState(editProps.originalUser?.email);
+	const [disabled, setDisabled] = useState(
+		editProps.originalUser.rank.disabled
 	);
-	const [disabled, setDisabled] = useState(editProps.originalUser.disabled);
-	const [admin, setAdmin] = useState(editProps.originalUser?.admin);
+	const [admin, setAdmin] = useState(editProps.originalUser?.rank.admin);
 	const [emailError, setEmailError] = useState('');
 
 	const handleClose = () => {
@@ -58,7 +58,6 @@ const EditUserModal = ({ ...editProps }) => {
 	const handleSubmit = () => {
 		const newUser = {
 			userId: editProps.originalUser.id,
-			guestId: editProps.originalUser.guestAccount.id,
 			email,
 			disabled,
 		};
@@ -92,9 +91,7 @@ const EditUserModal = ({ ...editProps }) => {
 						<TextField
 							label='Sähköposti'
 							variant='outlined'
-							defaultValue={
-								editProps.originalUser?.guestAccount.email
-							}
+							defaultValue={editProps.originalUser?.email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
 							error={!email}

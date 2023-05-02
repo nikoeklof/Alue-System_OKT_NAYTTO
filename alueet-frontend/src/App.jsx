@@ -38,6 +38,8 @@ const App = () => {
 
 	const { data: loggedUserData, loading: loadingUserData } = useQuery(ME);
 
+	console.log(loggedUserData);
+
 	useEffect(() => {
 		setUsers(dataUsers?.allUsers);
 	}, [loadingUsers, dataUsers, refetchUsers]);
@@ -74,7 +76,7 @@ const App = () => {
 								users={users}
 								usersDisabled={usersDisabled}
 								setUsers={setUsers}
-								refetch={refetchUsers}
+								refetchUsers={refetchUsers}
 								refetchUsersDisabled={refetchUsersDisabled}
 							/>
 						}

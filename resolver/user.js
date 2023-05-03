@@ -11,13 +11,13 @@ module.exports = {
 		allUsers: async (root, args) => {
 			const newArgs = {}
 
-			if (args.admin !== undefined)
+			if ("admin" in args)
 				newArgs["rank.admin"] = args.admin
 
-			if (args.disabled !== undefined)
+			if ("disabled" in args)
 				newArgs["rank.disabled"] = args.disabled
 
-			if (args.worker !== undefined)
+			if ("worker" in args)
 				newArgs["rank.worker"] = args.worker
 
 			return await User.find(newArgs)

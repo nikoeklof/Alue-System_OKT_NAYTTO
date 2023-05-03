@@ -119,7 +119,7 @@ const EditUserModal = ({ ...editProps }) => {
 									}
 								/>
 							}
-							label='Disabled'
+							label='Aktiivinen'
 							sx={styles.input}
 						/>
 					</FormControl>

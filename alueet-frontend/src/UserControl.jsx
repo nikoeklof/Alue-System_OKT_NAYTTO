@@ -204,7 +204,7 @@ const UserControl = ({
 							variant='h6'
 							sx={styles.subText}
 						>
-							Käytössä
+							Aktiiviset käyttäjät
 							<IconButton sx={styles.icon}>
 								{checkedNotDisabled ? (
 									<RemoveIcon />

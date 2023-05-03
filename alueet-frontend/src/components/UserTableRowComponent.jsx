@@ -158,7 +158,7 @@ const UserTableRowComponent = ({
 											setOpenChangeDisabled(true)
 										}
 									>
-										Ota käyttäjä käyttöön
+										Aktivoi käyttäjä
 									</Button>
 								)}
 								<Button

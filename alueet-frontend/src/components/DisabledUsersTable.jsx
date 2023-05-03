@@ -50,7 +50,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 							variant='h6'
 							sx={styles.subText}
 						>
-							Ei käytössä
+							Epäaktiiviset käyttäjät
 							<IconButton sx={styles.icon}>
 								{checkedDisabled ? <RemoveIcon /> : <AddIcon />}
 							</IconButton>

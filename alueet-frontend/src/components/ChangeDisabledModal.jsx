@@ -49,8 +49,7 @@ const ChangeDisabledModal = ({ ...changeDisabledProps }) => {
 					component='h2'
 					sx={styles.header}
 				>
-					Vaihda käyttäjä{' '}
-					{!disabled ? 'käytettäväksi' : 'pois käytöstä'}?
+					Vaihda käyttäjä aktiiviseksi?
 				</Typography>
 				<Box>
 					<Button

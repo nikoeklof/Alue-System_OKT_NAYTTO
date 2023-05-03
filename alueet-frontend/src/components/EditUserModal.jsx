@@ -45,7 +45,7 @@ const styles = {
 const EditUserModal = ({ ...editProps }) => {
 	const [email, setEmail] = useState(editProps.originalUser?.email);
 	const [disabled, setDisabled] = useState(
-		editProps.originalUser.rank.disabled
+		editProps.originalUser?.rank.disabled
 	);
 	const [admin, setAdmin] = useState(editProps.originalUser?.rank.admin);
 	const [emailError, setEmailError] = useState('');
@@ -60,6 +60,8 @@ const EditUserModal = ({ ...editProps }) => {
 			userId: editProps.originalUser.id,
 			email,
 			disabled,
+			admin,
+			originalUser: editProps.originalUser,
 		};
 
 		if (!email) setEmailError('Sähköposti on pakollinen');

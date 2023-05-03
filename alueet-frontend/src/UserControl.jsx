@@ -124,27 +124,33 @@ const UserControl = ({
 	};
 
 	const updateUser = async (user) => {
-		const { userId, email } = user;
-		await toggleUserAdmin({
-			variables: { userId: userId },
-		});
-		await toggleUserDisabled({
-			variables: { userId: userId },
-		});
-		await editUserEmailAsAdmin({
-			variables: {
-				userId: userId,
-				email: email,
-			},
-		});
+		const { userId, email, admin, disabled, originalUser } = user;
+		if (originalUser.rank.admin !== admin)
+			await toggleUserAdmin({
+				variables: { userId: userId },
+			});
+		if (originalUser.rank.disabled !== disabled)
+			await toggleUserDisabled({
+				variables: { userId: userId },
+			});
+		if (email !== originalUser.email)
+			await editUserEmailAsAdmin({
+				variables: {
+					userId: userId,
+					email: email,
+				},
+			});
 		refetchUsers();
 		refetchUsersDisabled();
 	};
 
-	const updateUserDisabled = async (userId) => {
+	const updateUserDisabled = async (user) => {
+		const userId = user.id;
 		await toggleUserDisabled({
 			variables: { userId: userId },
 		});
+		refetchUsers();
+		refetchUsersDisabled();
 	};
 
 	const addUser = async (user) => {

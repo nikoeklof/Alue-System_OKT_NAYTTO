@@ -17,7 +17,6 @@ import {
 import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 import { InfinitySpin } from 'react-loader-spinner';
 
-import DeleteWarningModal from './DeleteWarningModal';
 import UserTableRowComponent from './UserTableRowComponent';
 
 const DisabledUsersTable = ({ ...disabledProps }) => {
@@ -31,7 +30,6 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 	} = disabledProps;
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [open, setOpen] = useState(false);
 	const [checkedDisabled, setCheckedDisabled] = useState(false);
 
 	const handleChangePage = (event, newPage) => {
@@ -41,13 +39,6 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
-	};
-
-	const delProps = {
-		openDel: open,
-		handleCloseDelModal: () => setOpen(false),
-		warningText: 'Haluatko laittaa käyttäjän käyttöön?',
-		handleConfirm: (user) => updateUserDisabled(user.id),
 	};
 
 	if (usersDisabled) {
@@ -105,6 +96,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 												user,
 												updateUser,
 												removeUser,
+												updateUserDisabled,
 											};
 
 											return (
@@ -129,7 +121,6 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 						/>
 					</Collapse>
 				</Paper>
-				<DeleteWarningModal {...delProps} />
 			</>
 		);
 	} else {

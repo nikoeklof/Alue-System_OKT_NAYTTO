@@ -161,7 +161,7 @@ module.exports = {
 			contextCheck(contextValue.authUser, 2);
 
 			const user = await User.findById(args.userId);
-			user.rank.disabled = !user.disabled;
+			user.rank.disabled = !user.rank.disabled;
 			return user.save();
 		},
 
@@ -169,7 +169,7 @@ module.exports = {
 			contextCheck(contextValue.authUser, 2);
 
 			const user = await User.findById(args.userId);
-			user.rank.worker = !user.disabled;
+			user.rank.worker = !user.rank.worker;
 			return user.save();
 		},
 
@@ -177,7 +177,7 @@ module.exports = {
 			contextCheck(contextValue.authUser, 2);
 
 			const user = await User.findById(args.userId);
-			user.rank.admin = !user.admin;
+			user.rank.admin = !user.rank.admin;
 			return user.save();
 		},
 	},

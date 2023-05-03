@@ -59,7 +59,9 @@ const App = () => {
 				<Routes>
 					<Route
 						path='/'
-						element={<Main />}
+						element={
+							<Main user={!loadingUserData ? loggedUser : null} />
+						}
 					/>
 					<Route
 						path='/login'

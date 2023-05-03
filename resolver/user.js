@@ -72,8 +72,6 @@ module.exports = {
 		editUserEmail: async (root, args, contextValue) => {
 			const user = contextCheck(contextValue.authUser, 0);
 
-			if (!user) throw new UserInputError('Guest not found');
-
 			user.email = args.newEmail;
 
 			return user.save().catch((error) => {
@@ -113,15 +111,16 @@ module.exports = {
 		},
 
 		deleteUser: async (root, args, contextValue) => {
-			const user = contextCheck(contextValue.authUser, 2)
+			contextCheck(contextValue.authUser, 2)
 
-			if (args.userId)
+			if ("userId" in args)
 				return await User.findByIdAndDelete(args.userId)
 
-			if (args.email)
+			else if ("email" in args)
 				return await User.findOneAndDelete({ email: args.email })
-
-			throw new UserInputError('At least 1 argument is required')
+				
+			else
+				throw new UserInputError('At least 1 argument is required')
 		},
 
 		editUserEmailAsAdmin: async (root, args, contextValue) => {

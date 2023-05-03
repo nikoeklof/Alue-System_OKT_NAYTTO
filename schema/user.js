@@ -29,7 +29,7 @@ module.exports = `
     editUserEmail ( email: String!): User
     editUserPassword (password: String!): User
     editUserAbout (aboutMe: String!): User
-    deleteUser (email: String, userId: ID, guestId: ID): User
+    deleteUser (email: String, userId: ID): User
 
     editUserEmailAsAdmin (userId: ID!, email: String!): User
     editUserPasswordAsAdmin (userId: ID!, password: String!): User

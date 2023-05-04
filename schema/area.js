@@ -51,6 +51,7 @@ module.exports = `
     deleteArea (areaId: ID!): Area
 
     makeRequest (areaId: ID!): Area
+    removeRequest (areaId: ID!): Area
     allowAreaRequest (areaId: ID!, email: String!): Area
     returnSharedArea (areaId: ID!): Area
   }

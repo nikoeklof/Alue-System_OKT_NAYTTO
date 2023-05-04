@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const Area = require('../models/area');
 const contextCheck = require('../util/contextCheck');
 
 module.exports = {
@@ -72,7 +73,9 @@ module.exports = {
 		editUserEmail: async (root, args, contextValue) => {
 			const user = contextCheck(contextValue.authUser, 0);
 
-			user.email = args.newEmail;
+			await Area.updateMany({ ["shareState.shareRequests"]: user.email }, { $set: { "shareState.shareRequests.$": args.email } })
+
+			user.email = args.email;
 
 			return user.save().catch((error) => {
 				throw new UserInputError(error.message, {
@@ -113,20 +116,31 @@ module.exports = {
 		deleteUser: async (root, args, contextValue) => {
 			contextCheck(contextValue.authUser, 2)
 
+			let user
+
 			if ("userId" in args)
-				return await User.findByIdAndDelete(args.userId)
+				user = await User.findByIdAndDelete(args.userId)
 
 			else if ("email" in args)
-				return await User.findOneAndDelete({ email: args.email })
-				
+				user = await User.findOneAndDelete({ email: args.email })
+
 			else
 				throw new UserInputError('At least 1 argument is required')
+
+			await Area.updateMany({}, { $pull: { "shareState.shareRequests": user.email } })
+
+			return await user.deleteOne()
 		},
 
 		editUserEmailAsAdmin: async (root, args, contextValue) => {
 			contextCheck(contextValue.authUser, 2)
 
 			const user = await User.findById(args.userId)
+
+			if (!user)
+				throw new UserInputError("User not found")
+
+			await Area.updateMany({ ["shareState.shareRequests"]: user.email }, { $set: { "shareState.shareRequests.$": args.email } })
 
 			user.email = args.email
 
@@ -141,6 +155,9 @@ module.exports = {
 			contextCheck(contextValue.authUser, 2)
 
 			const user = await User.findById(args.userId)
+
+			if (!user)
+				throw new UserInputError("User not found")
 
 			if (args.password.length < 5)
 				throw new UserInputError(

@@ -107,6 +107,22 @@ module.exports = {
             return area
         },
 
+        removeRequest: async (root, args, contextValue) => {
+            const user = contextCheck(contextValue.authUser, 0)
+
+            const area = await Area.findById(args.areaId)
+
+            if (!area)
+                throw new UserInputError("Area not found")
+
+            if (!area.shareState.shareRequests.includes(user.email))
+                throw new UserInputError("You have not requested this area")
+
+            area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user.email), 1)
+
+            return area.save()
+        },
+
         allowAreaRequest: async (root, args, contextValue) => {
             const authUser = contextCheck(contextValue.authUser, 1)
 

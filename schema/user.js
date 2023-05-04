@@ -26,7 +26,7 @@ module.exports = `
 
   type Mutation {
     createUser (email: String!, password: String!): User
-    editUserEmail ( email: String!): User
+    editUserEmail (email: String!): User
     editUserPassword (password: String!): User
     editUserAbout (aboutMe: String!): User
     deleteUser (email: String, userId: ID): User

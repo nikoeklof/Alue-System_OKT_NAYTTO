@@ -46,7 +46,7 @@ async function createTestAccount() {
     })
 }
 
-async function main(receiverEmail, area, type) {
+async function main(receiverEmail, incomingValues, type) {
     let transporter
 
     if (process.env.USE_GMAIL === "1")
@@ -70,7 +70,7 @@ async function main(receiverEmail, area, type) {
             subject = "Muistutus viesti"
     }
 
-    const html = messageCreator(area, subject)
+    const html = messageCreator(incomingValues, subject)
 
     let info = await transporter.sendMail({
         from: "Alueet - jako huomautus <jakoSupport@mail.com>",

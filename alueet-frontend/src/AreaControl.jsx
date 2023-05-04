@@ -104,12 +104,7 @@ const AreaControl = () => {
   const [cityIndex, setCityIndex] = useState(
     cities.findIndex((city) => city.Kunta === defaultFilter)
   );
-  const {
-    data: quarterData,
-    loading: quarterLoading,
-    error: quarterError,
-    refetch: quarterRefetch,
-  } = useQuery(FILTERED_BY_QUARTER, {
+  const { data: quarterData } = useQuery(FILTERED_BY_QUARTER, {
     variables: { quarter: quarterFilter, cityName: cityFilter },
     onError: (e) => {
       console.log(e.graphQLErrors[0].message);

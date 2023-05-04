@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const resolvers = require("./resolvers");
-const typeDefs = require("./schema");
+const schema = require("./execSchema");
 const User = require("./models/user");
 
 const mongoUrl = process.env.MONGODB_URI;
@@ -21,8 +20,7 @@ mongoose
   });
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   plugins: [
     {
       requestDidStart(requestContext) {
@@ -43,7 +41,6 @@ const server = new ApolloServer({
               console.log(
                 "Variables: " + JSON.stringify(requestContext.request.variables)
               );
-              console.log("***");
             }
           },
         };
@@ -59,7 +56,7 @@ startStandaloneServer(server, {
     if (auth) {
       const decodedToken = jwt.verify(auth, process.env.JWT_SECRET);
       const authUser = await User.findById(decodedToken.id);
-      if (!authUser.disabled) return { authUser };
+      if (!authUser.rank.disabled) return { authUser };
     }
   },
 }).then(({ url }) => {

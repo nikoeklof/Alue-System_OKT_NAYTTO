@@ -4,8 +4,8 @@ const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 
-const schema = require("./execSchema")
-const User = require("./models/user")
+const schema = require("./execSchema");
+const User = require("./models/user");
 
 const mongoUrl = process.env.MONGODB_URI
 console.log("Connecting to", mongoUrl)
@@ -30,10 +30,18 @@ const server = new ApolloServer({
               if (operationName === "IntrospectionQuery")
                 return null
 
-              console.log("***")
-              console.log("Operation type: " + operation.operation)
-              console.log("Operation name: " + operation.loc.source.body.replace(/(\r\n|\n|\r)/gm, "").replace(/\s+/g, ' ').trim())
-              console.log("Variables: " + JSON.stringify(requestContext.request.variables))
+              console.log("***");
+              console.log("Operation type: " + operation.operation);
+              console.log(
+                "Operation name: " +
+                  operation.loc.source.body
+                    .replace(/(\r\n|\n|\r)/gm, "")
+                    .replace(/\s+/g, " ")
+                    .trim()
+              );
+              console.log(
+                "Variables: " + JSON.stringify(requestContext.request.variables)
+              );
             }
           }
         }
@@ -47,10 +55,9 @@ startStandaloneServer(server, {
   context: async ({ req, res }) => {
     const auth = req ? req.headers.authorization : null
     if (auth) {
-      const decodedToken = jwt.verify(auth, process.env.JWT_SECRET)
-      const authUser = await User.findById(decodedToken.id)
-      if (!authUser.rank.disabled)
-        return { authUser }
+      const decodedToken = jwt.verify(auth, process.env.JWT_SECRET);
+      const authUser = await User.findById(decodedToken.id);
+      if (!authUser.rank.disabled) return { authUser };
     }
   },
 }).then(({ url }) => {

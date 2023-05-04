@@ -24,6 +24,9 @@ module.exports = {
             if ("isShared" in args)
                 newArgs["shareState.isShared"] = args.isShared
 
+            if ("requesteeEmail" in args)
+                newArgs["shareState.shareRequests"] = { $in: args.requesteeEmail }
+
             return await Area.find(newArgs)
         },
     },
@@ -33,7 +36,7 @@ module.exports = {
         shareState: (root) => root.shareState,
         shareHistory: (root) => root.shareHistory
     },
-    
+
     Mutation: {
         createArea: (root, args, contextValue) => {
             //contextCheck(contextValue.authUser, 2)

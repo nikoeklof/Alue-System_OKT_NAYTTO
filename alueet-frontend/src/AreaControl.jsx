@@ -16,12 +16,7 @@ import { InfinitySpin } from "react-loader-spinner";
 import theme from "./style/theme";
 import AreaMap from "./AreaMap";
 import AreaTableRowComponent from "./components/AreaTableRowComponent";
-import {
-  ALLOW_AREA_REQUEST,
-  FILTERED_AREAS,
-  MAKE_REQUEST,
-  FILTERED_BY_QUARTER,
-} from "./queries";
+import { FILTERED_AREAS, MAKE_REQUEST, FILTERED_BY_QUARTER } from "./queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { cities } from "./db/cities";
 
@@ -83,7 +78,7 @@ const styles = {
   },
 };
 
-const AreaControl = () => {
+const AreaControl = ({ loggedUser }) => {
   const defaultFilter = localStorage.getItem("defaultFilter");
   if (!defaultFilter || defaultFilter === "null")
     localStorage.setItem("defaultFilter", "Mikkeli");
@@ -93,6 +88,7 @@ const AreaControl = () => {
   const [cityFilter, setCityFilter] = useState(
     defaultFilter ? defaultFilter : cities[0].Kunta
   );
+  const [loanError, setLoanError] = useState("");
   const [cityFilterInput, setCityFilterInput] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -125,14 +121,12 @@ const AreaControl = () => {
 
   const [makeAreaRequest] = useMutation(MAKE_REQUEST, {
     onError: (e) => {
-      console.log(e);
+      setLoanError(e);
     },
   });
-  const [loanAreaMutation] = useMutation(ALLOW_AREA_REQUEST, {
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+  useEffect(() => {
+    console.log(loanError);
+  }, [loanError]);
 
   useEffect(() => {
     setFilteredAreas(data?.allAreas);
@@ -172,13 +166,11 @@ const AreaControl = () => {
   };
 
   const loanArea = async (props) => {
-    makeAreaRequest({
-      variables: { areaId: props.id, email: "nikoe123@outlook.com" },
-    }).then(() => {
-      loanAreaMutation({
-        variables: { areaId: props.id, email: "nikoe123@outlook.com" },
+    if (loggedUser) {
+      makeAreaRequest({
+        variables: { areaId: props.id },
       });
-    });
+    }
   };
 
   const clearSelected = () => {

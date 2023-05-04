@@ -169,8 +169,8 @@ export const EDIT_USER_PASSWORD = gql`
 
 //needs testing
 export const MAKE_REQUEST = gql`
-  mutation makeRequest($areaId: ID!, $email: String!) {
-    makeRequest(areaId: $areaId, email: $email) {
+  mutation makeRequest($areaId: ID!) {
+    makeRequest(areaId: $areaId) {
       id
       shareState {
         isShared

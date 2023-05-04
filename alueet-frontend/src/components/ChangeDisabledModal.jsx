@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Box, Typography, Modal, Button } from '@mui/material';
 
 import theme from '../style/theme';
-import { TOGGLE_USER_DISABLED } from '../queries';
-import { useMutation } from '@apollo/client';
 
 const styles = {
 	modal: {
@@ -35,10 +33,6 @@ const ChangeDisabledModal = ({ ...changeDisabledProps }) => {
 	const [disabled, setDisabled] = useState(
 		changeDisabledProps.originalUser.disabled
 	);
-	const [toggleDisabled] = useMutation(TOGGLE_USER_DISABLED, {
-		variables: { userId: changeDisabledProps.originalUser.id },
-		onError: (e) => console.error(e),
-	});
 
 	const handleClose = () =>
 		changeDisabledProps.handleCloseChangeDisabledModal();
@@ -55,8 +49,7 @@ const ChangeDisabledModal = ({ ...changeDisabledProps }) => {
 					component='h2'
 					sx={styles.header}
 				>
-					Vaihda käyttäjä{' '}
-					{!disabled ? 'käytettäväksi' : 'pois käytöstä'}?
+					Vaihda käyttäjä aktiiviseksi?
 				</Typography>
 				<Box>
 					<Button
@@ -71,7 +64,9 @@ const ChangeDisabledModal = ({ ...changeDisabledProps }) => {
 						variant='contained'
 						onClick={() => {
 							setDisabled(!disabled);
-							toggleDisabled();
+							changeDisabledProps.updateUserDisabled(
+								changeDisabledProps.originalUser
+							);
 							handleClose();
 						}}
 					>

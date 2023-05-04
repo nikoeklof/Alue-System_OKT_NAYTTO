@@ -23,7 +23,12 @@ const styles = {
 	},
 };
 
-const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
+const UserTableRowComponent = ({
+	user,
+	updateUser,
+	removeUser,
+	updateUserDisabled,
+}) => {
 	const [open, setOpen] = useState(false);
 	const [openEdit, setEditOpen] = useState(false);
 	const [openDel, setDelOpen] = useState(false);
@@ -45,6 +50,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 		openChangeDisabled,
 		handleCloseChangeDisabledModal: () => setOpenChangeDisabled(false),
 		originalUser: user,
+		updateUserDisabled,
 	};
 
 	return (
@@ -152,7 +158,7 @@ const UserTableRowComponent = ({ user, updateUser, removeUser }) => {
 											setOpenChangeDisabled(true)
 										}
 									>
-										Ota käyttäjä käyttöön
+										Aktivoi käyttäjä
 									</Button>
 								)}
 								<Button

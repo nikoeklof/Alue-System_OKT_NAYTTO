@@ -7,8 +7,6 @@ import {
 	FormGroup,
 	FormControl,
 	TextField,
-	FormControlLabel,
-	Switch,
 } from '@mui/material';
 
 import theme from '../style/theme';
@@ -43,7 +41,6 @@ const styles = {
 };
 
 const CreateUserModal = ({ ...createProps }) => {
-	const [admin, setAdmin] = useState(false);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [emailError, setEmailError] = useState('');
@@ -54,7 +51,6 @@ const CreateUserModal = ({ ...createProps }) => {
 		setPasswordError('');
 		setEmail('');
 		setPassword('');
-		setAdmin(false);
 		createProps.handleCreateModalClose();
 	};
 
@@ -70,10 +66,6 @@ const CreateUserModal = ({ ...createProps }) => {
 		};
 		createProps.addUser(user);
 		handleClose();
-	};
-
-	const handleChangeAdmin = () => {
-		setAdmin(!admin);
 	};
 
 	return (
@@ -110,11 +102,6 @@ const CreateUserModal = ({ ...createProps }) => {
 							required
 							error={!password}
 							helperText={passwordError}
-							sx={styles.input}
-						/>
-						<FormControlLabel
-							control={<Switch onChange={handleChangeAdmin} />}
-							label='Admin'
 							sx={styles.input}
 						/>
 					</FormControl>

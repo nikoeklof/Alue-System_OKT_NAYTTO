@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
 	Container,
 	Collapse,
@@ -66,11 +66,17 @@ const styles = {
 	},
 };
 
-const Main = () => {
+const Main = ({ user }) => {
 	const [areaControlChecked, setAreaControlChecked] = useState(false);
 	const [userChecked, setUserChecked] = useState(false);
 	const [createAreaChecked, setCreateAreaChecked] = useState(false);
 	const [lendChecked, setLendChecked] = useState(false);
+	const navigate = useNavigate();
+
+	const logOut = () => {
+		navigate('/');
+		navigate(0);
+	};
 
 	return (
 		<Container sx={styles.container}>
@@ -353,23 +359,37 @@ const Main = () => {
 							variant='h6'
 							sx={styles.subText}
 						>
-							Aloitus
+							{!user ? 'Aloitus' : 'Lopetus'}
 						</Typography>
 						<Typography sx={styles.text}>
-							Kirjaudu sisään, jotta saat sivun toiminnot
-							käyttöösi!
+							{!user
+								? 'Kirjaudu sisään, jotta saat sivun toiminnot käyttöösi!'
+								: 'Valmis kaikkien muutosten kanssa?'}
 						</Typography>
-						<Link
-							to={'/login'}
-							style={styles.link}
-						>
+						{!user ? (
+							<Link
+								to={'/login'}
+								style={styles.link}
+							>
+								<Button
+									variant='contained'
+									sx={styles.button}
+								>
+									Kirjaudu sisään
+								</Button>
+							</Link>
+						) : (
 							<Button
+								onClick={() => {
+									localStorage.setItem('token', '');
+									return logOut();
+								}}
 								variant='contained'
 								sx={styles.button}
 							>
-								Kirjaudu sisään
+								Kirjaudu ulos
 							</Button>
-						</Link>
+						)}
 					</Paper>
 				</Grid>
 			</Grid>

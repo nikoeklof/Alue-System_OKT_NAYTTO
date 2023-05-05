@@ -15,6 +15,37 @@ export const ALL_USERS = gql`
     }
   }
 `;
+export const AREAS_WITH_REQUESTS = gql`
+  query areasWithRequests($hasRequests: Boolean) {
+    allAreas(hasRequests: $hasRequests) {
+      id
+      info {
+        address
+        buildings
+        cityName
+        latlngs {
+          lat
+          lng
+        }
+        misc
+        quarter
+      }
+      shareState {
+        shareRequests
+        sharedTo
+        sharedBy
+        shareStartDate
+        isShared
+      }
+      shareHistory {
+        shareEndDate
+        shareStartDate
+        sharedBy
+        sharedTo
+      }
+    }
+  }
+`;
 
 export const FILTERED_AREAS = gql`
   query filteredAreas($cityName: String) {
@@ -104,10 +135,7 @@ export const ALL_AREAS = gql`
         isShared
         shareStartDate
         sharedBy
-        shareRequests {
-          id
-          email
-        }
+        shareRequests
         sharedTo
       }
     }

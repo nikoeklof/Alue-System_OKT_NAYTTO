@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Button,
   Container,
   Paper,
   Table,
@@ -13,12 +12,14 @@ import {
   Typography,
 } from "@mui/material";
 import { InfinitySpin } from "react-loader-spinner";
-import { ALLOW_AREA_REQUEST } from "./queries";
+import { ALLOW_AREA_REQUEST, AREAS_WITH_REQUESTS } from "./queries";
+
 import { useMutation, useQuery } from "@apollo/client";
 
 import theme from "./style/theme";
 
 import DeleteWarningModal from "./components/DeleteWarningModal";
+import LendListTableRowComponent from "./components/LendListTableRowComponent";
 
 const styles = {
   container: {
@@ -39,13 +40,14 @@ const styles = {
 
 const columns = [
   {
-    id: "email",
-    label: "Sähköposti",
-    minWidth: 170,
-  },
-  {
     id: "area",
     label: "Alue",
+    minWidth: 170,
+  },
+  { id: "info", label: "Alueen tiedot", minWidth: 170, textAlign: "center" },
+  {
+    id: "city",
+    label: "Kaupunki",
     minWidth: 170,
   },
 ];
@@ -55,6 +57,13 @@ const LendList = ({ users }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDel, setDelOpen] = useState(false);
   const [warningText, setWarningText] = useState("");
+  const [areasWithRequests, setAreasWithRequests] = useState(null);
+  const {
+    data: areaData,
+    loading: areaLoading,
+    error: areaError,
+    refetch: areaRefetch,
+  } = useQuery(AREAS_WITH_REQUESTS, { variables: { hasRequests: true } });
   const [loanAreaMutation] = useMutation(ALLOW_AREA_REQUEST, {
     onError: (e) => {
       console.log(e);
@@ -75,8 +84,11 @@ const LendList = ({ users }) => {
     handleCloseDelModal: () => setDelOpen(false),
     warningText,
   };
+  useEffect(() => {
+    setAreasWithRequests(areaData?.allAreas);
+  }, [areaData]);
 
-  return users ? (
+  return areasWithRequests ? (
     <Container sx={styles.container}>
       <Typography variant="h6" sx={styles.mainText}>
         Lainauslista
@@ -90,71 +102,40 @@ const LendList = ({ users }) => {
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth }}
+                    style={{
+                      minWidth: column.minWidth,
+                      textAlign: column.textAlign || "left",
+                    }}
                   >
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell />
-                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user) => {
-                  return (
-                    <TableRow key={user.id}>
-                      <TableCell style={{ minWidth: 170 }}>
-                        {user.email}
-                      </TableCell>
-                      <TableCell style={{ mindWidth: 170 }}>
-                        Fetch from backend
-                      </TableCell>
-                      <TableCell style={{ minWidth: 20 }}>
-                        <Button
-                          variant="contained"
-                          sx={styles.button}
-                          onClick={() => {
-                            setWarningText(
-                              "Haluatko varmasti hyväksyä lainaus pyynnön?"
-                            );
-                            setDelOpen(true);
-                          }}
-                        >
-                          Hyväksy
-                        </Button>
-                      </TableCell>
-                      <TableCell style={{ minWidth: 20 }}>
-                        <Button
-                          variant="contained"
-                          sx={styles.button}
-                          onClick={() => {
-                            setWarningText(
-                              "Haluatko varmasti hylätä lainaus pyynnön?"
-                            );
-                            setDelOpen(true);
-                          }}
-                        >
-                          Hylkää
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+              {areasWithRequests.map((area, i) => {
+                return (
+                  <LendListTableRowComponent
+                    key={i}
+                    area={area}
+                    allowLoan={loanAreaMutation}
+                    refetch={areaRefetch}
+                  />
+                );
+              })}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            component="div"
+            count={areasWithRequests.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            labelRowsPerPage="Rivejä per sivu:"
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          component="div"
-          count={users.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          labelRowsPerPage="Rivejä per sivu:"
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
       <DeleteWarningModal {...delProps} />
     </Container>

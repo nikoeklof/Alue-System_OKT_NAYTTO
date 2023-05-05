@@ -50,7 +50,7 @@ const App = () => {
   useEffect(() => {
     setLoggedUser(loggedUserData?.me);
   }, [loggedUser, loggedUserData]);
-  console.log(loggedUser);
+
   return (
     <Router>
       <Container>

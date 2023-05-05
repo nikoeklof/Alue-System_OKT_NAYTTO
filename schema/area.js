@@ -42,7 +42,7 @@ module.exports = `
 
   type Query {
     areaCount: Int!
-    allAreas (cityName: String, quarter: String, address: String, isShared: Boolean, requesteeEmail: String): [Area]!
+    allAreas (cityName: String, quarter: String, address: String, isShared: Boolean, requesteeEmail: String, hasRequests: Boolean): [Area]!
   }
 
   type Mutation {

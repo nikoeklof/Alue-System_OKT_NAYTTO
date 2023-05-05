@@ -2,7 +2,6 @@ const { UserInputError } = require("apollo-server")
 
 const Area = require("../models/area")
 const User = require("../models/user")
-
 const contextCheck = require("../util/contextCheck")
 const mailer = require("../util/mail")
 
@@ -27,7 +26,14 @@ module.exports = {
             if ("requesteeEmail" in args)
                 newArgs["shareState.shareRequests"] = { $regex: args.requesteeEmail }
 
-            return await Area.find(newArgs)
+            const areas = await Area.find(newArgs)
+
+            if ("hasRequests" in args && args.hasRequests === true)
+                for (let x = 0; x < areas.length; x++)
+                    if (areas[x].shareState.shareRequests.length < 1)
+                        areas.splice(x, 1)
+
+            return areas
         },
     },
 

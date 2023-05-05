@@ -19,7 +19,7 @@ module.exports = {
                 newArgs["info.quarter"] = args.quarter
 
             if ("address" in args)
-                newArgs["info.address"] = args.address
+                newArgs["info.address"] = { $regex: args.address }
 
             if ("isShared" in args)
                 newArgs["shareState.isShared"] = args.isShared
@@ -102,7 +102,7 @@ module.exports = {
 
             area.save()
 
-            mailer(user.email, area.info, 0)
+            mailer(user.email, area.info, "Olet pyytänyt aluetta")
 
             return area
         },
@@ -154,7 +154,7 @@ module.exports = {
                     })
                 })
 
-            mailer(user.email, area.info, 1)
+            mailer(user.email, area.info, "Pyytämäsi alue on sinulle nyt jaossa")
 
             return area
         },
@@ -196,7 +196,7 @@ module.exports = {
 
             const user = await User.findOne({ email: shareEnd.sharedTo })
 
-            mailer(user.email, area.info, 2)
+            mailer(user.email, area.info, "Sinulle jaettu alue on nyt palautettu")
 
             return area
         }

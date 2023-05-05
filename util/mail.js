@@ -46,7 +46,7 @@ async function createTestAccount() {
     })
 }
 
-async function main(receiverEmail, incomingValues, type) {
+async function main(receiverEmail, incomingValues, subject) {
     let transporter
 
     if (process.env.USE_GMAIL === "1")
@@ -54,26 +54,10 @@ async function main(receiverEmail, incomingValues, type) {
     else
         transporter = await createTestAccount()
 
-    let subject
-
-    switch (type) {
-        case 0:
-            subject = "Olet pyytänyt aluetta"
-            break
-        case 1:
-            subject = "Pyytämäsi alue on nyt sinulle jaossa"
-            break
-        case 2:
-            subject = "Sinulle jaettu alue on nyt palautettu"
-            break
-        default:
-            subject = "Muistutus viesti"
-    }
-
     const html = messageCreator(incomingValues, subject)
 
     let info = await transporter.sendMail({
-        from: "Alueet - jako huomautus <jakoSupport@mail.com>",
+        from: "Alueet - jako huomautus <AlueetTuki@mail.com>",
         to: receiverEmail,
         subject: subject,
         html: html

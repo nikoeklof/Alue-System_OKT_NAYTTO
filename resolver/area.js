@@ -25,7 +25,7 @@ module.exports = {
                 newArgs["shareState.isShared"] = args.isShared
 
             if ("requesteeEmail" in args)
-                newArgs["shareState.shareRequests"] = { $in: args.requesteeEmail }
+                newArgs["shareState.shareRequests"] = { $regex: args.requesteeEmail }
 
             return await Area.find(newArgs)
         },

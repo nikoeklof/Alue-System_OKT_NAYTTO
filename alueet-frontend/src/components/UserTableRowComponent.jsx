@@ -21,6 +21,9 @@ const styles = {
 	button: {
 		m: 1,
 	},
+	tableHeadText: {
+		fontWeight: 'bold',
+	},
 };
 
 const UserTableRowComponent = ({
@@ -103,8 +106,20 @@ const UserTableRowComponent = ({
 										>
 											<TableHead>
 												<TableRow>
-													<TableCell>Nimi</TableCell>
-													<TableCell>ID</TableCell>
+													<TableCell
+														sx={
+															styles.tableHeadText
+														}
+													>
+														Nimi
+													</TableCell>
+													<TableCell
+														sx={
+															styles.tableHeadText
+														}
+													>
+														ID
+													</TableCell>
 												</TableRow>
 											</TableHead>
 											<TableBody>

@@ -231,6 +231,7 @@ const UserControl = ({
 												align={column.align}
 												style={{
 													minWidth: column.minWidth,
+													fontWeight: 'bold',
 												}}
 											>
 												{column.label}

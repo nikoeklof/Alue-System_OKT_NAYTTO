@@ -53,6 +53,7 @@ const CreateAreaForm = ({
 	const [miscInfo, setMiscInfo] = useState('');
 	const [layer, setLayer] = useState(null);
 	const [areaNameError, setAreaNameError] = useState('');
+	const [areaQuarterError, setAreaQuarterError] = useState('');
 	const [areaBuildingsError, setAreaBuildingsError] = useState('');
 	const [areaCityError, setAreaCityError] = useState('');
 	const [errorAlert, setErrorAlert] = useState(false);
@@ -85,6 +86,9 @@ const CreateAreaForm = ({
 
 		if (!areaName) setAreaNameError('Alueen nimi on pakollinen');
 		else setAreaNameError('');
+
+		if (!quarterName) setAreaQuarterError('Kaupunginosa on pakollinen');
+		else setAreaQuarterError('');
 
 		if (!parseInt(apartmentAmount))
 			setAreaBuildingsError('Asuntojen määrä on pakollinen');
@@ -195,6 +199,9 @@ const CreateAreaForm = ({
 					onChange={(e) => setQuarterName(e.target.value)}
 					type='text'
 					label='Kaupunginosa'
+					required
+					error={!!areaQuarterError}
+					helperText={areaQuarterError}
 					sx={styles.textField}
 				/>
 				<TextField

@@ -1,6 +1,7 @@
 const { UserInputError, AuthenticationError } = require('apollo-server');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const validator = require("email-validator");
 
 const User = require('../models/user');
 const Area = require('../models/area');
@@ -53,6 +54,11 @@ module.exports = {
 		},
 
 		createUser: async (root, args) => {
+			if (!validator.validate(args.email))
+				throw new UserInputError(
+					'Invalid email'
+				);
+
 			if (args.password.length < 5)
 				throw new UserInputError(
 					'Password must have at least minimum 5 letters'
@@ -72,6 +78,11 @@ module.exports = {
 
 		editUserEmail: async (root, args, contextValue) => {
 			const user = contextCheck(contextValue.authUser, 0);
+
+			if (!validator.validate(args.email))
+				throw new UserInputError(
+					'Invalid email'
+				);
 
 			await Area.updateMany({ ["shareState.shareRequests"]: user.email }, { $set: { "shareState.shareRequests.$": args.email } })
 
@@ -134,6 +145,11 @@ module.exports = {
 
 		editUserEmailAsAdmin: async (root, args, contextValue) => {
 			contextCheck(contextValue.authUser, 2)
+
+			if (!validator.validate(args.email))
+				throw new UserInputError(
+					'Invalid email'
+				);
 
 			const user = await User.findById(args.userId)
 

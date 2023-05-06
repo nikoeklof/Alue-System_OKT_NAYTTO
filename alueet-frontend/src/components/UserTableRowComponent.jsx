@@ -75,6 +75,9 @@ const UserTableRowComponent = ({
           <TableCell align="right">
             {user.rank.admin ? "Kyllä" : "Ei"}
           </TableCell>
+          <TableCell align="right">
+            {user.rank.worker ? "Kyllä" : "Ei"}
+          </TableCell>
           <TableCell align="right">{user.id}</TableCell>
         </TableRow>
         <TableRow>
@@ -99,7 +102,7 @@ const UserTableRowComponent = ({
                             return (
                               <TableRow key={area.id}>
                                 <TableCell component="th" scope="row">
-                                  {area.info.quarter}
+                                  {area.info.address}
                                 </TableCell>
                                 <TableCell>{area.id}</TableCell>
                               </TableRow>

@@ -66,6 +66,7 @@ const App = () => {
             path="/areaControl"
             element={<AreaControl loggedUser={loggedUser} />}
           />
+
           <Route
             path="/userControl"
             element={
@@ -78,6 +79,7 @@ const App = () => {
               />
             }
           />
+
           <Route path="/createArea" element={<AreaCreate />} />
           <Route path="/lendList" element={<LendList users={users} />} />
           <Route

@@ -130,9 +130,6 @@ const AreaControl = ({ loggedUser }) => {
   useEffect(() => {
     setQuarterAreas(quarterData?.allAreas);
   }, [quarterData]);
-  useEffect(() => {
-    console.log(quarterAreas);
-  }, [quarterAreas]);
 
   useEffect(() => {
     if (filteredAreas) {
@@ -252,6 +249,7 @@ const AreaControl = ({ loggedUser }) => {
                               setSelectedArea={setSelectedArea}
                               selectedArea={selectedArea}
                               setHoverStatus={setHoverStatus}
+                              loggedUser={loggedUser}
                               loanArea={loanArea}
                               refetch={refetch}
                             />
@@ -304,6 +302,7 @@ const AreaControl = ({ loggedUser }) => {
                             cityFilter={cityFilter}
                             setSelectedArea={setSelectedArea}
                             selectedArea={selectedArea}
+                            loggedUser={loggedUser}
                             setHoverStatus={setHoverStatus}
                             loanArea={loanArea}
                             refetch={refetch}

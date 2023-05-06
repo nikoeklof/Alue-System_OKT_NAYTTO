@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import theme from "../style/theme";
+
 const styles = {
   container: {
     mb: 8,
@@ -34,16 +35,29 @@ const styles = {
     ml: 5,
     color: "red",
   },
+  pointer: {
+    cursor: "pointer",
+  },
 };
 
 const LendListTableRowComponent = ({ area, allowLoan, refetch }) => {
   const [open, setOpen] = useState(false);
   console.log(area);
+
+  const handleAllowLoan = (area, email) => {
+    allowLoan({ variables: { areaId: area, email: email } }).then(() => {
+      refetch();
+    });
+  };
   return (
     <Fragment>
-      <TableRow sx={{ width: "100%" }} onClick={() => setOpen(!open)}>
-        <TableCell>
-          <IconButton aria-label="expand row" size="small">
+      <TableRow sx={{ width: "100%" }} hover>
+        <TableCell onClick={() => setOpen(!open)} sx={styles.pointer}>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
             {open ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
           {area.info.address}
@@ -91,16 +105,19 @@ const LendListTableRowComponent = ({ area, allowLoan, refetch }) => {
                     <TableRow key={i} sx={{ margin: 1, p: 2 }}>
                       <TableCell sx={{ margin: 0.5, padding: 0.5 }}>
                         {request}
-                        <Button variant="contained" sx={styles.areaButton}>
+                        <Button
+                          variant="contained"
+                          sx={styles.areaButton}
+                          onClick={() => {
+                            handleAllowLoan(area.id, request);
+                          }}
+                        >
                           &#10003;
                         </Button>
                         <Button
                           variant="contained"
                           color="error"
                           sx={styles.areaButton}
-                          onClick={(e) => {
-                            e.preventDefault();
-                          }}
                         >
                           &#x292B;
                         </Button>

@@ -20,7 +20,7 @@ import LendAreaModal from "./LendAreaModal";
 import ReturnAreaModal from "./ReturnAreaModal";
 import theme from "../style/theme";
 import { useRef } from "react";
-import { DELETE_AREA } from "../queries";
+import { DELETE_AREA, RETURN_SHARED_AREA } from "../queries";
 import { useMutation } from "@apollo/client";
 
 const styles = {
@@ -96,6 +96,7 @@ const AreaTableRowComponent = ({
   loanArea,
   refetch,
   cityFilter,
+  loggedUser,
 }) => {
   const [open, setOpen] = useState(false);
   const [openDel, setOpenDel] = useState(false);
@@ -105,6 +106,7 @@ const AreaTableRowComponent = ({
   const scrollRef = useRef(null);
   const [deleteArea] = useMutation(DELETE_AREA);
   const loaned = area.loaned;
+  const [returnArea] = useMutation(RETURN_SHARED_AREA);
 
   useEffect(() => {
     if (area.id !== selectedArea?.id) {
@@ -240,34 +242,62 @@ const AreaTableRowComponent = ({
                   )}
 
                   <Grid sx={styles.buttons}>
-                    <Button
-                      variant="contained"
-                      sx={styles.areaButton}
-                      onClick={() => {
-                        loanArea(area);
-                      }}
-                    >
-                      {area.shareState.isShared
-                        ? "Palauta alue"
-                        : "Lainaa alue"}
-                    </Button>
-
-                    <Button
-                      variant="contained"
-                      sx={styles.areaButton}
-                      onClick={() => {
-                        setOpenEdit(true);
-                      }}
-                    >
-                      Muokkaa tietoja
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={styles.areaButton}
-                      onClick={() => setOpenDel(true)}
-                    >
-                      Poista alue
-                    </Button>
+                    {!area.shareState.isShared ? (
+                      loggedUser?.rank?.worker ? (
+                        <Button
+                          variant="contained"
+                          sx={styles.areaButton}
+                          onClick={() => {
+                            loanArea(area);
+                          }}
+                        >
+                          Lainaa Alue
+                        </Button>
+                      ) : (
+                        <></>
+                      )
+                    ) : (
+                      <></>
+                    )}
+                    {area.shareState.sharedTo === loggedUser?.email ? (
+                      <Button
+                        variant="contained"
+                        sx={styles.areaButton}
+                        onClick={() => {
+                          returnArea({ variables: { areaId: area.id } }).then(
+                            () => {
+                              refetch();
+                            }
+                          );
+                        }}
+                      >
+                        Palauta Alue
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                    {loggedUser?.rank?.admin ? (
+                      <>
+                        <Button
+                          variant="contained"
+                          sx={styles.areaButton}
+                          onClick={() => {
+                            setOpenEdit(true);
+                          }}
+                        >
+                          Muokkaa tietoja
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={styles.areaButton}
+                          onClick={() => setOpenDel(true)}
+                        >
+                          Poista alue
+                        </Button>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </Grid>
                 </Box>
               </Collapse>

@@ -58,12 +58,14 @@ const LendList = ({ users }) => {
   const [openDel, setDelOpen] = useState(false);
   const [warningText, setWarningText] = useState("");
   const [areasWithRequests, setAreasWithRequests] = useState(null);
+
   const {
     data: areaData,
-    loading: areaLoading,
-    error: areaError,
+    // loading: areaLoading,
+    // error: areaError,
     refetch: areaRefetch,
   } = useQuery(AREAS_WITH_REQUESTS, { variables: { hasRequests: true } });
+
   const [loanAreaMutation] = useMutation(ALLOW_AREA_REQUEST, {
     onError: (e) => {
       console.log(e);

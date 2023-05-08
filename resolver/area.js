@@ -27,7 +27,7 @@ module.exports = {
       if ("hasRequests" in args && args.hasRequests === true) {
         const areasWithRequests = [];
         for (let x = 0; x < areas.length; x++)
-          if (areas[x].shareState.shareRequests.length < 1) {
+          if (areas[x].shareState.shareRequests.length > 0) {
             areasWithRequests.push(areas[x]);
           }
         return areasWithRequests;

@@ -195,6 +195,14 @@ const AreaTableRowComponent = ({
                 ) : (
                   <></>
                 )}
+                {area.shareState.sharedTo === loggedUser?.email ? (
+                  <Alert severity="success" sx={styles.alert}>
+                    Alue on lainattu sinulle
+                  </Alert>
+                ) : (
+                  <></>
+                )}
+
                 <Box sx={{ margin: 1 }}>
                   <Typography variant="h6" gutterBottom component="div">
                     Info

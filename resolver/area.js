@@ -129,6 +129,23 @@ module.exports = {
             return area.save()
         },
 
+        removeRequestAsAdmin: async (root, args, contextValue) => {
+            console.log(contextValue)
+            contextCheck(contextValue.authUser, 1)
+
+            const area = await Area.findById(args.areaId)
+
+            if (!area)
+                throw new UserInputError("Area not found")
+
+            if (!area.shareState.shareRequests.includes(args.email))
+                throw new UserInputError("This is not requested by: " + args.email)
+
+            area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(args.email), 1)
+
+            return area.save()
+        },
+
         allowAreaRequest: async (root, args, contextValue) => {
             const authUser = contextCheck(contextValue.authUser, 1)
 

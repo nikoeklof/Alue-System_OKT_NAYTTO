@@ -335,6 +335,20 @@ export const EDIT_AREA = gql`
     }
   }
 `;
+export const REMOVE_REQUESTS = gql`
+  mutation removeRequests($areaId: ID!) {
+    removeRequest(areaId: $areaId) {
+      id
+    }
+  }
+`;
+export const DENY_LOAN_REQUEST = gql`
+  mutation denyRequest($areaId: ID!, $email: String!) {
+    removeRequestAsAdmin(areaId: $areaId, email: $email) {
+      id
+    }
+  }
+`;
 //needs testing
 export const DELETE_AREA = gql`
   mutation deleteArea($areaId: ID!) {

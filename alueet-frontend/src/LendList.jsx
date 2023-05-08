@@ -12,7 +12,12 @@ import {
   Typography,
 } from "@mui/material";
 import { InfinitySpin } from "react-loader-spinner";
-import { ALLOW_AREA_REQUEST, AREAS_WITH_REQUESTS } from "./queries";
+import {
+  ALLOW_AREA_REQUEST,
+  AREAS_WITH_REQUESTS,
+  REMOVE_REQUESTS,
+  DENY_LOAN_REQUEST
+} from "./queries";
 
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -52,7 +57,7 @@ const columns = [
   },
 ];
 
-const LendList = ({ users }) => {
+const LendList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDel, setDelOpen] = useState(false);
@@ -65,6 +70,16 @@ const LendList = ({ users }) => {
     // error: areaError,
     refetch: areaRefetch,
   } = useQuery(AREAS_WITH_REQUESTS, { variables: { hasRequests: true } });
+  const [removeRequests] = useMutation(REMOVE_REQUESTS, {
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+  const [denyLoanRequest] = useMutation(DENY_LOAN_REQUEST, {
+    onError: (e) => {
+      console.log(e);
+    },
+  })
 
   const [loanAreaMutation] = useMutation(ALLOW_AREA_REQUEST, {
     onError: (e) => {
@@ -121,6 +136,8 @@ const LendList = ({ users }) => {
                     key={i}
                     area={area}
                     allowLoan={loanAreaMutation}
+                    denyLoan={denyLoanRequest}
+                    removeRequests={removeRequests}
                     refetch={areaRefetch}
                   />
                 );

@@ -40,12 +40,25 @@ const styles = {
   },
 };
 
-const LendListTableRowComponent = ({ area, allowLoan, refetch }) => {
+const LendListTableRowComponent = ({
+  area,
+  allowLoan,
+  refetch,
+  removeRequests,
+  denyLoan,
+}) => {
   const [open, setOpen] = useState(false);
   console.log(area);
 
   const handleAllowLoan = (area, email) => {
     allowLoan({ variables: { areaId: area, email: email } }).then(() => {
+      removeRequests({ variables: { areaId: area } }).then(() => {
+        refetch();
+      });
+    });
+  };
+  const handleDenyLoan = (area, email) => {
+    denyLoan({ variables: { areaId: area, email: email } }).then(() => {
       refetch();
     });
   };
@@ -118,6 +131,9 @@ const LendListTableRowComponent = ({ area, allowLoan, refetch }) => {
                           variant="contained"
                           color="error"
                           sx={styles.areaButton}
+                          onClick={() => {
+                            handleDenyLoan(area.id, request);
+                          }}
                         >
                           &#x292B;
                         </Button>

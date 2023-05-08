@@ -188,7 +188,7 @@ const AreaTableRowComponent = ({
           <TableRow>
             <TableCell sx={{ py: 0 }} colSpan={6}>
               <Collapse in={open} timeout="auto" unmountOnExit>
-                {area.shareState.shareRequests.includes(loggedUser.email) ? (
+                {area.shareState.shareRequests.includes(loggedUser?.email) ? (
                   <Alert severity="success" sx={styles.alert}>
                     Lainauspyyntö jätetty
                   </Alert>

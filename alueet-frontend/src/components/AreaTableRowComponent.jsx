@@ -11,6 +11,7 @@ import {
   IconButton,
   Collapse,
   Box,
+  Alert,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
@@ -62,6 +63,10 @@ const styles = {
     mb: 2,
     ml: 2,
     width: "96%",
+  },
+  alert: {
+    m: 0.5,
+    mb: 1,
   },
   form: {
     width: "100%",
@@ -179,9 +184,17 @@ const AreaTableRowComponent = ({
               </IconButton>
             </TableCell>
           </TableRow>
+
           <TableRow>
             <TableCell sx={{ py: 0 }} colSpan={6}>
               <Collapse in={open} timeout="auto" unmountOnExit>
+                {area.shareState.shareRequests.includes(loggedUser.email) ? (
+                  <Alert severity="success" sx={styles.alert}>
+                    Lainauspyyntö jätetty
+                  </Alert>
+                ) : (
+                  <></>
+                )}
                 <Box sx={{ margin: 1 }}>
                   <Typography variant="h6" gutterBottom component="div">
                     Info
@@ -243,7 +256,10 @@ const AreaTableRowComponent = ({
 
                   <Grid sx={styles.buttons}>
                     {!area.shareState.isShared ? (
-                      loggedUser?.rank?.worker ? (
+                      loggedUser?.rank?.worker &&
+                      !area.shareState.shareRequests.includes(
+                        loggedUser.email
+                      ) ? (
                         <Button
                           variant="contained"
                           sx={styles.areaButton}

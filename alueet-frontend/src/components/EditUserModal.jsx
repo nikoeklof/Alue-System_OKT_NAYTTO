@@ -48,6 +48,7 @@ const EditUserModal = ({ ...editProps }) => {
 		editProps.originalUser?.rank.disabled
 	);
 	const [admin, setAdmin] = useState(editProps.originalUser?.rank.admin);
+	const [worker, setWorker] = useState(editProps.originalUser?.rank.worker);
 	const [emailError, setEmailError] = useState('');
 
 	const handleClose = () => {
@@ -61,6 +62,7 @@ const EditUserModal = ({ ...editProps }) => {
 			email,
 			disabled,
 			admin,
+			worker,
 			originalUser: editProps.originalUser,
 		};
 
@@ -108,6 +110,18 @@ const EditUserModal = ({ ...editProps }) => {
 								/>
 							}
 							label='Admin'
+							sx={styles.input}
+						/>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={worker}
+									onChange={(e) =>
+										setWorker(e.target.checked)
+									}
+								/>
+							}
+							label='Työntekijä'
 							sx={styles.input}
 						/>
 						<FormControlLabel

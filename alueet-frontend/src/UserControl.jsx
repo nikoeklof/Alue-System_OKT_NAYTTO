@@ -21,9 +21,9 @@ import {
 import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 import { InfinitySpin } from 'react-loader-spinner';
 
-import DisabledUsersTable from "./components/DisabledUsersTable";
-import UserTableRowComponent from "./components/UserTableRowComponent";
-import CreateUserModal from "./components/CreateUserModal";
+import DisabledUsersTable from './components/DisabledUsersTable';
+import UserTableRowComponent from './components/UserTableRowComponent';
+import CreateUserModal from './components/CreateUserModal';
 
 import theme from './style/theme';
 import { useMutation, useQuery } from '@apollo/client';
@@ -34,6 +34,7 @@ import {
 	DELETE_USER,
 	EDIT_USER_EMAIL_AS_ADMIN,
 	TOGGLE_USER_DISABLED,
+	TOGGLE_USER_WORKER,
 } from './queries';
 
 const styles = {
@@ -77,29 +78,29 @@ const styles = {
 };
 
 const columns = [
-  {
-    id: "email",
-    label: "Sähköposti",
-    minWidth: 100,
-  },
-  {
-    id: "admin",
-    label: "Admin",
-    minWidth: 100,
-    align: "right",
-  },
-  {
-    id: "worker",
-    label: "Worker",
-    minWidth: 100,
-    align: "right",
-  },
-  {
-    id: "id",
-    label: "ID",
-    minWidth: 150,
-    align: "right",
-  },
+	{
+		id: 'email',
+		label: 'Sähköposti',
+		minWidth: 100,
+	},
+	{
+		id: 'admin',
+		label: 'Admin',
+		minWidth: 100,
+		align: 'right',
+	},
+	{
+		id: 'worker',
+		label: 'Työntekijä',
+		minWidth: 100,
+		align: 'right',
+	},
+	{
+		id: 'id',
+		label: 'ID',
+		minWidth: 150,
+		align: 'right',
+	},
 ];
 
 const UserControl = () => {
@@ -146,6 +147,9 @@ const UserControl = () => {
 	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
+	const [toggleUserWorker] = useMutation(TOGGLE_USER_WORKER, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
 	const [toggleUserDisabled] = useMutation(TOGGLE_USER_DISABLED, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
@@ -159,14 +163,14 @@ const UserControl = () => {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(+event.target.value);
+		setPage(0);
+	};
 
 	useEffect(() => {
 		setUsers(dataUsers?.allUsers);
@@ -213,9 +217,13 @@ const UserControl = () => {
 	}, [disabled, userInputFilter]);
 
 	const updateUser = async (user) => {
-		const { userId, email, admin, disabled, originalUser } = user;
+		const { userId, email, admin, worker, disabled, originalUser } = user;
 		if (originalUser.rank.admin !== admin)
 			await toggleUserAdmin({
+				variables: { userId: userId },
+			});
+		if (originalUser.rank.worker !== worker)
+			await toggleUserWorker({
 				variables: { userId: userId },
 			});
 		if (originalUser.rank.disabled !== disabled)
@@ -234,14 +242,14 @@ const UserControl = () => {
 		refetchAllUsers();
 	};
 
-  const updateUserDisabled = async (user) => {
-    const userId = user.id;
-    await toggleUserDisabled({
-      variables: { userId: userId },
-    });
-    refetchUsers();
-    refetchUsersDisabled();
-  };
+	const updateUserDisabled = async (user) => {
+		const userId = user.id;
+		await toggleUserDisabled({
+			variables: { userId: userId },
+		});
+		refetchUsers();
+		refetchUsersDisabled();
+	};
 
 	const addUser = async (user) => {
 		const { email, password } = user;
@@ -262,11 +270,11 @@ const UserControl = () => {
 		refetchAllUsers();
 	};
 
-  const createProps = {
-    openCreate,
-    handleCreateModalClose: () => setCreateOpen(false),
-    addUser,
-  };
+	const createProps = {
+		openCreate,
+		handleCreateModalClose: () => setCreateOpen(false),
+		addUser,
+	};
 
 	const disabledProps = {
 		usersDisabled,

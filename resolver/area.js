@@ -54,7 +54,6 @@ module.exports = {
                 sharedBy: sharedBy.email,
                 sharedTo: sharedTo.email,
                 shareRequests: requestsArray,
-                //shareStartDate: root.shareState.shareStartDate.toString().replace(/ *\([^)]*\) */g, "")
             }
         },
         shareHistory: (root) => root.shareHistory

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Button,
 	Container,
@@ -15,6 +15,8 @@ import {
 	TableRow,
 	Typography,
 	Box,
+	Autocomplete,
+	TextField,
 } from '@mui/material';
 import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 import { InfinitySpin } from 'react-loader-spinner';
@@ -24,8 +26,9 @@ import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
 
 import theme from './style/theme';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
+	ALL_USERS,
 	TOGGLE_USER_ADMIN,
 	CREATE_USER,
 	DELETE_USER,
@@ -66,6 +69,11 @@ const styles = {
 		float: 'right',
 		pb: 2,
 	},
+	search: {
+		mb: 2,
+		ml: 2,
+		width: '96%',
+	},
 };
 
 const columns = [
@@ -88,16 +96,47 @@ const columns = [
 	},
 ];
 
-const UserControl = ({
-	users,
-	usersDisabled,
-	refetchUsers,
-	refetchUsersDisabled,
-}) => {
+const UserControl = () => {
+	const [users, setUsers] = useState(null);
+	const [usersDisabled, setUsersDisabled] = useState(null);
+	const [allUsers, setAllUsers] = useState(null);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
 	const [checkedNotDisabled, setCheckedNotDisabled] = useState(false);
+	const [userFilter, setUserFilter] = useState('');
+	const [filteredUsers, setFilteredUsers] = useState([]);
+	const [userInputFilter, setUserInputFilter] = useState('');
+	const [userList, setUserList] = useState([]);
+	const [disabled, setDisabled] = useState(null);
+
+	const { data: userData } = useQuery(ALL_USERS, {
+		variables: { email: userFilter },
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const {
+		data: dataUsers,
+		loading: loadingUsers,
+		refetch: refetchUsers,
+	} = useQuery(ALL_USERS, {
+		variables: { disabled: false },
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const {
+		data: dataUsersDisabled,
+		loading: loadingUsersDisabled,
+		refetch: refetchUsersDisabled,
+	} = useQuery(ALL_USERS, {
+		variables: { disabled: true },
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const { data: dataAllUsers, refetch: refetchAllUsers } = useQuery(
+		ALL_USERS,
+		{
+			onError: (e) => console.log(JSON.stringify(e, null, 2)),
+		}
+	);
+
 	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
@@ -123,6 +162,50 @@ const UserControl = ({
 		setPage(0);
 	};
 
+	useEffect(() => {
+		setUsers(dataUsers?.allUsers);
+	}, [loadingUsers, dataUsers, filteredUsers]);
+	useEffect(() => {
+		setUsersDisabled(dataUsersDisabled?.allUsers);
+	}, [loadingUsersDisabled, dataUsersDisabled, filteredUsers]);
+	useEffect(() => {
+		setAllUsers(dataAllUsers?.allUsers);
+	}, [dataAllUsers, userInputFilter, allUsers]);
+
+	useEffect(() => {
+		setFilteredUsers(userData?.allUsers);
+	}, [userData]);
+
+	useEffect(() => {
+		if (users && usersDisabled) {
+			const usersList = [];
+			allUsers.forEach((user) => {
+				if (usersList.includes(user.email)) return;
+				else usersList.push(user);
+			});
+
+			return setUserList(usersList);
+		}
+		return;
+	}, [users, usersDisabled, userList]);
+	useEffect(() => {
+		if (filteredUsers) {
+			const dis = filteredUsers.map((user) => user.rank.disabled);
+			if (dis[0] === true) {
+				setDisabled(true);
+			} else if (dis[0] === false) {
+				setDisabled(false);
+			}
+		}
+	}, [userFilter, userList]);
+	useEffect(() => {
+		if (disabled === false) {
+			setCheckedNotDisabled(true);
+		} else if (disabled === true) {
+			setCheckedNotDisabled(false);
+		}
+	}, [disabled, userInputFilter]);
+
 	const updateUser = async (user) => {
 		const { userId, email, admin, disabled, originalUser } = user;
 		if (originalUser.rank.admin !== admin)
@@ -142,6 +225,7 @@ const UserControl = ({
 			});
 		refetchUsers();
 		refetchUsersDisabled();
+		refetchAllUsers();
 	};
 
 	const updateUserDisabled = async (user) => {
@@ -158,6 +242,7 @@ const UserControl = ({
 		await createUser({ variables: { password: password, email: email } });
 		refetchUsers();
 		refetchUsersDisabled();
+		refetchAllUsers();
 	};
 
 	const removeUser = async (user) => {
@@ -168,6 +253,7 @@ const UserControl = ({
 		});
 		refetchUsers();
 		refetchUsersDisabled();
+		refetchAllUsers();
 	};
 
 	const createProps = {
@@ -178,8 +264,13 @@ const UserControl = ({
 
 	const disabledProps = {
 		usersDisabled,
+		filteredUserInput: userInputFilter,
+		filteredUsers,
+		userFilter,
+		disabled,
 		columns,
 		styles,
+		loadingUsersDisabled,
 		updateUserDisabled,
 		removeUser,
 		updateUser,
@@ -193,7 +284,46 @@ const UserControl = ({
 			>
 				Käyttäjien hallinta
 			</Typography>
-			{users ? (
+			<Autocomplete
+				freeSolo
+				disableClearable
+				id='findUser'
+				options={
+					userList.length !== 0
+						? userList.map((user) => user.email)
+						: ['Ei käyttäjiä']
+				}
+				value={userFilter}
+				onChange={(e, newValue) => {
+					if (newValue === '') {
+						setUserFilter('');
+						setFilteredUsers([]);
+						return;
+					}
+					setUserFilter(newValue);
+				}}
+				inputValue={userInputFilter}
+				onInputChange={(e, newValue) => {
+					if (newValue === '') {
+						setUserInputFilter('');
+						setFilteredUsers([]);
+						return;
+					}
+					setUserInputFilter(newValue);
+				}}
+				renderInput={(params) => (
+					<TextField
+						{...params}
+						label='Hae käyttäjää...'
+						InputProps={{
+							...params.InputProps,
+							type: 'search',
+						}}
+					/>
+				)}
+				sx={styles.search}
+			/>
+			{users && !loadingUsers ? (
 				<Paper sx={styles.form}>
 					<Box
 						onClick={() =>
@@ -217,61 +347,172 @@ const UserControl = ({
 
 					<Collapse in={checkedNotDisabled}>
 						<Divider sx={styles.divider} />
-						<TableContainer sx={{ maxHeight: 440 }}>
-							<Table
-								stickyHeader
-								aria-label='sticky label'
-							>
-								<TableHead>
-									<TableRow>
-										<TableCell />
-										{columns.map((column) => (
-											<TableCell
-												key={column.id}
-												align={column.align}
-												style={{
-													minWidth: column.minWidth,
-													fontWeight: 'bold',
-												}}
-											>
-												{column.label}
-											</TableCell>
-										))}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{users
-										.slice(
-											page * rowsPerPage,
-											page * rowsPerPage + rowsPerPage
-										)
-										.map((user) => {
-											const rowProps = {
-												user,
-												updateUser,
-												removeUser,
-											};
 
-											return (
-												<UserTableRowComponent
-													key={user.id}
-													{...rowProps}
-												/>
-											);
-										})}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5, 10, 25, 50, 100]}
-							component='div'
-							count={users.length}
-							rowsPerPage={rowsPerPage}
-							page={page}
-							labelRowsPerPage='Rivejä per sivu:'
-							onPageChange={handleChangePage}
-							onRowsPerPageChange={handleChangeRowsPerPage}
-						/>
+						{userInputFilter ? (
+							filteredUsers ? (
+								<>
+									<TableContainer sx={{ maxHeight: 440 }}>
+										<Table
+											stickyHeader
+											aria-label='sticky label'
+										>
+											<TableHead>
+												<TableRow>
+													<TableCell />
+													{columns.map((column) => (
+														<TableCell
+															key={column.id}
+															align={column.align}
+															style={{
+																minWidth:
+																	column.minWidth,
+																fontWeight:
+																	'bold',
+															}}
+														>
+															{column.label}
+														</TableCell>
+													))}
+												</TableRow>
+											</TableHead>
+											<TableBody>
+												{filteredUsers
+													?.slice(
+														page * rowsPerPage,
+														page * rowsPerPage +
+															rowsPerPage
+													)
+													.map((user) => {
+														const rowProps = {
+															user,
+															updateUser,
+															removeUser,
+														};
+														return (
+															<UserTableRowComponent
+																key={user.id}
+																{...rowProps}
+															/>
+														);
+													})}
+											</TableBody>
+										</Table>
+									</TableContainer>
+									<TablePagination
+										rowsPerPageOptions={[
+											5, 10, 25, 50, 100,
+										]}
+										component='div'
+										count={
+											filteredUsers
+												? filteredUsers?.length
+												: 1
+										}
+										rowsPerPage={rowsPerPage}
+										page={page}
+										labelRowsPerPage='Rivejä per sivu:'
+										onPageChange={handleChangePage}
+										onRowsPerPageChange={
+											handleChangeRowsPerPage
+										}
+									/>
+								</>
+							) : (
+								<div
+									style={{
+										marginLeft: '30%',
+										marginTop: '15%',
+										paddingBottom: '0px',
+									}}
+								>
+									<InfinitySpin
+										width='200'
+										color='gray'
+										wrapperStyle
+										wrapperClass
+										ariaLabel='loading'
+									/>
+								</div>
+							)
+						) : users ? (
+							<>
+								<TableContainer sx={{ maxHeight: 440 }}>
+									<Table
+										stickyHeader
+										aria-label='sticky label'
+									>
+										<TableHead>
+											<TableRow>
+												<TableCell />
+												{columns.map((column) => (
+													<TableCell
+														key={column.id}
+														align={column.align}
+														style={{
+															minWidth:
+																column.minWidth,
+															fontWeight: 'bold',
+														}}
+													>
+														{column.label}
+													</TableCell>
+												))}
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{users
+												.slice(
+													page * rowsPerPage,
+													page * rowsPerPage +
+														rowsPerPage
+												)
+												.map((user) => {
+													const rowProps = {
+														user,
+														updateUser,
+														removeUser,
+													};
+
+													return (
+														<UserTableRowComponent
+															key={user.id}
+															{...rowProps}
+														/>
+													);
+												})}
+										</TableBody>
+									</Table>
+								</TableContainer>
+								<TablePagination
+									rowsPerPageOptions={[5, 10, 25, 50, 100]}
+									component='div'
+									count={users ? users?.length : 1}
+									rowsPerPage={rowsPerPage}
+									page={page}
+									labelRowsPerPage='Rivejä per sivu:'
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={
+										handleChangeRowsPerPage
+									}
+								/>
+							</>
+						) : (
+							<div
+								style={{
+									marginLeft: '30%',
+									marginTop: '15%',
+									paddingBottom: '0px',
+								}}
+							>
+								<InfinitySpin
+									width='200'
+									color='gray'
+									wrapperStyle
+									wrapperClass
+									ariaLabel='loading'
+								/>
+							</div>
+						)}
 					</Collapse>
 				</Paper>
 			) : (

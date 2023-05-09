@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Box,
 	Collapse,
@@ -22,8 +22,12 @@ import UserTableRowComponent from './UserTableRowComponent';
 const DisabledUsersTable = ({ ...disabledProps }) => {
 	const {
 		usersDisabled,
+		filteredUserInput,
+		filteredUsers,
+		disabled,
 		columns,
 		styles,
+		loadingUsersDisabled,
 		updateUserDisabled,
 		removeUser,
 		updateUser,
@@ -41,7 +45,15 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 		setPage(0);
 	};
 
-	if (usersDisabled) {
+	useEffect(() => {
+		if (disabled === false) {
+			setCheckedDisabled(false);
+		} else if (disabled === true) {
+			setCheckedDisabled(true);
+		}
+	}, [disabled, filteredUserInput]);
+
+	if (!loadingUsersDisabled && usersDisabled) {
 		return (
 			<>
 				<Paper sx={styles.form}>
@@ -63,62 +75,145 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 						unmountOnExit
 					>
 						<Divider sx={styles.divider} />
-						<TableContainer sx={{ maxHeight: 440 }}>
-							<Table
-								stickyHeader
-								aria-label='sticky label'
-							>
-								<TableHead>
-									<TableRow>
-										<TableCell style={{ maxWidth: 5 }} />
-										{columns.map((column) => (
-											<TableCell
-												key={column.id}
-												align={column.align}
-												style={{
-													minWidth: column.minWidth,
-												}}
-											>
-												{column.label}
-											</TableCell>
-										))}
-										<TableCell />
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{usersDisabled
-										.slice(
-											page * rowsPerPage,
-											page * rowsPerPage + rowsPerPage
-										)
-										.map((user) => {
-											const rowProps = {
-												user,
-												updateUser,
-												removeUser,
-												updateUserDisabled,
-											};
 
-											return (
-												<UserTableRowComponent
-													key={user.id}
-													{...rowProps}
+						{filteredUserInput ? (
+							<>
+								<TableContainer sx={{ maxHeight: 440 }}>
+									<Table
+										stickyHeader
+										aria-label='sticky label'
+									>
+										<TableHead>
+											<TableRow>
+												<TableCell
+													style={{ maxWidth: 5 }}
 												/>
-											);
-										})}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5, 10, 25, 50, 100]}
-							component='div'
-							count={usersDisabled.length}
-							rowsPerPage={rowsPerPage}
-							page={page}
-							labelRowsPerPage='Rivejä per sivu:'
-							onPageChange={handleChangePage}
-							onRowsPerPageChange={handleChangeRowsPerPage}
-						/>
+												{columns.map((column) => (
+													<TableCell
+														key={column.id}
+														align={column.align}
+														style={{
+															minWidth:
+																column.minWidth,
+															fontWeight: 'bold',
+														}}
+													>
+														{column.label}
+													</TableCell>
+												))}
+												<TableCell />
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{filteredUsers
+												?.slice(
+													page * rowsPerPage,
+													page * rowsPerPage +
+														rowsPerPage
+												)
+												.map((user) => {
+													const rowProps = {
+														user,
+														updateUser,
+														removeUser,
+														updateUserDisabled,
+													};
+													return (
+														<UserTableRowComponent
+															key={user.id}
+															{...rowProps}
+														/>
+													);
+												})}
+										</TableBody>
+									</Table>
+								</TableContainer>
+								<TablePagination
+									rowsPerPageOptions={[5, 10, 25, 50, 100]}
+									component='div'
+									count={
+										filteredUsers
+											? filteredUsers?.length
+											: 1
+									}
+									rowsPerPage={rowsPerPage}
+									page={page}
+									labelRowsPerPage='Rivejä per sivu:'
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={
+										handleChangeRowsPerPage
+									}
+								/>
+							</>
+						) : (
+							<>
+								<TableContainer sx={{ maxHeight: 440 }}>
+									<Table
+										stickyHeader
+										aria-label='sticky label'
+									>
+										<TableHead>
+											<TableRow>
+												<TableCell
+													style={{ maxWidth: 5 }}
+												/>
+												{columns.map((column) => (
+													<TableCell
+														key={column.id}
+														align={column.align}
+														style={{
+															minWidth:
+																column.minWidth,
+														}}
+													>
+														{column.label}
+													</TableCell>
+												))}
+												<TableCell />
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{usersDisabled
+												.slice(
+													page * rowsPerPage,
+													page * rowsPerPage +
+														rowsPerPage
+												)
+												.map((user) => {
+													const rowProps = {
+														user,
+														updateUser,
+														removeUser,
+														updateUserDisabled,
+													};
+													return (
+														<UserTableRowComponent
+															key={user.id}
+															{...rowProps}
+														/>
+													);
+												})}
+										</TableBody>
+									</Table>
+								</TableContainer>
+								<TablePagination
+									rowsPerPageOptions={[5, 10, 25, 50, 100]}
+									component='div'
+									count={
+										usersDisabled
+											? usersDisabled?.length
+											: 1
+									}
+									rowsPerPage={rowsPerPage}
+									page={page}
+									labelRowsPerPage='Rivejä per sivu:'
+									onPageChange={handleChangePage}
+									onRowsPerPageChange={
+										handleChangeRowsPerPage
+									}
+								/>
+							</>
+						)}
 					</Collapse>
 				</Paper>
 			</>

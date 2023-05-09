@@ -62,6 +62,7 @@ const UserTableRowComponent = ({
 				<TableRow
 					hover
 					key={user.id}
+					id={user.id}
 					onClick={() => setOpen(!open)}
 					sx={{ '& > *': { borderBottom: 'unset' } }}
 				>

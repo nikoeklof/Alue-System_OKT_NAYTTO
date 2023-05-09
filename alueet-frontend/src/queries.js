@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 
 //  -----  querys  -----
 export const ALL_USERS = gql`
-	query allUsers($disabled: Boolean) {
-		allUsers(disabled: $disabled) {
+	query allUsers($disabled: Boolean, $email: String) {
+		allUsers(disabled: $disabled, email: $email) {
 			id
 			email
 			rank {

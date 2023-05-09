@@ -21,9 +21,9 @@ import {
 import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 import { InfinitySpin } from 'react-loader-spinner';
 
-import DisabledUsersTable from './components/DisabledUsersTable';
-import UserTableRowComponent from './components/UserTableRowComponent';
-import CreateUserModal from './components/CreateUserModal';
+import DisabledUsersTable from "./components/DisabledUsersTable";
+import UserTableRowComponent from "./components/UserTableRowComponent";
+import CreateUserModal from "./components/CreateUserModal";
 
 import theme from './style/theme';
 import { useMutation, useQuery } from '@apollo/client';
@@ -77,23 +77,29 @@ const styles = {
 };
 
 const columns = [
-	{
-		id: 'email',
-		label: 'Sähköposti',
-		minWidth: 170,
-	},
-	{
-		id: 'admin',
-		label: 'Admin',
-		minWidth: 50,
-		align: 'right',
-	},
-	{
-		id: 'id',
-		label: 'ID',
-		minWidth: 170,
-		align: 'right',
-	},
+  {
+    id: "email",
+    label: "Sähköposti",
+    minWidth: 100,
+  },
+  {
+    id: "admin",
+    label: "Admin",
+    minWidth: 100,
+    align: "right",
+  },
+  {
+    id: "worker",
+    label: "Worker",
+    minWidth: 100,
+    align: "right",
+  },
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 150,
+    align: "right",
+  },
 ];
 
 const UserControl = () => {
@@ -153,14 +159,14 @@ const UserControl = () => {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(+event.target.value);
-		setPage(0);
-	};
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
 	useEffect(() => {
 		setUsers(dataUsers?.allUsers);
@@ -228,14 +234,14 @@ const UserControl = () => {
 		refetchAllUsers();
 	};
 
-	const updateUserDisabled = async (user) => {
-		const userId = user.id;
-		await toggleUserDisabled({
-			variables: { userId: userId },
-		});
-		refetchUsers();
-		refetchUsersDisabled();
-	};
+  const updateUserDisabled = async (user) => {
+    const userId = user.id;
+    await toggleUserDisabled({
+      variables: { userId: userId },
+    });
+    refetchUsers();
+    refetchUsersDisabled();
+  };
 
 	const addUser = async (user) => {
 		const { email, password } = user;
@@ -256,11 +262,11 @@ const UserControl = () => {
 		refetchAllUsers();
 	};
 
-	const createProps = {
-		openCreate,
-		handleCreateModalClose: () => setCreateOpen(false),
-		addUser,
-	};
+  const createProps = {
+    openCreate,
+    handleCreateModalClose: () => setCreateOpen(false),
+    addUser,
+  };
 
 	const disabledProps = {
 		usersDisabled,

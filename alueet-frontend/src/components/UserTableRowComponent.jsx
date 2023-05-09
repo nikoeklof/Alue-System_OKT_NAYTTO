@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React, { Fragment, useState } from 'react';
 import {
 	Box,
@@ -145,7 +144,6 @@ const UserTableRowComponent = ({
 																</TableCell>
 															</TableRow>
 														);
-														// eslint-disable-next-line no-mixed-spaces-and-tabs
 													})
 												) : (
 													<></>

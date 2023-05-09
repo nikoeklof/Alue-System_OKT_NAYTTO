@@ -120,6 +120,7 @@ module.exports = {
     },
 
     removeRequest: async (root, args, contextValue) => {
+      console.log(args);
       const user = contextCheck(contextValue.authUser, 0);
 
       const area = await Area.findById(args.areaId);
@@ -181,6 +182,7 @@ module.exports = {
           1
         );
 
+      area.shareState.shareRequests = [];
       area.shareState.isShared = true;
       area.shareState.sharedBy = authUser._id;
       area.shareState.sharedTo = user._id;

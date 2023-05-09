@@ -30,7 +30,7 @@ module.exports = {
 		email: (root) => root.email,
 		rank: (root) => root.rank,
 		areas: async (root) =>
-			await Area.find({ ['shareState.sharedTo']: root.email }),
+			await Area.find({ ['shareState.sharedTo']: root._id }),
 	},
 
 	Mutation: {

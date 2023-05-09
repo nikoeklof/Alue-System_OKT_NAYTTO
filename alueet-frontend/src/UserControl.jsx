@@ -189,15 +189,16 @@ const UserControl = () => {
 	useEffect(() => {
 		if (users && usersDisabled) {
 			const usersList = [];
-			allUsers.forEach((user) => {
-				if (usersList.includes(user.email)) return;
-				else usersList.push(user);
-			});
-
+			if (allUsers) {
+				allUsers.forEach((user) => {
+					if (usersList.includes(user.email)) return;
+					else usersList.push(user);
+				});
+			}
 			return setUserList(usersList);
 		}
 		return;
-	}, [users, usersDisabled, userList]);
+	}, [users, usersDisabled, userList, allUsers]);
 	useEffect(() => {
 		if (filteredUsers) {
 			const dis = filteredUsers.map((user) => user.rank.disabled);

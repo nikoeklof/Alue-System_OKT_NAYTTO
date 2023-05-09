@@ -54,7 +54,6 @@ const UserTableRowComponent = ({
 		originalUser: user,
 		updateUserDisabled,
 	};
-
 	return (
 		<>
 			<Fragment>

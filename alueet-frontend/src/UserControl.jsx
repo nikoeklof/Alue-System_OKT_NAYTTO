@@ -34,6 +34,7 @@ import {
 	DELETE_USER,
 	EDIT_USER_EMAIL_AS_ADMIN,
 	TOGGLE_USER_DISABLED,
+	TOGGLE_USER_WORKER,
 } from './queries';
 
 const styles = {
@@ -90,7 +91,7 @@ const columns = [
 	},
 	{
 		id: 'worker',
-		label: 'Worker',
+		label: 'Työntekijä',
 		minWidth: 100,
 		align: 'right',
 	},
@@ -144,6 +145,9 @@ const UserControl = () => {
 	);
 
 	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
+	const [toggleUserWorker] = useMutation(TOGGLE_USER_WORKER, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
 	const [toggleUserDisabled] = useMutation(TOGGLE_USER_DISABLED, {
@@ -213,9 +217,13 @@ const UserControl = () => {
 	}, [disabled, userInputFilter]);
 
 	const updateUser = async (user) => {
-		const { userId, email, admin, disabled, originalUser } = user;
+		const { userId, email, admin, worker, disabled, originalUser } = user;
 		if (originalUser.rank.admin !== admin)
 			await toggleUserAdmin({
+				variables: { userId: userId },
+			});
+		if (originalUser.rank.worker !== worker)
+			await toggleUserWorker({
 				variables: { userId: userId },
 			});
 		if (originalUser.rank.disabled !== disabled)

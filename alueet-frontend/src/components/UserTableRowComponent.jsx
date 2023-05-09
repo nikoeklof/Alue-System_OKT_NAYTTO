@@ -78,6 +78,9 @@ const UserTableRowComponent = ({
 					<TableCell align='right'>
 						{user.rank.admin ? 'Kyllä' : 'Ei'}
 					</TableCell>
+					<TableCell align='right'>
+						{user.rank.worker ? 'Kyllä' : 'Ei'}
+					</TableCell>
 					<TableCell align='right'>{user.id}</TableCell>
 				</TableRow>
 				<TableRow>

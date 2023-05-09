@@ -16,35 +16,35 @@ export const ALL_USERS = gql`
 	}
 `;
 export const AREAS_WITH_REQUESTS = gql`
-  query areasWithRequests($hasRequests: Boolean) {
-    allAreas(hasRequests: $hasRequests) {
-      id
-      info {
-        address
-        buildings
-        cityName
-        latlngs {
-          lat
-          lng
-        }
-        misc
-        quarter
-      }
-      shareState {
-        shareRequests
-        sharedTo
-        sharedBy
-        shareStartDate
-        isShared
-      }
-      shareHistory {
-        shareEndDate
-        shareStartDate
-        sharedBy
-        sharedTo
-      }
-    }
-  }
+	query areasWithRequests($hasRequests: Boolean) {
+		allAreas(hasRequests: $hasRequests) {
+			id
+			info {
+				address
+				buildings
+				cityName
+				latlngs {
+					lat
+					lng
+				}
+				misc
+				quarter
+			}
+			shareState {
+				shareRequests
+				sharedTo
+				sharedBy
+				shareStartDate
+				isShared
+			}
+			shareHistory {
+				shareEndDate
+				shareStartDate
+				sharedBy
+				sharedTo
+			}
+		}
+	}
 `;
 
 export const FILTERED_AREAS = gql`
@@ -111,35 +111,35 @@ export const FILTERED_BY_QUARTER = gql`
 `;
 
 export const ALL_AREAS = gql`
-  query allAreas {
-    allAreas {
-      id
-      info {
-        misc
-        quarter
-        latlngs {
-          lat
-          lng
-        }
-        cityName
-        buildings
-        address
-      }
-      shareHistory {
-        shareEndDate
-        shareStartDate
-        sharedBy
-        sharedTo
-      }
-      shareState {
-        isShared
-        shareStartDate
-        sharedBy
-        shareRequests
-        sharedTo
-      }
-    }
-  }
+	query allAreas {
+		allAreas {
+			id
+			info {
+				misc
+				quarter
+				latlngs {
+					lat
+					lng
+				}
+				cityName
+				buildings
+				address
+			}
+			shareHistory {
+				shareEndDate
+				shareStartDate
+				sharedBy
+				sharedTo
+			}
+			shareState {
+				isShared
+				shareStartDate
+				sharedBy
+				shareRequests
+				sharedTo
+			}
+		}
+	}
 `;
 export const ME = gql`
 	query me {
@@ -197,14 +197,14 @@ export const EDIT_USER_PASSWORD = gql`
 
 //needs testing
 export const MAKE_REQUEST = gql`
-  mutation makeRequest($areaId: ID!) {
-    makeRequest(areaId: $areaId) {
-      id
-      shareState {
-        isShared
-      }
-    }
-  }
+	mutation makeRequest($areaId: ID!) {
+		makeRequest(areaId: $areaId) {
+			id
+			shareState {
+				isShared
+			}
+		}
+	}
 `;
 
 export const CREATE_USER = gql`
@@ -233,6 +233,14 @@ export const DELETE_USER = gql`
 export const TOGGLE_USER_ADMIN = gql`
 	mutation toggleUserAdmin($userId: ID!) {
 		toggleUserAdmin(userId: $userId) {
+			id
+		}
+	}
+`;
+
+export const TOGGLE_USER_WORKER = gql`
+	mutation toggleUserWorker($userId: ID!) {
+		toggleUserWorker(userId: $userId) {
 			id
 		}
 	}
@@ -345,18 +353,18 @@ export const EDIT_AREA = gql`
 	}
 `;
 export const REMOVE_REQUESTS = gql`
-  mutation removeRequests($areaId: ID!) {
-    removeRequest(areaId: $areaId) {
-      id
-    }
-  }
+	mutation removeRequests($areaId: ID!) {
+		removeRequest(areaId: $areaId) {
+			id
+		}
+	}
 `;
 export const DENY_LOAN_REQUEST = gql`
-  mutation denyRequest($areaId: ID!, $email: String!) {
-    removeRequestAsAdmin(areaId: $areaId, email: $email) {
-      id
-    }
-  }
+	mutation denyRequest($areaId: ID!, $email: String!) {
+		removeRequestAsAdmin(areaId: $areaId, email: $email) {
+			id
+		}
+	}
 `;
 //needs testing
 export const DELETE_AREA = gql`

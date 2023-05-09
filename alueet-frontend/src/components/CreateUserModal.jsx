@@ -55,7 +55,11 @@ const CreateUserModal = ({ ...createProps }) => {
 	};
 
 	const handleSubmit = () => {
+		console.log(password.length);
 		if (!password) setPasswordError('Salasana on pakollinen');
+		else setPasswordError('');
+		if (password.length < 5)
+			setPasswordError('Salasanan pitää vähintään 5 merkkiä');
 		else setPasswordError('');
 		if (!email) setEmailError('Sähköposti on pakollinen');
 		else setEmailError('');
@@ -100,7 +104,7 @@ const CreateUserModal = ({ ...createProps }) => {
 							type='password'
 							onChange={(e) => setPassword(e.target.value)}
 							required
-							error={!password}
+							error={!password || password.length < 5}
 							helperText={passwordError}
 							sx={styles.input}
 						/>

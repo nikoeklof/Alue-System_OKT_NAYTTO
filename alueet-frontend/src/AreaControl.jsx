@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Grid,
-  Typography,
-  Paper,
-  TableContainer,
-  Table,
-  TableBody,
-  TextField,
-  TablePagination,
-  Autocomplete,
-} from "@mui/material";
-import { InfinitySpin } from "react-loader-spinner";
+	Container,
+	Grid,
+	Typography,
+	Paper,
+	TableContainer,
+	Table,
+	TableBody,
+	TextField,
+	TablePagination,
+	Autocomplete,
+} from '@mui/material';
+import { InfinitySpin } from 'react-loader-spinner';
 
 import theme from "./style/theme";
 import AreaMap from "./AreaMap";
@@ -21,61 +21,61 @@ import { useMutation, useQuery } from "@apollo/client";
 import { cities } from "./db/cities";
 
 const styles = {
-  container: {
-    mb: 8,
-  },
-  areas: {
-    flewGrow: 1,
-  },
-  selectMenu: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 0.5,
-  },
-  menuProps: {
-    PaperProps: {
-      style: {
-        maxHeight: 200,
-        width: 250,
-      },
-    },
-  },
-  mainText: {
-    borderBottom: "solid",
-    borderColor: theme.bgColor.secondary,
-    borderWidth: 1,
-    mt: 4,
-    mb: 2,
-    pb: 2,
-  },
-  search: {
-    mb: 2,
-    ml: 2,
-    width: "96%",
-  },
-  form: {
-    width: "100%",
-  },
-  areainfo: {
-    backgroundColor: theme.bgColor.primary,
-    border: "solid",
-    borderColor: theme.bgColor.secondary,
-    borderWidth: 1,
-    borderRadius: 1,
-    display: "flex",
-    py: 2,
-    my: 1,
-  },
-  info: {
-    flexGrow: 2,
-  },
-  infotext: {
-    mb: 0.5,
-  },
-  button: {},
-  areaButton: {
-    m: 0.5,
-  },
+	container: {
+		mb: 8,
+	},
+	areas: {
+		flewGrow: 1,
+	},
+	selectMenu: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		gap: 0.5,
+	},
+	menuProps: {
+		PaperProps: {
+			style: {
+				maxHeight: 200,
+				width: 250,
+			},
+		},
+	},
+	mainText: {
+		borderBottom: 'solid',
+		borderColor: theme.bgColor.secondary,
+		borderWidth: 1,
+		mt: 4,
+		mb: 2,
+		pb: 2,
+	},
+	search: {
+		mb: 2,
+		ml: 2,
+		width: '96%',
+	},
+	form: {
+		width: '100%',
+	},
+	areainfo: {
+		backgroundColor: theme.bgColor.primary,
+		border: 'solid',
+		borderColor: theme.bgColor.secondary,
+		borderWidth: 1,
+		borderRadius: 1,
+		display: 'flex',
+		py: 2,
+		my: 1,
+	},
+	info: {
+		flexGrow: 2,
+	},
+	infotext: {
+		mb: 0.5,
+	},
+	button: {},
+	areaButton: {
+		m: 0.5,
+	},
 };
 
 const AreaControl = ({ loggedUser }) => {
@@ -107,12 +107,12 @@ const AreaControl = ({ loggedUser }) => {
     },
   });
 
-  const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
-    variables: { cityName: cityFilter },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+	const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
+		variables: { cityName: cityFilter },
+		onError: (e) => {
+			console.log(e);
+		},
+	});
 
   const [makeAreaRequest] = useMutation(MAKE_REQUEST, {
     onError: (e) => {
@@ -123,39 +123,39 @@ const AreaControl = ({ loggedUser }) => {
     console.log(loanError);
   }, [loanError]);
 
-  useEffect(() => {
-    setFilteredAreas(data?.allAreas);
-  }, [data, loading, filteredAreas]);
+	useEffect(() => {
+		setFilteredAreas(data?.allAreas);
+	}, [data, loading, filteredAreas]);
 
   useEffect(() => {
     setQuarterAreas(quarterData?.allAreas);
   }, [quarterData]);
 
-  useEffect(() => {
-    if (filteredAreas) {
-      const quarterArray = [];
-      filteredAreas.forEach((area) => {
-        if (quarterArray.includes(area.info.quarter)) return;
-        quarterArray.push(area.info.quarter);
-      });
+	useEffect(() => {
+		if (filteredAreas) {
+			const quarterArray = [];
+			filteredAreas.forEach((area) => {
+				if (quarterArray.includes(area.info.quarter)) return;
+				quarterArray.push(area.info.quarter);
+			});
 
-      return setQuarterList(quarterArray);
-    }
-    return;
-  }, [quarterList, filteredAreas]);
+			return setQuarterList(quarterArray);
+		}
+		return;
+	}, [quarterList, filteredAreas]);
 
-  useEffect(() => {
-    console.log(selectedArea);
-  }, [selectedArea, setSelectedArea]);
+	useEffect(() => {
+		console.log(selectedArea);
+	}, [selectedArea, setSelectedArea]);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(+event.target.value);
+		setPage(0);
+	};
 
   const loanArea = async (props) => {
     if (loggedUser) {
@@ -165,53 +165,66 @@ const AreaControl = ({ loggedUser }) => {
     }
   };
 
-  const clearSelected = () => {
-    setSelectedArea(undefined);
-  };
+	const clearSelected = () => {
+		setSelectedArea(undefined);
+	};
 
-  return (
-    <Container sx={styles.container}>
-      <Typography sx={styles.mainText} variant="h6">
-        Alueiden hallinta
-      </Typography>
+	return (
+		<Container sx={styles.container}>
+			<Typography
+				sx={styles.mainText}
+				variant='h6'
+			>
+				Alueiden hallinta
+			</Typography>
 
-      <Autocomplete
-        disablePortal
-        id="findCity"
-        options={cities.map((city) => city.Kunta)}
-        value={cityFilter}
-        onChange={(e, newValue) => {
-          if (newValue === "") return;
-          setCityFilter(newValue);
-          localStorage.setItem("defaultFilter", newValue);
-          setCityIndex(cities.findIndex((city) => city.Kunta === newValue));
-          setQuarterFilterInput("");
-          setQuarterAreas([]);
-        }}
-        inputValue={cityFilterInput}
-        onInputChange={(e, newValue) => setCityFilterInput(newValue)}
-        sx={styles.search}
-        renderInput={(params) => (
-          <TextField {...params} label="Hae kaupunkia..." />
-        )}
-      />
-      <Autocomplete
-        freeSolo
-        disablePortal
-        id="findQuarter"
-        options={quarterList.length !== 0 ? quarterList : ["Ei alueita"]}
-        value={quarterFilter}
-        onChange={(e, newValue) => {
-          if (newValue === "") return;
-          setQuarterFilter(newValue);
-        }}
-        inputValue={quarterFilterInput}
-        onInputChange={(e, newValue) => setQuarterFilterInput(newValue)}
-        sx={styles.search}
-        renderInput={(params) => (
-          <TextField {...params} label="Hae kaupunginosaa..." />
-        )}
-      />
+			<Autocomplete
+				disablePortal
+				id='findCity'
+				options={cities.map((city) => city.Kunta)}
+				value={cityFilter}
+				onChange={(e, newValue) => {
+					if (newValue === '') return;
+					setCityFilter(newValue);
+					localStorage.setItem('defaultFilter', newValue);
+					setCityIndex(
+						cities.findIndex((city) => city.Kunta === newValue)
+					);
+					setQuarterFilterInput('');
+					setQuarterAreas([]);
+				}}
+				inputValue={cityFilterInput}
+				onInputChange={(e, newValue) => setCityFilterInput(newValue)}
+				sx={styles.search}
+				renderInput={(params) => (
+					<TextField
+						{...params}
+						label='Hae kaupunkia...'
+					/>
+				)}
+			/>
+			<Autocomplete
+				freeSolo
+				disablePortal
+				id='findQuarter'
+				options={
+					quarterList.length !== 0 ? quarterList : ['Ei alueita']
+				}
+				value={quarterFilter}
+				onChange={(e, newValue) => {
+					if (newValue === '') return;
+					setQuarterFilter(newValue);
+				}}
+				inputValue={quarterFilterInput}
+				onInputChange={(e, newValue) => setQuarterFilterInput(newValue)}
+				sx={styles.search}
+				renderInput={(params) => (
+					<TextField
+						{...params}
+						label='Hae kaupunginosaa...'
+					/>
+				)}
+			/>
 
       <Container xs={styles.areas}>
         <Grid container spacing={3}>

@@ -12,7 +12,11 @@ import {
 import theme from './style/theme';
 import DeleteWarningModal from './components/DeleteWarningModal';
 import { useMutation } from '@apollo/client';
-import { EDIT_USER_EMAIL, EDIT_USER_PASSWORD } from './queries';
+import {
+	EDIT_USER_ABOUT,
+	EDIT_USER_EMAIL,
+	EDIT_USER_PASSWORD,
+} from './queries';
 
 const styles = {
 	container: {
@@ -42,6 +46,7 @@ const UserProfile = ({ user }) => {
 	const [openDel, setDelOpen] = useState(false);
 	const [email, setEmail] = useState(user ? user.email : null);
 	const [password, setPassword] = useState('');
+	const [aboutMe, setAboutMe] = useState(user ? user.aboutMe : null);
 	const [emailError, setEmailError] = useState('');
 	const [editUserEmail] = useMutation(EDIT_USER_EMAIL, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
@@ -49,8 +54,11 @@ const UserProfile = ({ user }) => {
 	const [editUserPassword] = useMutation(EDIT_USER_PASSWORD, {
 		onError: (e) => console.log(JSON.stringify(e, null, 2)),
 	});
+	const [editUserAbout] = useMutation(EDIT_USER_ABOUT, {
+		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	});
 
-	const updateEmail = async () => {
+	const updateUser = async () => {
 		if (!email) return setEmailError('Sähköposti tarvitaan');
 		else setEmailError('');
 
@@ -66,6 +74,11 @@ const UserProfile = ({ user }) => {
 				},
 			});
 		}
+		await editUserAbout({
+			variables: {
+				aboutMe: aboutMe,
+			},
+		});
 	};
 
 	const delProps = {
@@ -73,7 +86,7 @@ const UserProfile = ({ user }) => {
 		handleCloseDelModal: () => setDelOpen(false),
 		warningText: 'Haluatko varmasti tallentaa tiedot?',
 		handleConfirm: () => {
-			updateEmail();
+			updateUser();
 			setEmailError('');
 			setPassword('');
 			setDelOpen(false);
@@ -112,6 +125,17 @@ const UserProfile = ({ user }) => {
 							variant='outlined'
 							defaultValue={password}
 							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</FormControl>
+				</Paper>
+				<Paper sx={styles.paper}>
+					<Typography>Vaihda minusta tekstiä</Typography>
+					<FormControl sx={styles.form}>
+						<TextField
+							label='Minusta'
+							variant='outlined'
+							defaultValue={aboutMe}
+							onChange={(e) => setAboutMe(e.target.value)}
 						/>
 					</FormControl>
 				</Paper>

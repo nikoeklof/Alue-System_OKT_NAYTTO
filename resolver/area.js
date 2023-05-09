@@ -24,10 +24,14 @@ module.exports = {
 
       const areas = await Area.find(newArgs);
 
-      if ("hasRequests" in args && args.hasRequests === true)
-        for (let x = 0; x < areas.length; x++)
-          if (areas[x].shareState.shareRequests.length < 1) areas.splice(x, 1);
-
+      if ("hasRequests" in args && args.hasRequests === true) {
+        const areasWithRequests = [];
+        areas.forEach((area) => {
+          if (area.shareState.shareRequests.length !== 0)
+            areasWithRequests.push(area);
+        });
+        return areasWithRequests;
+      }
       return areas;
     },
   },

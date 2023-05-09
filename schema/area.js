@@ -1,4 +1,6 @@
 module.exports = `
+  scalar Date
+
   type Area {
     id: ID!
     info: Info!
@@ -16,10 +18,10 @@ module.exports = `
   }
 
   type Shares {
-    sharedTo: String
-    sharedBy: String
-    shareStartDate: String
-    shareEndDate: String
+    sharedTo: ID
+    sharedBy: ID
+    shareStartDate: Date
+    shareEndDate: Date
   }
 
   type latlngs {
@@ -37,7 +39,7 @@ module.exports = `
     shareRequests: [String]
     sharedTo: String
     sharedBy: String
-    shareStartDate: String
+    shareStartDate: Date
   }
 
   type Query {

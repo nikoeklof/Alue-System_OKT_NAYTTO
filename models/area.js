@@ -45,15 +45,15 @@ const schema = new mongoose.Schema({
             default: false
         },
         shareRequests: {
-            type: [String],
+            type: [mongoose.Schema.Types.ObjectId],
             default: []
         },
         sharedTo: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             default: null
         },
         sharedBy: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             default: null
         },
         shareStartDate: {
@@ -65,11 +65,11 @@ const schema = new mongoose.Schema({
         type: [
             {
                 sharedTo: {
-                    type: String,
+                    type: mongoose.Schema.Types.ObjectId,
                     required: true
                 },
                 sharedBy: {
-                    type: String,
+                    type: mongoose.Schema.Types.ObjectId,
                     required: true
                 },
                 shareStartDate: {

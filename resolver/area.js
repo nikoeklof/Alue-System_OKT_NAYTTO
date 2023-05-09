@@ -39,7 +39,24 @@ module.exports = {
 
     Area: {
         info: (root) => root.info,
-        shareState: (root) => root.shareState,
+        shareState: async (root) => {
+            const sharedTo = await User.findById(root.shareState.sharedTo)
+            const sharedBy = await User.findById(root.shareState.sharedBy)
+
+            const requestsArray = []
+            for (let x = 0; x < root.shareState.shareRequests.length; x++) {
+                const user = await User.findById(root.shareState.shareRequests[x])
+                requestsArray.push(user.email)
+            }
+
+            return {
+                ...root.shareState,
+                sharedBy: sharedBy.email,
+                sharedTo: sharedTo.email,
+                shareRequests: requestsArray,
+                //shareStartDate: root.shareState.shareStartDate.toString().replace(/ *\([^)]*\) */g, "")
+            }
+        },
         shareHistory: (root) => root.shareHistory
     },
 
@@ -98,13 +115,13 @@ module.exports = {
             if (!area)
                 throw new UserInputError("Area not found")
 
-            if (area.shareState.shareRequests.includes(user.email))
+            if (area.shareState.shareRequests.includes(user._id))
                 throw new UserInputError("You have already reguested this area")
 
-            if (area.shareState.sharedTo == user.email)
+            if (area.shareState.sharedTo == user._id)
                 throw new UserInputError("Area is already being shared to you")
 
-            area.shareState.shareRequests.push(user.email)
+            area.shareState.shareRequests.push(user._id)
 
             area.save()
 
@@ -121,16 +138,15 @@ module.exports = {
             if (!area)
                 throw new UserInputError("Area not found")
 
-            if (!area.shareState.shareRequests.includes(user.email))
+            if (!area.shareState.shareRequests.includes(user._id))
                 throw new UserInputError("You have not requested this area")
 
-            area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user.email), 1)
+            area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user._id), 1)
 
             return area.save()
         },
 
         removeRequestAsAdmin: async (root, args, contextValue) => {
-            console.log(contextValue)
             contextCheck(contextValue.authUser, 1)
 
             const area = await Area.findById(args.areaId)
@@ -138,10 +154,15 @@ module.exports = {
             if (!area)
                 throw new UserInputError("Area not found")
 
-            if (!area.shareState.shareRequests.includes(args.email))
-                throw new UserInputError("This is not requested by: " + args.email)
+            const user = await User.findOne({ email: args.email })
 
-            area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(args.email), 1)
+            if (!user)
+                throw new UserInputError("User not found")
+
+            if (!area.shareState.shareRequests.includes(user._id))
+                throw new UserInputError("This has not been requested by: " + args.email)
+
+            area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user._id), 1)
 
             return area.save()
         },
@@ -162,12 +183,12 @@ module.exports = {
             if (area.shareState.isShared == true)
                 throw new UserInputError("Area is currently being shared")
 
-            if (area.shareState.shareRequests.includes(user.email))
-                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user.email), 1)
+            if (area.shareState.shareRequests.includes(user._id))
+                area.shareState.shareRequests.splice(area.shareState.shareRequests.indexOf(user._id), 1)
 
             area.shareState.isShared = true
-            area.shareState.sharedBy = authUser.email
-            area.shareState.sharedTo = user.email
+            area.shareState.sharedBy = authUser._id
+            area.shareState.sharedTo = user._id
             area.shareState.shareStartDate = new Date()
 
             area.save()
@@ -217,7 +238,7 @@ module.exports = {
                     })
                 })
 
-            const user = await User.findOne({ email: shareEnd.sharedTo })
+            const user = await User.findById(shareEnd.sharedTo)
 
             mailer(user.email, area.info, "Sinulle jaettu alue on nyt palautettu")
 

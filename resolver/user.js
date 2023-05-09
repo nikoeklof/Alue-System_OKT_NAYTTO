@@ -84,8 +84,6 @@ module.exports = {
 					'Invalid email'
 				);
 
-			await Area.updateMany({ ["shareState.shareRequests"]: user.email }, { $set: { "shareState.shareRequests.$": args.email } })
-
 			user.email = args.email;
 
 			return user.save().catch((error) => {
@@ -138,7 +136,7 @@ module.exports = {
 			else
 				throw new UserInputError('At least 1 argument is required')
 
-			await Area.updateMany({}, { $pull: { "shareState.shareRequests": user.email } })
+			await Area.updateMany({}, { $pull: { "shareState.shareRequests": user._id } })
 
 			return await user.deleteOne()
 		},
@@ -155,8 +153,6 @@ module.exports = {
 
 			if (!user)
 				throw new UserInputError("User not found")
-
-			await Area.updateMany({ ["shareState.shareRequests"]: user.email }, { $set: { "shareState.shareRequests.$": args.email } })
 
 			user.email = args.email
 

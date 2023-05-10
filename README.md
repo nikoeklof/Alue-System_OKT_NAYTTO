@@ -23,6 +23,7 @@ $ npm start
 ## Requires envs
 
 MONGODB_URI - Your Mongo Database link
+
 JWT_SECRET - A string of your choosing, used for authorization key creation during login
 
 ## Optional envs
@@ -34,9 +35,13 @@ PORT - By default this is 3001
 USE_GMAIL - "1" to use GMAIL as email transporter, will otherwise send fake emails to experiment with if unused
 
 Use_GMAIL requires the following values:
+
 EMAIL_SENDER - Google account used to send the mail, preferably don´t use a personal account
+
 EMAIL_CLIENTID
+
 EMAIL_SECRET
+
 EMAIL_REFRESHTOKEN
 
 ### For logging:

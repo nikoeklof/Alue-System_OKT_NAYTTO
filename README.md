@@ -13,8 +13,9 @@ $ cd {File directory}
 $ npm install
 ```
 
-You need to setup your personalized environmental values into an .env file that is within this file. Same as README.md.
-Check the [Required envs](#required-envs) below. Once set you can start the backend
+You need to setup your personalized environmental values into an .env file and put the file at root of this project.
+
+Check the [Required envs](#required-envs) below. Once set you can start the backend.
 
 ```
 $ npm start

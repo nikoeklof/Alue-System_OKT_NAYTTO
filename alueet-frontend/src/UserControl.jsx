@@ -39,43 +39,38 @@ import {
 } from "./queries";
 
 const styles = {
-  container: {
-    mb: 8,
-  },
-  mainText: {
-    borderBottom: "solid",
-    borderColor: theme.bgColor.secondary,
-    borderWidth: 1,
-    mt: 4,
-    mb: 2,
-    pb: 2,
-  },
-  subText: {
-    my: 1,
-    pb: 1,
-    px: 2,
-  },
-  button: {
-    mt: 2,
-    mx: 1,
-  },
-  form: {
-    mt: 2,
-    width: "100%",
-    overflow: "hidden",
-  },
-  divider: {
-    borderColor: theme.bgColor.secondary,
-  },
-  icon: {
-    float: "right",
-    pb: 2,
-  },
-  search: {
-    mb: 2,
-    ml: 2,
-    width: "96%",
-  },
+	container: {
+		mb: 8,
+	},
+	mainText: {
+		borderBottom: 'solid',
+		borderColor: theme.bgColor.secondary,
+		borderWidth: 1,
+		mt: 4,
+		mb: 2,
+		pb: 2,
+	},
+	subText: {
+		my: 1,
+		pb: 1,
+		px: 2,
+	},
+	button: {
+		mt: 2,
+		mx: 1,
+	},
+	form: {
+		mt: 2,
+		width: '100%',
+		overflow: 'hidden',
+	},
+	divider: {
+		borderColor: theme.bgColor.secondary,
+	},
+	icon: {
+		float: 'right',
+		pb: 2,
+	},
 };
 
 const columns = [
@@ -184,73 +179,91 @@ const UserControl = () => {
     setFilteredUsers(userData?.allUsers);
   }, [userData]);
 
-  useEffect(() => {
-    if (users && usersDisabled) {
-      const usersList = [];
-      if (allUsers)
-        allUsers.forEach((user) => {
-          if (usersList.includes(user.email)) return;
-          else usersList.push(user);
-        });
+	useEffect(() => {
+		if (users && usersDisabled) {
+			const usersList = [];
+			if (allUsers) {
+				allUsers.forEach((user) => {
+					if (usersList.includes(user.email)) return;
+					else usersList.push(user);
+				});
+			}
+			return setUserList(usersList);
+		}
+		return;
+	}, [users, usersDisabled, userList, allUsers]);
+	useEffect(() => {
+		if (filteredUsers) {
+			const dis = filteredUsers.map((user) => user.rank.disabled);
+			if (dis[0] === true) {
+				setDisabled(true);
+			} else if (dis[0] === false) {
+				setDisabled(false);
+			}
+		}
+	}, [userFilter, userList]);
+	useEffect(() => {
+		if (disabled === false) {
+			setCheckedNotDisabled(true);
+		} else if (disabled === true) {
+			setCheckedNotDisabled(false);
+		}
+	}, [disabled, userInputFilter]);
 
-      return setUserList(usersList);
-    }
-    return;
-  }, [users, usersDisabled, userList, allUsers]);
+	const refetchAll = async () => {
+		await refetchUsers();
+		await refetchUsersDisabled();
+		await refetchAllUsers();
+	};
 
-  useEffect(() => {
-    if (filteredUsers) {
-      const dis = filteredUsers.map((user) => user.rank.disabled);
-      if (dis[0] === true) {
-        setDisabled(true);
-      } else if (dis[0] === false) {
-        setDisabled(false);
-      }
-    }
-  }, [userFilter, userList, filteredUsers]);
+	const updateUser = async (user) => {
+		const { userId, email, admin, worker, disabled, originalUser } = user;
+		if (originalUser.rank.admin !== admin)
+			await toggleUserAdmin({
+				variables: { userId: userId },
+			});
+		if (originalUser.rank.worker !== worker)
+			await toggleUserWorker({
+				variables: { userId: userId },
+			});
+		if (originalUser.rank.disabled !== disabled)
+			await toggleUserDisabled({
+				variables: { userId: userId },
+			});
+		if (email !== originalUser.email)
+			await editUserEmailAsAdmin({
+				variables: {
+					userId: userId,
+					email: email,
+				},
+			});
+		refetchAll();
+	};
 
-  useEffect(() => {
-    if (disabled === false) {
-      setCheckedNotDisabled(true);
-    } else if (disabled === true) {
-      setCheckedNotDisabled(false);
-    }
-  }, [disabled, userInputFilter]);
+	const updateUserDisabled = async (user) => {
+		const userId = user.id;
+		await toggleUserDisabled({
+			variables: { userId: userId },
+		});
+		refetchUsers();
+		refetchUsersDisabled();
+		refetchAllUsers();
+	};
 
-  const updateUser = async (user) => {
-    const { userId, email, admin, worker, disabled, originalUser } = user;
-    if (originalUser.rank.admin !== admin)
-      await toggleUserAdmin({
-        variables: { userId: userId },
-      });
-    if (originalUser.rank.worker !== worker)
-      await toggleUserWorker({
-        variables: { userId: userId },
-      });
-    if (originalUser.rank.disabled !== disabled)
-      await toggleUserDisabled({
-        variables: { userId: userId },
-      });
-    if (email !== originalUser.email)
-      await editUserEmailAsAdmin({
-        variables: {
-          userId: userId,
-          email: email,
-        },
-      });
-    refetchUsers();
-    refetchUsersDisabled();
-    refetchAllUsers();
-  };
+	const addUser = async (user) => {
+		const { email, password } = user;
+		await createUser({ variables: { password: password, email: email } });
+		refetchAll();
+	};
 
-  const updateUserDisabled = async (user) => {
-    const userId = user.id;
-    await toggleUserDisabled({
-      variables: { userId: userId },
-    });
-    refetchUsers();
-    refetchUsersDisabled();
-  };
+	const removeUser = async (user) => {
+		const userId = user.id;
+		const email = user.email;
+		await deleteUser({
+			variables: { userId: userId, email: email },
+		});
+		refetchAll();
+	};
 
   const addUser = async (user) => {
     const { email, password } = user;
@@ -260,22 +273,87 @@ const UserControl = () => {
     refetchAllUsers();
   };
 
-  const removeUser = async (user) => {
-    const userId = user.id;
-    const email = user.email;
-    await deleteUser({
-      variables: { userId: userId, email: email },
-    });
-    refetchUsers();
-    refetchUsersDisabled();
-    refetchAllUsers();
-  };
+	const disabledProps = {
+		usersDisabled,
+		userInputFilter,
+		filteredUsers,
+		userFilter,
+		disabled,
+		columns,
+		styles,
+		loadingUsersDisabled,
+		updateUserDisabled,
+		removeUser,
+		updateUser,
+	};
 
-  const createProps = {
-    openCreate,
-    handleCreateModalClose: () => setCreateOpen(false),
-    addUser,
-  };
+	return (
+		<Container sx={styles.container}>
+			<Typography
+				variant='h5'
+				sx={styles.mainText}
+			>
+				Käyttäjien hallinta
+			</Typography>
+			<Autocomplete
+				freeSolo
+				disableClearable
+				id='findUser'
+				options={
+					userList.length !== 0
+						? userList.map((user) => user.email)
+						: ['Ei käyttäjiä']
+				}
+				value={userFilter}
+				onChange={(e, newValue) => {
+					if (newValue === '') {
+						setUserFilter('');
+						setFilteredUsers([]);
+						return;
+					}
+					setUserFilter(newValue);
+				}}
+				inputValue={userInputFilter}
+				onInputChange={(e, newValue) => {
+					if (newValue === '') {
+						setUserInputFilter('');
+						setFilteredUsers([]);
+						return;
+					}
+					setUserInputFilter(newValue);
+				}}
+				renderInput={(params) => (
+					<TextField
+						{...params}
+						label='Hae käyttäjää...'
+						InputProps={{
+							...params.InputProps,
+							type: 'search',
+						}}
+					/>
+				)}
+			/>
+			{users && !loadingUsers ? (
+				<Paper sx={styles.form}>
+					<Box
+						onClick={() =>
+							setCheckedNotDisabled(!checkedNotDisabled)
+						}
+					>
+						<Typography
+							variant='h6'
+							sx={styles.subText}
+						>
+							Aktiiviset käyttäjät
+							<IconButton sx={styles.icon}>
+								{checkedNotDisabled ? (
+									<RemoveIcon />
+								) : (
+									<AddIcon />
+								)}
+							</IconButton>
+						</Typography>
+					</Box>
 
   const disabledProps = {
     usersDisabled,

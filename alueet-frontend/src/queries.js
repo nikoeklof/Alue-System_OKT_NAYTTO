@@ -2,31 +2,45 @@ import { gql } from "@apollo/client";
 
 //  -----  querys  -----
 export const ALL_USERS = gql`
-  query allUsers($disabled: Boolean, $email: String) {
-    allUsers(disabled: $disabled, email: $email) {
-      aboutMe
-      email
-      id
-      rank {
-        admin
-        disabled
-        worker
-      }
-      areas {
-        id
-        info {
-          address
-          buildings
-          cityName
-          misc
-          quarter
-        }
-        shareState {
-          shareStartDate
-        }
-      }
-    }
-  }
+	query allUsers($disabled: Boolean, $email: String) {
+		allUsers(disabled: $disabled, email: $email) {
+			id
+			email
+			rank {
+				admin
+				worker
+				disabled
+			}
+			aboutMe
+			areas {
+				id
+				info {
+					address
+					buildings
+					cityName
+					latlngs {
+						lat
+						lng
+					}
+					misc
+					quarter
+				}
+				shareState {
+					shareRequests
+					sharedTo
+					sharedBy
+					shareStartDate
+					isShared
+				}
+				shareHistory {
+					shareEndDate
+					shareStartDate
+					sharedBy
+					sharedTo
+				}
+			}
+		}
+	}
 `;
 export const AREAS_WITH_REQUESTS = gql`
   query areasWithRequests($hasRequests: Boolean) {

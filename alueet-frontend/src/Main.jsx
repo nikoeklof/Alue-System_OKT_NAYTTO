@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -134,18 +135,35 @@ const Main = ({ user }) => {
 											</ListItemIcon>
 											<ListItemText primary='Tarkastele alueita' />
 										</ListItem>
-										<ListItem>
-											<ListItemIcon>
-												<MapIcon />
-											</ListItemIcon>
-											<ListItemText primary='Muokkaa alueita' />
-										</ListItem>
-										<ListItem>
-											<ListItemIcon>
-												<MapIcon />
-											</ListItemIcon>
-											<ListItemText primary='Lainaa ja palauta alueita' />
-										</ListItem>
+										{user ? (
+											user.rank.admin === true ? (
+												<ListItem>
+													<ListItemIcon>
+														<MapIcon />
+													</ListItemIcon>
+													<ListItemText primary='Muokkaa alueiden tietoja' />
+												</ListItem>
+											) : (
+												''
+											)
+										) : (
+											''
+										)}
+										{user ? (
+											user.rank.worker === true &&
+											user.rank.admin === false ? (
+												<ListItem>
+													<ListItemIcon>
+														<MapIcon />
+													</ListItemIcon>
+													<ListItemText primary='Lainaa ja palauta alueita' />
+												</ListItem>
+											) : (
+												''
+											)
+										) : (
+											''
+										)}
 									</List>
 								</Grid>
 								<Grid
@@ -169,185 +187,213 @@ const Main = ({ user }) => {
 						</Collapse>
 					</Paper>
 
-					<Paper sx={styles.paper}>
-						<Box onClick={() => setUserChecked(!userChecked)}>
-							<Typography
-								variant='h6'
-								sx={styles.subText}
-							>
-								Käyttäjien hallinta
-								<IconButton sx={styles.icon}>
-									{userChecked ? <RemoveIcon /> : <AddIcon />}
-								</IconButton>
-							</Typography>
-						</Box>
-
-						<Collapse in={userChecked}>
-							<Divider sx={styles.divider} />
-							<Grid
-								container
-								sx={styles.box}
-							>
-								<Grid
-									item
-									md={12}
-									xs={12}
-								>
-									<List>
-										<ListItem>
-											<ListItemIcon>
-												<PersonIcon />
-											</ListItemIcon>
-											<ListItemText primary='Tarkastele käyttäjiä' />
-										</ListItem>
-										<ListItem>
-											<ListItemIcon>
-												<PersonIcon />
-											</ListItemIcon>
-											<ListItemText primary='Luo käyttäjiä' />
-										</ListItem>
-										<ListItem>
-											<ListItemIcon>
-												<PersonIcon />
-											</ListItemIcon>
-											<ListItemText primary='Muokkaa ja poista käyttäjiä' />
-										</ListItem>
-									</List>
-								</Grid>
-								<Grid
-									item
-									md={12}
-									xs={12}
-								>
-									<Link
-										to={'/userControl'}
-										style={styles.link}
+					{user ? (
+						user.rank.admin === true ? (
+							<>
+								<Paper sx={styles.paper}>
+									<Box
+										onClick={() =>
+											setUserChecked(!userChecked)
+										}
 									>
-										<Button
-											variant='contained'
-											sx={styles.button}
+										<Typography
+											variant='h6'
+											sx={styles.subText}
 										>
-											Siirry
-										</Button>
-									</Link>
-								</Grid>
-							</Grid>
-						</Collapse>
-					</Paper>
-					<Paper sx={styles.paper}>
-						<Box
-							onClick={() =>
-								setCreateAreaChecked(!createAreaChecked)
-							}
-						>
-							<Typography
-								variant='h6'
-								sx={styles.subText}
-							>
-								Luo alue
-								<IconButton sx={styles.icon}>
-									{createAreaChecked ? (
-										<RemoveIcon />
-									) : (
-										<AddIcon />
-									)}
-								</IconButton>
-							</Typography>
-						</Box>
+											Käyttäjien hallinta
+											<IconButton sx={styles.icon}>
+												{userChecked ? (
+													<RemoveIcon />
+												) : (
+													<AddIcon />
+												)}
+											</IconButton>
+										</Typography>
+									</Box>
 
-						<Collapse in={createAreaChecked}>
-							<Divider sx={styles.divider} />
-							<Grid
-								container
-								sx={styles.box}
-							>
-								<Grid
-									item
-									md={12}
-									xs={12}
-								>
-									<List>
-										<ListItem>
-											<ListItemIcon>
-												<MapIcon />
-											</ListItemIcon>
-											<ListItemText primary='Luo uusia alueita' />
-										</ListItem>
-									</List>
-								</Grid>
-								<Grid
-									item
-									md={12}
-									xs={12}
-								>
-									<Link
-										to={'/createArea'}
-										style={styles.link}
-									>
-										<Button
-											variant='contained'
-											sx={styles.button}
+									<Collapse in={userChecked}>
+										<Divider sx={styles.divider} />
+										<Grid
+											container
+											sx={styles.box}
 										>
-											Siirry
-										</Button>
-									</Link>
-								</Grid>
-							</Grid>
-						</Collapse>
-					</Paper>
-					<Paper sx={styles.paper}>
-						<Box onClick={() => setLendChecked(!lendChecked)}>
-							<Typography
-								variant='h6'
-								sx={styles.subText}
-							>
-								Lainaa
-								<IconButton sx={styles.icon}>
-									{lendChecked ? <RemoveIcon /> : <AddIcon />}
-								</IconButton>
-							</Typography>
-						</Box>
+											<Grid
+												item
+												md={12}
+												xs={12}
+											>
+												<List>
+													<ListItem>
+														<ListItemIcon>
+															<PersonIcon />
+														</ListItemIcon>
+														<ListItemText primary='Tarkastele käyttäjiä' />
+													</ListItem>
+													<ListItem>
+														<ListItemIcon>
+															<PersonIcon />
+														</ListItemIcon>
+														<ListItemText primary='Luo käyttäjiä' />
+													</ListItem>
+													<ListItem>
+														<ListItemIcon>
+															<PersonIcon />
+														</ListItemIcon>
+														<ListItemText primary='Muokkaa ja poista käyttäjiä' />
+													</ListItem>
+												</List>
+											</Grid>
+											<Grid
+												item
+												md={12}
+												xs={12}
+											>
+												<Link
+													to={'/userControl'}
+													style={styles.link}
+												>
+													<Button
+														variant='contained'
+														sx={styles.button}
+													>
+														Siirry
+													</Button>
+												</Link>
+											</Grid>
+										</Grid>
+									</Collapse>
+								</Paper>
+								<Paper sx={styles.paper}>
+									<Box
+										onClick={() =>
+											setCreateAreaChecked(
+												!createAreaChecked
+											)
+										}
+									>
+										<Typography
+											variant='h6'
+											sx={styles.subText}
+										>
+											Luo alue
+											<IconButton sx={styles.icon}>
+												{createAreaChecked ? (
+													<RemoveIcon />
+												) : (
+													<AddIcon />
+												)}
+											</IconButton>
+										</Typography>
+									</Box>
 
-						<Collapse in={lendChecked}>
-							<Divider sx={styles.divider} />
-							<Grid
-								container
-								sx={styles.box}
-							>
-								<Grid
-									item
-									md={12}
-									xs={12}
-								>
-									<List>
-										<ListItem>
-											<ListItemIcon>
-												<MapIcon />
-											</ListItemIcon>
-											<ListItemText primary='Hallitse alueiden lainaus pyyntöjä' />
-										</ListItem>
-									</List>
-								</Grid>
-								<Grid
-									item
-									md={12}
-									xs={12}
-								>
-									<Link
-										to={'/lendList'}
-										style={styles.link}
-									>
-										<Button
-											variant='contained'
-											sx={styles.button}
+									<Collapse in={createAreaChecked}>
+										<Divider sx={styles.divider} />
+										<Grid
+											container
+											sx={styles.box}
 										>
-											Siirry
-										</Button>
-									</Link>
-								</Grid>
-							</Grid>
-						</Collapse>
-					</Paper>
+											<Grid
+												item
+												md={12}
+												xs={12}
+											>
+												<List>
+													<ListItem>
+														<ListItemIcon>
+															<MapIcon />
+														</ListItemIcon>
+														<ListItemText primary='Luo uusia alueita' />
+													</ListItem>
+												</List>
+											</Grid>
+											<Grid
+												item
+												md={12}
+												xs={12}
+											>
+												<Link
+													to={'/createArea'}
+													style={styles.link}
+												>
+													<Button
+														variant='contained'
+														sx={styles.button}
+													>
+														Siirry
+													</Button>
+												</Link>
+											</Grid>
+										</Grid>
+									</Collapse>
+								</Paper>
+								<Paper sx={styles.paper}>
+									<Box
+										onClick={() =>
+											setLendChecked(!lendChecked)
+										}
+									>
+										<Typography
+											variant='h6'
+											sx={styles.subText}
+										>
+											Lainaa
+											<IconButton sx={styles.icon}>
+												{lendChecked ? (
+													<RemoveIcon />
+												) : (
+													<AddIcon />
+												)}
+											</IconButton>
+										</Typography>
+									</Box>
+
+									<Collapse in={lendChecked}>
+										<Divider sx={styles.divider} />
+										<Grid
+											container
+											sx={styles.box}
+										>
+											<Grid
+												item
+												md={12}
+												xs={12}
+											>
+												<List>
+													<ListItem>
+														<ListItemIcon>
+															<MapIcon />
+														</ListItemIcon>
+														<ListItemText primary='Hallitse alueiden lainaus pyyntöjä' />
+													</ListItem>
+												</List>
+											</Grid>
+											<Grid
+												item
+												md={12}
+												xs={12}
+											>
+												<Link
+													to={'/lendList'}
+													style={styles.link}
+												>
+													<Button
+														variant='contained'
+														sx={styles.button}
+													>
+														Siirry
+													</Button>
+												</Link>
+											</Grid>
+										</Grid>
+									</Collapse>
+								</Paper>
+							</>
+						) : (
+							''
+						)
+					) : (
+						''
+					)}
 				</Grid>
 				<Grid
 					item

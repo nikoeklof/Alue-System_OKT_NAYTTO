@@ -20,7 +20,7 @@ Check the [Required envs](#required-envs) below. Once set you can start the back
 $ npm start
 ```
 
-## Requires envs
+## Required envs
 
 MONGODB_URI - Your Mongo Database link
 

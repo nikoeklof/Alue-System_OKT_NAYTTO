@@ -1,40 +1,40 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState } from 'react';
 import {
-  Box,
-  Button,
-  Collapse,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import EditUserModal from "./EditUserModal";
-import ChangeDisabledModal from "./ChangeDisabledModal";
-import DeleteWarningModal from "./DeleteWarningModal";
+	Box,
+	Button,
+	Collapse,
+	IconButton,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	Typography,
+} from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import EditUserModal from './EditUserModal';
+import ChangeDisabledModal from './ChangeDisabledModal';
+import DeleteWarningModal from './DeleteWarningModal';
 
 const styles = {
-  button: {
-    m: 1,
-  },
-  tableHeadText: {
-    fontWeight: "bold",
-  },
+	button: {
+		m: 1,
+	},
+	tableHeadText: {
+		fontWeight: 'bold',
+	},
 };
 
 const UserTableRowComponent = ({
-  user,
-  updateUser,
-  removeUser,
-  updateUserDisabled,
+	user,
+	updateUser,
+	removeUser,
+	updateUserDisabled,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [openEdit, setEditOpen] = useState(false);
-  const [openDel, setDelOpen] = useState(false);
-  const [openChangeDisabled, setOpenChangeDisabled] = useState(false);
+	const [open, setOpen] = useState(false);
+	const [openEdit, setEditOpen] = useState(false);
+	const [openDel, setDelOpen] = useState(false);
+	const [openChangeDisabled, setOpenChangeDisabled] = useState(false);
 
 	const editProps = {
 		openEdit,

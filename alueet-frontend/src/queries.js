@@ -12,6 +12,33 @@ export const ALL_USERS = gql`
 				disabled
 			}
 			aboutMe
+			areas {
+				id
+				info {
+					address
+					buildings
+					cityName
+					latlngs {
+						lat
+						lng
+					}
+					misc
+					quarter
+				}
+				shareState {
+					shareRequests
+					sharedTo
+					sharedBy
+					shareStartDate
+					isShared
+				}
+				shareHistory {
+					shareEndDate
+					shareStartDate
+					sharedBy
+					sharedTo
+				}
+			}
 		}
 	}
 `;

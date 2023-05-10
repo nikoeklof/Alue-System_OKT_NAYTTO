@@ -113,7 +113,21 @@ const UserTableRowComponent = ({
 															styles.tableHeadText
 														}
 													>
+														Kaupunginosa
+													</TableCell>
+													<TableCell
+														sx={
+															styles.tableHeadText
+														}
+													>
 														Nimi
+													</TableCell>
+													<TableCell
+														sx={
+															styles.tableHeadText
+														}
+													>
+														Kaupunki
 													</TableCell>
 													<TableCell
 														sx={
@@ -126,7 +140,7 @@ const UserTableRowComponent = ({
 											</TableHead>
 											<TableBody>
 												{user.areas ? (
-													user.areas.map((area) => {
+													user.areas?.map((area) => {
 														return (
 															<TableRow
 																key={area.id}
@@ -139,6 +153,26 @@ const UserTableRowComponent = ({
 																		area
 																			.info
 																			.quarter
+																	}
+																</TableCell>
+																<TableCell
+																	component='th'
+																	scope='row'
+																>
+																	{
+																		area
+																			.info
+																			.address
+																	}
+																</TableCell>
+																<TableCell
+																	component='th'
+																	scope='row'
+																>
+																	{
+																		area
+																			.info
+																			.cityName
 																	}
 																</TableCell>
 																<TableCell>

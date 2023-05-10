@@ -22,7 +22,6 @@ const styles = {
 			display: { xs: 'flex', md: 'none' },
 		},
 		logoText: {
-			mr: 2,
 			display: { xs: 'flex', md: 'none' },
 			flexGrow: 1,
 			fontFamily: 'monospace',
@@ -123,6 +122,7 @@ const styles = {
 		link: {
 			textDecoration: 'none',
 			color: theme.color.secondary,
+			fontSize: '12px',
 		},
 	},
 };
@@ -155,7 +155,7 @@ const NavBar = ({ user }) => {
 			color='default'
 		>
 			<Box maxWidth='xl'>
-				<Toolbar>
+				<Toolbar sx={{ p: 0 }}>
 					<Link
 						to={'/'}
 						style={styles.normal.link}

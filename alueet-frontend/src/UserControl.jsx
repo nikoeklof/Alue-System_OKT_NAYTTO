@@ -70,11 +70,6 @@ const styles = {
 		float: 'right',
 		pb: 2,
 	},
-	search: {
-		mb: 2,
-		ml: 2,
-		width: '96%',
-	},
 };
 
 const columns = [
@@ -217,6 +212,12 @@ const UserControl = () => {
 		}
 	}, [disabled, userInputFilter]);
 
+	const refetchAll = async () => {
+		await refetchUsers();
+		await refetchUsersDisabled();
+		await refetchAllUsers();
+	};
+
 	const updateUser = async (user) => {
 		const { userId, email, admin, worker, disabled, originalUser } = user;
 		if (originalUser.rank.admin !== admin)
@@ -238,9 +239,7 @@ const UserControl = () => {
 					email: email,
 				},
 			});
-		refetchUsers();
-		refetchUsersDisabled();
-		refetchAllUsers();
+		refetchAll();
 	};
 
 	const updateUserDisabled = async (user) => {
@@ -250,14 +249,13 @@ const UserControl = () => {
 		});
 		refetchUsers();
 		refetchUsersDisabled();
+		refetchAllUsers();
 	};
 
 	const addUser = async (user) => {
 		const { email, password } = user;
 		await createUser({ variables: { password: password, email: email } });
-		refetchUsers();
-		refetchUsersDisabled();
-		refetchAllUsers();
+		refetchAll();
 	};
 
 	const removeUser = async (user) => {
@@ -266,9 +264,7 @@ const UserControl = () => {
 		await deleteUser({
 			variables: { userId: userId, email: email },
 		});
-		refetchUsers();
-		refetchUsersDisabled();
-		refetchAllUsers();
+		refetchAll();
 	};
 
 	const createProps = {
@@ -336,7 +332,6 @@ const UserControl = () => {
 						}}
 					/>
 				)}
-				sx={styles.search}
 			/>
 			{users && !loadingUsers ? (
 				<Paper sx={styles.form}>

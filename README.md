@@ -2,7 +2,7 @@ Requires envs:
 
 MONGODB_URI - Your mongoDB link
 JWT_SECRET - A string of your choosing, used for authorization key creation
-PORT - 3001
+PORT - Optional, by default it is 3001
 
 For emails (Using Gmail):
 

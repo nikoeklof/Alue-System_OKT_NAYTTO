@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { Fragment, useState } from 'react';
 import {
 	Box,
@@ -93,7 +94,8 @@ const UserTableRowComponent = ({
 							unmountOnExit
 						>
 							<Box sx={{ margin: 1 }}>
-								{!user.rank.disabled ? (
+								{!user.rank.disabled &&
+								user.areas.length > 0 ? (
 									<>
 										<Typography
 											variant='h6'

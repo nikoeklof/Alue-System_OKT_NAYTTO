@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
-	AppBar,
-	Toolbar,
-	Typography,
-	Box,
-	Menu,
-	MenuItem,
-	Button,
-	IconButton,
-} from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Menu,
+  MenuItem,
+  Button,
+  IconButton,
+} from "@mui/material";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-import theme from '../style/theme';
+import theme from "../style/theme";
 
 const styles = {
 	responsive: {
@@ -128,26 +128,26 @@ const styles = {
 };
 
 const NavBar = ({ user }) => {
-	const [anchorElNav, setAnchorElNav] = useState(null);
-	const [anchorElUser, setAnchorElUser] = useState(null);
-	const navigate = useNavigate();
-	const handleOpenNavMenu = (event) => {
-		setAnchorElNav(event.currentTarget);
-	};
-	const handleOpenUserMenu = (event) => {
-		setAnchorElUser(event.currentTarget);
-	};
-	const handleCloseNavMenu = () => {
-		setAnchorElNav(null);
-	};
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
-	const handleCloseUserMenu = () => {
-		setAnchorElUser(null);
-	};
-	const logOut = () => {
-		navigate('/');
-		navigate(0);
-	};
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const logOut = () => {
+    navigate("/");
+    navigate(0);
+  };
 
 	return (
 		<AppBar
@@ -234,114 +234,87 @@ const NavBar = ({ user }) => {
 						</Menu>
 					</Box>
 
-					<Typography
-						variant='h5'
-						component='a'
-						href='/'
-						noWrap
-						sx={styles.responsive.logoText}
-					>
-						Aluepöytä
-					</Typography>
-					<Box sx={styles.normal.box}>
-						<Link
-							to={'/areaControl'}
-							style={styles.normal.link}
-						>
-							<Button sx={styles.normal.button}>
-								Alueiden hallinta
-							</Button>
-						</Link>
+          <Typography
+            variant="h5"
+            component="a"
+            href="/"
+            noWrap
+            sx={styles.responsive.logoText}
+          >
+            Aluepöytä
+          </Typography>
+          <Box sx={styles.normal.box}>
+            <Link to={"/areaControl"} style={styles.normal.link}>
+              <Button sx={styles.normal.button}>Alueiden hallinta</Button>
+            </Link>
 
-						<Link
-							to={'/userControl'}
-							style={
-								user?.rank?.admin
-									? styles.normal.link
-									: styles.normal.linkDisabled
-							}
-						>
-							<Button sx={styles.normal.button}>
-								Käyttäjien hallinta
-							</Button>
-						</Link>
-						<Link
-							to={'/createArea'}
-							style={
-								user?.rank?.admin
-									? styles.normal.link
-									: styles.normal.linkDisabled
-							}
-						>
-							<Button sx={styles.normal.button}>Luo Alue</Button>
-						</Link>
-						<Link
-							to={'/lendList'}
-							style={
-								user?.rank?.admin
-									? styles.normal.link
-									: styles.normal.linkDisabled
-							}
-						>
-							<Button sx={styles.normal.button}>Lainaa</Button>
-						</Link>
-					</Box>
-					<Box sx={styles.user.box}>
-						<Button
-							onClick={handleOpenUserMenu}
-							sx={styles.user.link}
-						>
-							{user ? user.email : 'Aloitus'}
-						</Button>
-						<Menu
-							sx={styles.normal.menu.sx}
-							id='menu-appbar'
-							anchorEl={anchorElUser}
-							anchorOrigin={styles.normal.menu.anchor}
-							keepMounted
-							transformOrigin={styles.normal.menu.transform}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}
-						>
-							{user ? (
-								<Box>
-									<Link
-										to='/userProfile'
-										style={styles.responsive.link}
-									>
-										<MenuItem>
-											<Typography textAlign='center'>
-												Profiili
-											</Typography>
-										</MenuItem>
-									</Link>
-									<MenuItem
-										onClick={() => {
-											localStorage.setItem('token', '');
-											return logOut();
-										}}
-									>
-										<Typography textAlign='center'>
-											Kirjaudu ulos
-										</Typography>
-									</MenuItem>
-								</Box>
-							) : (
-								<Link
-									to='/login'
-									style={styles.responsive.link}
-								>
-									<MenuItem>
-										<Typography>Kirjaudu sisään</Typography>
-									</MenuItem>
-								</Link>
-							)}
-						</Menu>
-					</Box>
-				</Toolbar>
-			</Box>
-		</AppBar>
-	);
+            <Link to={"/userControl"} style={styles.normal.link}>
+              <Button sx={styles.normal.button}>Käyttäjien hallinta</Button>
+            </Link>
+            <Link
+              to={"/createArea"}
+              style={
+                user?.rank?.admin
+                  ? styles.normal.link
+                  : styles.normal.linkDisabled
+              }
+            >
+              <Button sx={styles.normal.button}>Luo Alue</Button>
+            </Link>
+            <Link
+              to={"/lendList"}
+              style={
+                user?.rank?.admin
+                  ? styles.normal.link
+                  : styles.normal.linkDisabled
+              }
+            >
+              <Button sx={styles.normal.button}>Lainaa</Button>
+            </Link>
+          </Box>
+          <Box sx={styles.user.box}>
+            <Button onClick={handleOpenUserMenu} sx={styles.user.link}>
+              {user ? user.email : "Aloitus"}
+            </Button>
+            <Menu
+              sx={styles.normal.menu.sx}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={styles.normal.menu.anchor}
+              keepMounted
+              transformOrigin={styles.normal.menu.transform}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {user ? (
+                <Box>
+                  <Link to="/userProfile" style={styles.responsive.link}>
+                    <MenuItem>
+                      <Typography textAlign="center">Profiili</Typography>
+                    </MenuItem>
+                  </Link>
+                  <MenuItem
+                    onClick={() => {
+                      localStorage.setItem("token", "");
+                      return logOut();
+                    }}
+                  >
+                    <Typography textAlign="center">Kirjaudu ulos</Typography>
+                  </MenuItem>
+                </Box>
+              ) : (
+                <Link to="/login" style={styles.responsive.link}>
+                  <MenuItem>
+                    <Typography>Kirjaudu sisään</Typography>
+                  </MenuItem>
+                </Link>
+              )}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Box>
+    </AppBar>
+  );
 };
 
 export default NavBar;

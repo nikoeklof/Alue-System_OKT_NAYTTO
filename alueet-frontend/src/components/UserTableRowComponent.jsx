@@ -26,7 +26,6 @@ const styles = {
 };
 
 const UserTableRowComponent = ({
-  loggedUser,
   user,
   updateUser,
   removeUser,
@@ -135,38 +134,31 @@ const UserTableRowComponent = ({
                   <></>
                 )}
 
-                {loggedUser?.rank.admin ? (
-                  !user.rank.disabled ? (
-                    <Button
-                      variant="contained"
-                      sx={styles.button}
-                      onClick={() => setEditOpen(true)}
-                    >
-                      Muokkaa Käyttäjää
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      sx={styles.button}
-                      onClick={() => setOpenChangeDisabled(true)}
-                    >
-                      Aktivoi käyttäjä
-                    </Button>
-                  )
-                ) : (
-                  <></>
-                )}
-                {loggedUser?.rank.admin ? (
+                {!user.rank.disabled ? (
                   <Button
                     variant="contained"
                     sx={styles.button}
-                    onClick={() => setDelOpen(true)}
+                    onClick={() => setEditOpen(true)}
                   >
-                    Poista Käyttäjä
+                    Muokkaa Käyttäjää
                   </Button>
                 ) : (
-                  <></>
+                  <Button
+                    variant="contained"
+                    sx={styles.button}
+                    onClick={() => setOpenChangeDisabled(true)}
+                  >
+                    Aktivoi käyttäjä
+                  </Button>
                 )}
+
+                <Button
+                  variant="contained"
+                  sx={styles.button}
+                  onClick={() => setDelOpen(true)}
+                >
+                  Poista Käyttäjä
+                </Button>
               </Box>
             </Collapse>
           </TableCell>

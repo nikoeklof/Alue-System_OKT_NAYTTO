@@ -15,6 +15,7 @@ import { ME } from "./queries";
 
 const App = () => {
   const [loggedUser, setLoggedUser] = useState(null);
+
   const { data: loggedUserData, loading: loadingUserData } = useQuery(ME, {
     onError: (e) => console.log(JSON.stringify(e, null, 2)),
   });
@@ -38,10 +39,7 @@ const App = () => {
             path="/areaControl"
             element={<AreaControl loggedUser={loggedUser} />}
           />
-          <Route
-            path="/userControl"
-            element={<UserControl loggedUser={loggedUser} />}
-          />
+          <Route path="/userControl" element={<UserControl />} />
           <Route path="/createArea" element={<AreaCreate />} />
           <Route path="/lendList" element={<LendList />} />
           <Route

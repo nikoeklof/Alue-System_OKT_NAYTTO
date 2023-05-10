@@ -35,6 +35,7 @@ import {
   EDIT_USER_EMAIL_AS_ADMIN,
   TOGGLE_USER_DISABLED,
   TOGGLE_USER_WORKER,
+  ME,
 } from "./queries";
 
 const styles = {
@@ -103,7 +104,7 @@ const columns = [
   },
 ];
 
-const UserControl = ({ loggedUser }) => {
+const UserControl = () => {
   const [users, setUsers] = useState(null);
   const [usersDisabled, setUsersDisabled] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
@@ -196,6 +197,7 @@ const UserControl = ({ loggedUser }) => {
     }
     return;
   }, [users, usersDisabled, userList, allUsers]);
+
   useEffect(() => {
     if (filteredUsers) {
       const dis = filteredUsers.map((user) => user.rank.disabled);
@@ -206,6 +208,7 @@ const UserControl = ({ loggedUser }) => {
       }
     }
   }, [userFilter, userList, filteredUsers]);
+
   useEffect(() => {
     if (disabled === false) {
       setCheckedNotDisabled(true);
@@ -382,7 +385,6 @@ const UserControl = ({ loggedUser }) => {
                             };
                             return (
                               <UserTableRowComponent
-                                loggedUser={loggedUser}
                                 key={user.id}
                                 {...rowProps}
                               />

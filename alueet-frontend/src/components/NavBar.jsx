@@ -36,6 +36,13 @@ const styles = {
 			textDecoration: 'none',
 			color: theme.color.secondary,
 		},
+		linkDisabled: {
+			pointerEvents: 'none',
+			background: '#e8e8e8',
+			textDecoration: 'none',
+			color: theme.color.secondary,
+			display: 'none',
+		},
 		menu: {
 			sx: {
 				display: { xs: 'block', md: 'none' },
@@ -71,6 +78,7 @@ const styles = {
 			background: '#e8e8e8',
 			textDecoration: 'none',
 			color: theme.color.secondary,
+			display: 'none',
 		},
 		button: {
 			my: 1,
@@ -189,7 +197,11 @@ const NavBar = ({ user }) => {
 							</Link>
 							<Link
 								to={'/userControl'}
-								style={styles.responsive.link}
+								style={
+									user?.rank?.admin
+										? styles.responsive.link
+										: styles.responsive.linkDisabled
+								}
 							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Käyttäjien hallinta
@@ -197,7 +209,11 @@ const NavBar = ({ user }) => {
 							</Link>
 							<Link
 								to={'/createArea'}
-								style={styles.responsive.link}
+								style={
+									user?.rank?.admin
+										? styles.responsive.link
+										: styles.responsive.linkDisabled
+								}
 							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Luo alue
@@ -205,7 +221,11 @@ const NavBar = ({ user }) => {
 							</Link>
 							<Link
 								to={'/lendList'}
-								style={styles.responsive.link}
+								style={
+									user?.rank?.admin
+										? styles.responsive.link
+										: styles.responsive.linkDisabled
+								}
 							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Lainaa

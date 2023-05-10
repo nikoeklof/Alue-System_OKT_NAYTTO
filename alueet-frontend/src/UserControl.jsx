@@ -279,7 +279,7 @@ const UserControl = () => {
 
 	const disabledProps = {
 		usersDisabled,
-		filteredUserInput: userInputFilter,
+		userInputFilter,
 		filteredUsers,
 		userFilter,
 		disabled,

@@ -26,16 +26,15 @@ import UserTableRowComponent from './components/UserTableRowComponent';
 import CreateUserModal from './components/CreateUserModal';
 
 import theme from './style/theme';
-import { useMutation, useQuery } from '@apollo/client';
-import {
-	ALL_USERS,
-	TOGGLE_USER_ADMIN,
-	CREATE_USER,
-	DELETE_USER,
-	EDIT_USER_EMAIL_AS_ADMIN,
-	TOGGLE_USER_DISABLED,
-	TOGGLE_USER_WORKER,
-} from './queries';
+import { 
+	GetAllUsers,
+	ToggleUserAdmin,
+	ToggleUserWorker,
+	ToggleUserDisabled,
+	CreateUser,
+	DeleteUser,
+	EditEmailAsAdmin
+} from './graphql/functions'
 
 const styles = {
 	container: {
@@ -106,7 +105,6 @@ const columns = [
 const UserControl = () => {
 	const [users, setUsers] = useState(null);
 	const [usersDisabled, setUsersDisabled] = useState(null);
-	const [allUsers, setAllUsers] = useState(null);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [openCreate, setCreateOpen] = useState(false);
@@ -114,54 +112,16 @@ const UserControl = () => {
 	const [userFilter, setUserFilter] = useState('');
 	const [filteredUsers, setFilteredUsers] = useState([]);
 	const [userInputFilter, setUserInputFilter] = useState('');
-	const [userList, setUserList] = useState([]);
 	const [disabled, setDisabled] = useState(null);
 
-	const { data: userData } = useQuery(ALL_USERS, {
-		variables: { email: userFilter },
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const {
-		data: dataUsers,
-		loading: loadingUsers,
-		refetch: refetchUsers,
-	} = useQuery(ALL_USERS, {
-		variables: { disabled: false },
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const {
-		data: dataUsersDisabled,
-		loading: loadingUsersDisabled,
-		refetch: refetchUsersDisabled,
-	} = useQuery(ALL_USERS, {
-		variables: { disabled: true },
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const { data: dataAllUsers, refetch: refetchAllUsers } = useQuery(
-		ALL_USERS,
-		{
-			onError: (e) => console.log(JSON.stringify(e, null, 2)),
-		}
-	);
+	const allUsers = GetAllUsers()
 
-	const [toggleUserAdmin] = useMutation(TOGGLE_USER_ADMIN, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [toggleUserWorker] = useMutation(TOGGLE_USER_WORKER, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [toggleUserDisabled] = useMutation(TOGGLE_USER_DISABLED, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [editUserEmailAsAdmin] = useMutation(EDIT_USER_EMAIL_AS_ADMIN, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [createUser] = useMutation(CREATE_USER, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [deleteUser] = useMutation(DELETE_USER, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
+	const [toggleUserAdmin] = ToggleUserAdmin()
+	const [toggleUserWorker] = ToggleUserWorker()
+	const [toggleUserDisabled] = ToggleUserDisabled()
+	const [editUserEmailAsAdmin] = EditEmailAsAdmin()
+	const [createUser] = CreateUser()
+	const [deleteUser] = DeleteUser()
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -173,49 +133,33 @@ const UserControl = () => {
 	};
 
 	useEffect(() => {
-		setUsers(dataUsers?.allUsers);
-	}, [loadingUsers, dataUsers, filteredUsers]);
-	useEffect(() => {
-		setUsersDisabled(dataUsersDisabled?.allUsers);
-	}, [loadingUsersDisabled, dataUsersDisabled, filteredUsers]);
-	useEffect(() => {
-		setAllUsers(dataAllUsers?.allUsers);
-	}, [dataAllUsers, userInputFilter, allUsers]);
+		setUsers(allUsers.data?.allUsers.filter(
+			user => user.rank.disabled === false
+		))
+	}, [allUsers]);
 
 	useEffect(() => {
-		setFilteredUsers(userData?.allUsers);
-	}, [userData]);
+		setUsersDisabled(allUsers.data?.allUsers.filter(
+			user => user.rank.disabled === true
+		))
+	}, [allUsers]);
 
 	useEffect(() => {
-		if (users && usersDisabled) {
-			const usersList = [];
-			allUsers.forEach((user) => {
-				if (usersList.includes(user.email)) return;
-				else usersList.push(user);
-			});
-
-			return setUserList(usersList);
+		setFilteredUsers(allUsers.data?.allUsers.filter(
+			user => user.email === userFilter
+		))
+	}, [allUsers, userFilter]);
+	
+	useEffect(() => {
+		if (filteredUsers?.length > 0) {
+			setDisabled(filteredUsers[0].rank.disabled)
+			setCheckedNotDisabled(!filteredUsers[0].rank.disabled)
 		}
-		return;
-	}, [users, usersDisabled, userList]);
-	useEffect(() => {
-		if (filteredUsers) {
-			const dis = filteredUsers.map((user) => user.rank.disabled);
-			if (dis[0] === true) {
-				setDisabled(true);
-			} else if (dis[0] === false) {
-				setDisabled(false);
-			}
-		}
-	}, [userFilter, userList]);
-	useEffect(() => {
-		if (disabled === false) {
-			setCheckedNotDisabled(true);
-		} else if (disabled === true) {
-			setCheckedNotDisabled(false);
-		}
-	}, [disabled, userInputFilter]);
+	}, [filteredUsers]);
 
+	if (allUsers.loading) {
+		return
+	}
 	const updateUser = async (user) => {
 		const { userId, email, admin, worker, disabled, originalUser } = user;
 		if (originalUser.rank.admin !== admin)
@@ -237,9 +181,6 @@ const UserControl = () => {
 					email: email,
 				},
 			});
-		refetchUsers();
-		refetchUsersDisabled();
-		refetchAllUsers();
 	};
 
 	const updateUserDisabled = async (user) => {
@@ -247,16 +188,11 @@ const UserControl = () => {
 		await toggleUserDisabled({
 			variables: { userId: userId },
 		});
-		refetchUsers();
-		refetchUsersDisabled();
 	};
 
 	const addUser = async (user) => {
 		const { email, password } = user;
 		await createUser({ variables: { password: password, email: email } });
-		refetchUsers();
-		refetchUsersDisabled();
-		refetchAllUsers();
 	};
 
 	const removeUser = async (user) => {
@@ -265,9 +201,6 @@ const UserControl = () => {
 		await deleteUser({
 			variables: { userId: userId, email: email },
 		});
-		refetchUsers();
-		refetchUsersDisabled();
-		refetchAllUsers();
 	};
 
 	const createProps = {
@@ -284,7 +217,7 @@ const UserControl = () => {
 		disabled,
 		columns,
 		styles,
-		loadingUsersDisabled,
+		loading: allUsers.loading,
 		updateUserDisabled,
 		removeUser,
 		updateUser,
@@ -303,8 +236,8 @@ const UserControl = () => {
 				disableClearable
 				id='findUser'
 				options={
-					userList.length !== 0
-						? userList.map((user) => user.email)
+					allUsers.data.allUsers.length !== 0
+						? allUsers.data.allUsers.map((user) => user.email)
 						: ['Ei käyttäjiä']
 				}
 				value={userFilter}
@@ -337,7 +270,7 @@ const UserControl = () => {
 				)}
 				sx={styles.search}
 			/>
-			{users && !loadingUsers ? (
+			{users && !allUsers.loading ? (
 				<Paper sx={styles.form}>
 					<Box
 						onClick={() =>

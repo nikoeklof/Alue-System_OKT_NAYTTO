@@ -27,7 +27,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 		disabled,
 		columns,
 		styles,
-		loadingUsersDisabled,
+		loading,
 		updateUserDisabled,
 		removeUser,
 		updateUser,
@@ -53,7 +53,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 		}
 	}, [disabled, filteredUserInput]);
 
-	if (!loadingUsersDisabled && usersDisabled) {
+	if (!loading && usersDisabled) {
 		return (
 			<>
 				<Paper sx={styles.form}>

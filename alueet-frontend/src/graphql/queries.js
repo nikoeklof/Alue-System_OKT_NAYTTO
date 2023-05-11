@@ -1,146 +1,25 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
+import * as f from './fragments'
 
 //  -----  querys  -----
 export const ALL_USERS = gql`
 	query allUsers($disabled: Boolean, $email: String) {
 		allUsers(disabled: $disabled, email: $email) {
-			id
-			email
-			rank {
-				admin
-				worker
-				disabled
-			}
-			aboutMe
+			...UserDetails
 		}
 	}
-`;
-export const AREAS_WITH_REQUESTS = gql`
-	query areasWithRequests($hasRequests: Boolean) {
-		allAreas(hasRequests: $hasRequests) {
-			id
-			info {
-				address
-				buildings
-				cityName
-				latlngs {
-					lat
-					lng
-				}
-				misc
-				quarter
-			}
-			shareState {
-				shareRequests
-				sharedTo
-				sharedBy
-				shareStartDate
-				isShared
-			}
-			shareHistory {
-				shareEndDate
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-		}
-	}
-`;
-
-export const FILTERED_AREAS = gql`
-	query filteredAreas($cityName: String) {
-		allAreas(cityName: $cityName) {
-			id
-			info {
-				address
-				buildings
-				cityName
-				latlngs {
-					lat
-					lng
-				}
-				misc
-				quarter
-			}
-			shareHistory {
-				shareEndDate
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-			shareState {
-				isShared
-				shareRequests
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-		}
-	}
-`;
-export const FILTERED_BY_QUARTER = gql`
-	query filteredAreas($quarter: String, $cityName: String) {
-		allAreas(quarter: $quarter, cityName: $cityName) {
-			id
-			info {
-				address
-				buildings
-				cityName
-				latlngs {
-					lat
-					lng
-				}
-				misc
-				quarter
-			}
-			shareHistory {
-				shareEndDate
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-			shareState {
-				isShared
-				shareRequests
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-		}
-	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const ALL_AREAS = gql`
 	query allAreas {
 		allAreas {
-			id
-			info {
-				misc
-				quarter
-				latlngs {
-					lat
-					lng
-				}
-				cityName
-				buildings
-				address
-			}
-			shareHistory {
-				shareEndDate
-				shareStartDate
-				sharedBy
-				sharedTo
-			}
-			shareState {
-				isShared
-				shareStartDate
-				sharedBy
-				shareRequests
-				sharedTo
-			}
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
+
 export const ME = gql`
 	query me {
 		me {
@@ -154,73 +33,66 @@ export const ME = gql`
 			}
 		}
 	}
-`;
+`
 
 export const AREA_COUNT = gql`
 	query {
 		areaCount
 	}
-`;
+`
 
 export const USER_COUNT = gql`
 	query {
 		userCount
 	}
-`;
+`
 
 //  -----  mutations  -----
 export const EDIT_USER_EMAIL_AS_ADMIN = gql`
 	mutation editUserEmailAsAdmin($userId: ID!, $email: String!) {
 		editUserEmailAsAdmin(userId: $userId, email: $email) {
-			id
-			email
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const EDIT_USER_EMAIL = gql`
 	mutation editUserEmail($email: String!) {
 		editUserEmail(email: $email) {
-			id
-			email
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const EDIT_USER_PASSWORD = gql`
 	mutation editUserPassword($password: String!) {
 		editUserPassword(password: $password) {
-			id
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 //needs testing
 export const MAKE_REQUEST = gql`
 	mutation makeRequest($areaId: ID!) {
 		makeRequest(areaId: $areaId) {
-			id
-			shareState {
-				isShared
-			}
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
 
 export const CREATE_USER = gql`
 	mutation createUser($password: String!, $email: String!) {
 		createUser(password: $password, email: $email) {
-			id
-			email
-			rank {
-				admin
-				disabled
-				worker
-			}
-			aboutMe
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const DELETE_USER = gql`
 	mutation deleteUser($email: String, $userId: ID) {
@@ -228,64 +100,64 @@ export const DELETE_USER = gql`
 			id
 		}
 	}
-`;
+`
 
 export const TOGGLE_USER_ADMIN = gql`
 	mutation toggleUserAdmin($userId: ID!) {
 		toggleUserAdmin(userId: $userId) {
-			id
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const TOGGLE_USER_WORKER = gql`
 	mutation toggleUserWorker($userId: ID!) {
 		toggleUserWorker(userId: $userId) {
-			id
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const TOGGLE_USER_DISABLED = gql`
 	mutation toggleUserDisabled($userId: ID!) {
 		toggleUserDisabled(userId: $userId) {
-			id
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 export const EDIT_USER_ABOUT = gql`
 	mutation editUserAbout($aboutMe: String!) {
 		editUserAbout(aboutMe: $aboutMe) {
-			id
-			aboutMe
+			...UserDetails
 		}
 	}
-`;
+	${f.USER_DETAILS}
+`
 
 //needs testing
 export const ALLOW_AREA_REQUEST = gql`
 	mutation allowAreaRequest($areaId: ID!, $email: String!) {
 		allowAreaRequest(areaId: $areaId, email: $email) {
-			id
-			shareState {
-				isShared
-			}
-			shareHistory {
-				sharedBy
-				sharedTo
-			}
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
+
 //Needs testing
 export const RETURN_SHARED_AREA = gql`
 	mutation returnSharedArea($areaId: ID!) {
 		returnSharedArea(areaId: $areaId) {
-			id
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
+
 //needs testing
 export const CREATE_AREA = gql`
 	mutation createArea(
@@ -304,21 +176,11 @@ export const CREATE_AREA = gql`
 			latlngs: $latlngs
 			misc: $misc
 		) {
-			info {
-				address
-				buildings
-				cityName
-				latlngs {
-					lat
-					lng
-				}
-				misc
-				quarter
-			}
-			id
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
 
 export const EDIT_AREA = gql`
 	mutation (
@@ -337,35 +199,29 @@ export const EDIT_AREA = gql`
 			buildings: $buildings
 			misc: $misc
 		) {
-			id
-			info {
-				address
-				buildings
-				cityName
-				latlngs {
-					lat
-					lng
-				}
-				misc
-				quarter
-			}
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
+
 export const REMOVE_REQUESTS = gql`
 	mutation removeRequests($areaId: ID!) {
 		removeRequest(areaId: $areaId) {
 			id
 		}
 	}
-`;
+`
+
 export const DENY_LOAN_REQUEST = gql`
 	mutation denyRequest($areaId: ID!, $email: String!) {
 		removeRequestAsAdmin(areaId: $areaId, email: $email) {
-			id
+			...AreaDetails
 		}
 	}
-`;
+	${f.AREA_DETAILS}
+`
+
 //needs testing
 export const DELETE_AREA = gql`
 	mutation deleteArea($areaId: ID!) {
@@ -373,7 +229,8 @@ export const DELETE_AREA = gql`
 			id
 		}
 	}
-`;
+`
+
 //needs testing
 export const LOGIN = gql`
 	mutation login($email: String!, $password: String!) {
@@ -381,4 +238,4 @@ export const LOGIN = gql`
 			value
 		}
 	}
-`;
+`

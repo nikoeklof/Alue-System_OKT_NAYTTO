@@ -201,7 +201,7 @@ const AreaControl = ({ loggedUser }) => {
 				}
 				value={quarterFilter}
 				onChange={(e, newValue) => {
-					if (newValue) return;
+					if (!newValue) return;
 					setQuarterFilter(newValue);
 					setQuarterAreas(filteredAreas?.filter(
 						area => area.info.quarter === newValue

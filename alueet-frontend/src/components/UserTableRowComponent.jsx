@@ -95,7 +95,7 @@ const UserTableRowComponent = ({
 						>
 							<Box sx={{ margin: 1 }}>
 								{!user.rank.disabled &&
-								user.areas.length > 0 ? (
+								user.areas?.length > 0 ? (
 									<>
 										<Typography
 											variant='h6'

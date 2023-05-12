@@ -127,13 +127,13 @@ const EditUserModal = ({ ...editProps }) => {
 						<FormControlLabel
 							control={
 								<Switch
-									checked={!disabled}
+									checked={disabled}
 									onChange={(e) =>
 										setDisabled(!e.target.checked)
 									}
 								/>
 							}
-							label='Aktiivinen'
+							label='Epäaktiivinen'
 							sx={styles.input}
 						/>
 					</FormControl>

@@ -22,7 +22,7 @@ import UserTableRowComponent from './UserTableRowComponent';
 const DisabledUsersTable = ({ ...disabledProps }) => {
 	const {
 		usersDisabled,
-		filteredUserInput,
+		userInputFilter,
 		filteredUsers,
 		disabled,
 		columns,
@@ -51,7 +51,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 		} else if (disabled === true) {
 			setCheckedDisabled(true);
 		}
-	}, [disabled, filteredUserInput]);
+	}, [disabled, userInputFilter]);
 
 	if (!loading && usersDisabled) {
 		return (
@@ -76,7 +76,7 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 					>
 						<Divider sx={styles.divider} />
 
-						{filteredUserInput ? (
+						{userInputFilter ? (
 							<>
 								<TableContainer sx={{ maxHeight: 440 }}>
 									<Table
@@ -101,7 +101,6 @@ const DisabledUsersTable = ({ ...disabledProps }) => {
 														{column.label}
 													</TableCell>
 												))}
-												<TableCell />
 											</TableRow>
 										</TableHead>
 										<TableBody>

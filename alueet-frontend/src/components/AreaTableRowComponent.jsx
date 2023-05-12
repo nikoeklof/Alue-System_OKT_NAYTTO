@@ -275,7 +275,9 @@ const AreaTableRowComponent = ({
 													{area.info.buildings}
 												</TableCell>
 												<TableCell>
-													{loaned ? 'Kyllä' : 'Ei'}
+													{area.shareState.isShared
+														? 'Kyllä'
+														: 'Ei'}
 												</TableCell>
 											</TableRow>
 										</TableBody>

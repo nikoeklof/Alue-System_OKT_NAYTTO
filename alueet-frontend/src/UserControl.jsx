@@ -69,11 +69,6 @@ const styles = {
 		float: 'right',
 		pb: 2,
 	},
-	search: {
-		mb: 2,
-		ml: 2,
-		width: '96%',
-	},
 };
 
 const columns = [
@@ -211,7 +206,7 @@ const UserControl = () => {
 
 	const disabledProps = {
 		usersDisabled,
-		filteredUserInput: userInputFilter,
+		userInputFilter,
 		filteredUsers,
 		userFilter,
 		disabled,
@@ -268,7 +263,6 @@ const UserControl = () => {
 						}}
 					/>
 				)}
-				sx={styles.search}
 			/>
 			{users && !allUsers.loading ? (
 				<Paper sx={styles.form}>

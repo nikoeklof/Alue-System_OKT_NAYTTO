@@ -22,7 +22,6 @@ const styles = {
 			display: { xs: 'flex', md: 'none' },
 		},
 		logoText: {
-			mr: 2,
 			display: { xs: 'flex', md: 'none' },
 			flexGrow: 1,
 			fontFamily: 'monospace',
@@ -35,6 +34,13 @@ const styles = {
 		link: {
 			textDecoration: 'none',
 			color: theme.color.secondary,
+		},
+		linkDisabled: {
+			pointerEvents: 'none',
+			background: '#e8e8e8',
+			textDecoration: 'none',
+			color: theme.color.secondary,
+			display: 'none',
 		},
 		menu: {
 			sx: {
@@ -71,6 +77,7 @@ const styles = {
 			background: '#e8e8e8',
 			textDecoration: 'none',
 			color: theme.color.secondary,
+			display: 'none',
 		},
 		button: {
 			my: 1,
@@ -115,6 +122,7 @@ const styles = {
 		link: {
 			textDecoration: 'none',
 			color: theme.color.secondary,
+			fontSize: '12px',
 		},
 	},
 };
@@ -147,7 +155,7 @@ const NavBar = ({ user }) => {
 			color='default'
 		>
 			<Box maxWidth='xl'>
-				<Toolbar>
+				<Toolbar sx={{ p: 0 }}>
 					<Link
 						to={'/'}
 						style={styles.normal.link}
@@ -189,7 +197,11 @@ const NavBar = ({ user }) => {
 							</Link>
 							<Link
 								to={'/userControl'}
-								style={styles.responsive.link}
+								style={
+									user?.rank?.admin
+										? styles.responsive.link
+										: styles.responsive.linkDisabled
+								}
 							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Käyttäjien hallinta
@@ -197,7 +209,11 @@ const NavBar = ({ user }) => {
 							</Link>
 							<Link
 								to={'/createArea'}
-								style={styles.responsive.link}
+								style={
+									user?.rank?.admin
+										? styles.responsive.link
+										: styles.responsive.linkDisabled
+								}
 							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Luo alue
@@ -205,7 +221,11 @@ const NavBar = ({ user }) => {
 							</Link>
 							<Link
 								to={'/lendList'}
-								style={styles.responsive.link}
+								style={
+									user?.rank?.admin
+										? styles.responsive.link
+										: styles.responsive.linkDisabled
+								}
 							>
 								<MenuItem onClick={handleCloseNavMenu}>
 									Lainaa

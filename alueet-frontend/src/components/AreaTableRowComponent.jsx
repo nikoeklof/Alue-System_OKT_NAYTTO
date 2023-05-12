@@ -109,7 +109,6 @@ const AreaTableRowComponent = ({
 	const [openReturn, setOpenReturn] = useState(false);
 	const scrollRef = useRef(null);
 	const [deleteArea] = DeleteArea();
-	const loaned = area.loaned;
 	const [returnArea] = ReturnArea();
 
 	useEffect(() => {

@@ -129,7 +129,7 @@ const EditUserModal = ({ ...editProps }) => {
 								<Switch
 									checked={!disabled}
 									onChange={(e) =>
-										setDisabled(e.target.checked)
+										setDisabled(!e.target.checked)
 									}
 								/>
 							}

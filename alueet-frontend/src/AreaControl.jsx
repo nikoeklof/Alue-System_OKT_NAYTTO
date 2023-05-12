@@ -16,8 +16,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 import theme from './style/theme';
 import AreaMap from './AreaMap';
 import AreaTableRowComponent from './components/AreaTableRowComponent';
-import { FILTERED_AREAS, MAKE_REQUEST, FILTERED_BY_QUARTER } from './queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { MakeRequest, GetAllAreas } from './graphql/functions'
 import { cities } from './db/cities';
 
 const styles = {
@@ -92,7 +91,7 @@ const AreaControl = ({ loggedUser }) => {
 	const [cityFilterInput, setCityFilterInput] = useState('');
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [filteredAreas, setFilteredAreas] = useState(null);
+	const [filteredAreas, setFilteredAreas] = useState([]);
 	const [quarterFilter, setQuarterFilter] = useState('');
 	const [quarterFilterInput, setQuarterFilterInput] = useState('');
 	const [quarterList, setQuarterList] = useState([]);
@@ -100,36 +99,22 @@ const AreaControl = ({ loggedUser }) => {
 	const [cityIndex, setCityIndex] = useState(
 		cities.findIndex((city) => city.Kunta === defaultFilter)
 	);
-	const { data: quarterData } = useQuery(FILTERED_BY_QUARTER, {
-		variables: { quarter: quarterFilter, cityName: cityFilter },
-		onError: (e) => {
-			console.log(e.graphQLErrors[0].message);
-		},
-	});
 
-	const { loading, data, refetch } = useQuery(FILTERED_AREAS, {
-		variables: { cityName: cityFilter },
-		onError: (e) => {
-			console.log(e);
-		},
-	});
-
-	const [makeAreaRequest] = useMutation(MAKE_REQUEST, {
+	const allAreas = GetAllAreas()
+	
+	const [makeAreaRequest] = MakeRequest( { 
 		onError: (e) => {
 			setLoanError(e);
-		},
-	});
+		}
+	})
+
 	useEffect(() => {
 		console.log(loanError);
 	}, [loanError]);
 
 	useEffect(() => {
-		setFilteredAreas(data?.allAreas);
-	}, [data, loading, filteredAreas]);
-
-	useEffect(() => {
-		setQuarterAreas(quarterData?.allAreas);
-	}, [quarterData]);
+		console.log(selectedArea);
+	}, [selectedArea, setSelectedArea]);
 
 	useEffect(() => {
 		if (filteredAreas) {
@@ -138,15 +123,19 @@ const AreaControl = ({ loggedUser }) => {
 				if (quarterArray.includes(area.info.quarter)) return;
 				quarterArray.push(area.info.quarter);
 			});
-
-			return setQuarterList(quarterArray);
+			setQuarterList(quarterArray);
 		}
-		return;
-	}, [quarterList, filteredAreas]);
+	}, [filteredAreas]);
 
 	useEffect(() => {
-		console.log(selectedArea);
-	}, [selectedArea, setSelectedArea]);
+		setFilteredAreas(allAreas.data?.allAreas.filter(
+			area => area.info.cityName === cityFilter
+		))
+	}, [allAreas, cityFilter])
+
+	if (allAreas.loading) {
+		return 'loading...'
+	}
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -183,18 +172,18 @@ const AreaControl = ({ loggedUser }) => {
 				id='findCity'
 				options={cities.map((city) => city.Kunta)}
 				value={cityFilter}
-				onChange={(e, newValue) => {
-					if (newValue === '') return;
-					setCityFilter(newValue);
-					localStorage.setItem('defaultFilter', newValue);
+				onChange={(e, filter) => {
+					if (!filter) return;
+					setCityFilter(filter);
+					localStorage.setItem('defaultFilter', filter);
 					setCityIndex(
-						cities.findIndex((city) => city.Kunta === newValue)
-					);
+						cities.findIndex((city) => city.Kunta === filter)
+					)
 					setQuarterFilterInput('');
 					setQuarterAreas([]);
 				}}
 				inputValue={cityFilterInput}
-				onInputChange={(e, newValue) => setCityFilterInput(newValue)}
+				onInputChange={(e, filter) => setCityFilterInput(filter)}
 				sx={styles.search}
 				renderInput={(params) => (
 					<TextField
@@ -212,8 +201,11 @@ const AreaControl = ({ loggedUser }) => {
 				}
 				value={quarterFilter}
 				onChange={(e, newValue) => {
-					if (newValue === '') return;
+					if (!newValue) return;
 					setQuarterFilter(newValue);
+					setQuarterAreas(filteredAreas?.filter(
+						area => area.info.quarter === newValue
+					))
 				}}
 				inputValue={quarterFilterInput}
 				onInputChange={(e, newValue) => setQuarterFilterInput(newValue)}
@@ -242,7 +234,6 @@ const AreaControl = ({ loggedUser }) => {
 									? quarterAreas
 									: filteredAreas
 							}
-							setAreas={setFilteredAreas}
 							selectedArea={selectedArea}
 							setSelectedArea={setSelectedArea}
 							clearSelected={clearSelected}
@@ -258,7 +249,7 @@ const AreaControl = ({ loggedUser }) => {
 						md={6}
 						xs={12}
 					>
-						{quarterFilterInput !== '' ? (
+						{quarterFilterInput ? (
 							quarterAreas ? (
 								<Paper sx={styles.form}>
 									<TableContainer sx={{ maxHeight: 440 }}>
@@ -290,7 +281,6 @@ const AreaControl = ({ loggedUser }) => {
 																loggedUser
 															}
 															loanArea={loanArea}
-															refetch={refetch}
 														/>
 													))}
 											</TableBody>
@@ -359,7 +349,6 @@ const AreaControl = ({ loggedUser }) => {
 															setHoverStatus
 														}
 														loanArea={loanArea}
-														refetch={refetch}
 													/>
 												))}
 										</TableBody>

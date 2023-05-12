@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 
 import theme from '../style/theme';
-import { useMutation } from '@apollo/client';
-import { EDIT_AREA, FILTERED_AREAS } from '../queries';
+import { EditArea } from '../graphql/functions';
 
 const styles = {
 	modal: {
@@ -64,7 +63,7 @@ const EditAreaModal = ({ ...editProps }) => {
 	const [areaAddressError, setAreaAddressError] = useState('');
 	const [areaQuarterError, setAreaQuarterError] = useState('');
 	const [areaBuildingsError, setAreaBuildingsError] = useState('');
-	const [areaMutation] = useMutation(EDIT_AREA);
+	const [areaMutation] = EditArea();
 
 	return (
 		<Modal
@@ -184,11 +183,7 @@ const EditAreaModal = ({ ...editProps }) => {
 								address: areaAddress,
 								buildings: parseInt(buildingAmount),
 								misc: areaMiscInfo,
-							},
-							refetchQueries: () => [{ query: FILTERED_AREAS }],
-							onError: (e) => {
-								console.log(e);
-							},
+							}
 						}).then(() => {
 							handleClose();
 						});

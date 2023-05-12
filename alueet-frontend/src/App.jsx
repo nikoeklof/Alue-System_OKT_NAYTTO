@@ -10,19 +10,17 @@ import UserControl from './UserControl';
 import AreaCreate from './components/AreaCreate';
 import UserProfile from './UserProfile';
 import LendList from './LendList';
-import { useQuery } from '@apollo/client';
-import { ME } from './queries';
+import { Me } from './graphql/functions';
 
 const App = () => {
 	const [loggedUser, setLoggedUser] = useState(null);
-
-	const { data: loggedUserData, loading: loadingUserData } = useQuery(ME, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
+	const user = Me({onError: (e) => 
+		console.log(JSON.stringify(e, null, 2))
 	});
 
 	useEffect(() => {
-		setLoggedUser(loggedUserData?.me);
-	}, [loggedUser, loggedUserData]);
+		setLoggedUser(user.data?.me);
+	}, [loggedUser, user]);
 
 	return (
 		<Router>
@@ -33,7 +31,7 @@ const App = () => {
 					<Route
 						path='/'
 						element={
-							<Main user={!loadingUserData ? loggedUser : null} />
+							<Main user={!user.loading ? loggedUser : null} />
 						}
 					/>
 					<Route
@@ -60,7 +58,7 @@ const App = () => {
 						path='/userProfile'
 						element={
 							<UserProfile
-								user={!loadingUserData ? loggedUser : null}
+								user={!user.loading ? loggedUser : null}
 							/>
 						}
 					/>

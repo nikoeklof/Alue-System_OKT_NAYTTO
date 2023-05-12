@@ -11,12 +11,11 @@ import {
 
 import theme from './style/theme';
 import DeleteWarningModal from './components/DeleteWarningModal';
-import { useMutation } from '@apollo/client';
 import {
-	EDIT_USER_ABOUT,
-	EDIT_USER_EMAIL,
-	EDIT_USER_PASSWORD,
-} from './queries';
+	EditUserAbout,
+	EditEmail,
+	EditPassword
+} from './graphql/functions'
 
 const styles = {
 	container: {
@@ -48,15 +47,9 @@ const UserProfile = ({ user }) => {
 	const [password, setPassword] = useState('');
 	const [aboutMe, setAboutMe] = useState(user ? user.aboutMe : null);
 	const [emailError, setEmailError] = useState('');
-	const [editUserEmail] = useMutation(EDIT_USER_EMAIL, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [editUserPassword] = useMutation(EDIT_USER_PASSWORD, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
-	const [editUserAbout] = useMutation(EDIT_USER_ABOUT, {
-		onError: (e) => console.log(JSON.stringify(e, null, 2)),
-	});
+	const [editUserEmail] = EditEmail();
+	const [editUserPassword] = EditPassword();
+	const [editUserAbout] = EditUserAbout();
 
 	const updateUser = async () => {
 		if (!email) return setEmailError('Sähköposti tarvitaan');

@@ -58,7 +58,10 @@ const DeleteWarningModal = ({ ...delProps }) => {
 						sx={styles.button}
 						variant='contained'
 						onClick={() => {
-							delProps.handleConfirm();
+							delProps.handleConfirm()
+							.then(() => {
+								handleClose();
+							});
 						}}
 					>
 						Kyllä

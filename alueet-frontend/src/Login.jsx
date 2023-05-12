@@ -10,10 +10,9 @@ import {
 	Divider,
 	Alert,
 } from '@mui/material';
-import { LOGIN } from './queries';
+import { UserLogin } from './graphql/functions'
 
 import theme from './style/theme';
-import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 const styles = {
@@ -55,8 +54,9 @@ const Login = () => {
 	const [passwordError, setPasswordError] = useState('');
 	const [usernameError, setUsernameError] = useState('');
 	const [invalidCredentialsError, setInvalidCredentialsError] = useState('');
-	const [login] = useMutation(LOGIN);
+	const [login] = UserLogin();
 	const navigate = useNavigate();
+
 	const handleSubmit = async () => {
 		if (username.length === 0)
 			return setUsernameError('Tarvitaan Sähköposti');

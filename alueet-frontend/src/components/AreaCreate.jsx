@@ -4,8 +4,7 @@ import theme from '../style/theme';
 import AreaMap from '../AreaMap';
 import CreateAreaForm from './CreateAreaForm';
 
-import { FILTERED_AREAS } from '../queries';
-import { useQuery } from '@apollo/client';
+import { GetAllAreas } from '../graphql/functions';
 import { cities } from '../db/cities';
 
 const styles = {
@@ -64,7 +63,6 @@ const styles = {
 };
 
 const AreaCreate = () => {
-	const [areas, setAreas] = useState(undefined);
 	const [layerContext, setLayerContext] = useState(null);
 	const defaultFilter = localStorage.getItem('defaultFilter');
 	if (!defaultFilter) localStorage.setItem('defaultFilter', 'Mikkeli');
@@ -75,16 +73,11 @@ const AreaCreate = () => {
 		defaultFilter ? defaultFilter : cities[0].Kunta
 	);
 	const [cityFilterInput, setCityFilterInput] = useState('');
-	const { data, loading, error, refetch } = useQuery(FILTERED_AREAS, {
-		variables: { cityName: cityFilter ? cityFilter : defaultFilter },
-		onError: () => {
-			console.log(error);
-		},
-	});
+	
+	const filteredAreas = GetAllAreas({
+		variables: { cityName: cityFilter ? cityFilter : defaultFilter }
+	})
 
-	useEffect(() => {
-		setAreas(data?.allAreas);
-	}, [data, loading, refetch]);
 
 	useEffect(() => {
 		setCityIndex(cities.findIndex((city) => city.Kunta === cityFilter));
@@ -110,7 +103,7 @@ const AreaCreate = () => {
 						xs={12}
 					>
 						<AreaMap
-							areas={areas}
+							areas={filteredAreas.data?.allAreas}
 							layerContext={layerContext}
 							setLayerContext={setLayerContext}
 							canEdit={true}
@@ -134,7 +127,6 @@ const AreaCreate = () => {
 							cityFilterInput={cityFilterInput}
 							setCityFilterInput={setCityFilterInput}
 							setCityIndex={setCityIndex}
-							refetch={refetch}
 						/>
 					</Grid>
 				</Grid>

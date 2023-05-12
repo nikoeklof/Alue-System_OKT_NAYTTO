@@ -22,8 +22,7 @@ import LendAreaModal from './LendAreaModal';
 import ReturnAreaModal from './ReturnAreaModal';
 import theme from '../style/theme';
 import { useRef } from 'react';
-import { DELETE_AREA, RETURN_SHARED_AREA } from '../queries';
-import { useMutation } from '@apollo/client';
+import { DeleteArea, ReturnArea } from '../graphql/functions';
 
 const styles = {
 	areas: {
@@ -100,7 +99,6 @@ const AreaTableRowComponent = ({
 	selectedArea,
 	setHoverStatus,
 	loanArea,
-	refetch,
 	cityFilter,
 	loggedUser,
 }) => {
@@ -110,8 +108,9 @@ const AreaTableRowComponent = ({
 	const [openLend, setOpenLend] = useState(false);
 	const [openReturn, setOpenReturn] = useState(false);
 	const scrollRef = useRef(null);
-	const [deleteArea] = useMutation(DELETE_AREA);
-	const [returnArea] = useMutation(RETURN_SHARED_AREA);
+	const [deleteArea] = DeleteArea();
+	const loaned = area.loaned;
+	const [returnArea] = ReturnArea();
 
 	useEffect(() => {
 		if (area.id !== selectedArea?.id) {
@@ -130,8 +129,7 @@ const AreaTableRowComponent = ({
 		warningText: 'Haluatko varmasti poistaa alueen?',
 		handleConfirm: () =>
 			deleteArea({
-				variables: { areaId: area.id },
-				onCompleted: () => refetch({ cityName: cityFilter }),
+				variables: { areaId: area.id }
 			}),
 	};
 	const editProps = {
@@ -344,10 +342,8 @@ const AreaTableRowComponent = ({
 													returnArea({
 														variables: {
 															areaId: area.id,
-														},
-													}).then(() => {
-														refetch();
-													});
+														}
+													})
 												}}
 											>
 												Palauta Alue

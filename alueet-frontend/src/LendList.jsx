@@ -12,13 +12,12 @@ import {
 	Typography,
 } from '@mui/material';
 import { InfinitySpin } from 'react-loader-spinner';
-import {
-	ALLOW_AREA_REQUEST,
-	AREAS_WITH_REQUESTS,
-	DENY_LOAN_REQUEST,
-} from './queries';
-
-import { useMutation, useQuery } from '@apollo/client';
+import { 
+	GetAllAreas,
+	DenyLoanRequest,
+	AcceptAreaRequest,
+	RemoveRequests
+} from './graphql/functions'
 
 import theme from './style/theme';
 
@@ -63,24 +62,11 @@ const LendList = () => {
 	// const [warningText, setWarningText] = useState('');
 	const [areasWithRequests, setAreasWithRequests] = useState(null);
 
-	const {
-		data: areaData,
-		// loading: areaLoading,
-		// error: areaError,
-		refetch: areaRefetch,
-	} = useQuery(AREAS_WITH_REQUESTS, { variables: { hasRequests: true } });
+	const allAreas = GetAllAreas()
 
-	const [denyLoanRequest] = useMutation(DENY_LOAN_REQUEST, {
-		onError: (e) => {
-			console.log(e);
-		},
-	});
-
-	const [loanAreaMutation] = useMutation(ALLOW_AREA_REQUEST, {
-		onError: (e) => {
-			console.log(e);
-		},
-	});
+	const [removeRequests] = RemoveRequests();
+	const [denyLoanRequest] = DenyLoanRequest();
+	const [loanAreaMutation] = AcceptAreaRequest();
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -97,8 +83,10 @@ const LendList = () => {
 		// warningText,
 	};
 	useEffect(() => {
-		setAreasWithRequests(areaData?.allAreas);
-	}, [areaData]);
+		setAreasWithRequests(allAreas.data?.allAreas.filter(
+			area => area.shareState.shareRequests.length > 0
+		));
+	}, [allAreas]);
 
 	return areasWithRequests ? (
 		<Container sx={styles.container}>
@@ -139,7 +127,7 @@ const LendList = () => {
 										area={area}
 										allowLoan={loanAreaMutation}
 										denyLoan={denyLoanRequest}
-										refetch={areaRefetch}
+										removeRequests={removeRequests}
 									/>
 								);
 							})}

@@ -43,26 +43,18 @@ const styles = {
 const LendListTableRowComponent = ({
 	area,
 	allowLoan,
-	refetch,
-
+	removeRequests,
 	denyLoan,
 }) => {
 	const [open, setOpen] = useState(false);
-	console.log(area);
 
-	const handleAllowLoan = async (area, email) => {
-		await allowLoan({ variables: { areaId: area, email: email } }).then(
-			() => {
-				refetch();
-			}
-		);
+	const handleAllowLoan = (area, email) => {
+		allowLoan({ variables: { areaId: area, email: email } }).then(() => {
+			removeRequests({ variables: { areaId: area } })
+		});
 	};
-	const handleDenyLoan = async (area, email) => {
-		await denyLoan({ variables: { areaId: area, email: email } }).then(
-			() => {
-				refetch();
-			}
-		);
+	const handleDenyLoan = (area, email) => {
+		denyLoan({ variables: { areaId: area, email: email } })
 	};
 	return (
 		<Fragment>

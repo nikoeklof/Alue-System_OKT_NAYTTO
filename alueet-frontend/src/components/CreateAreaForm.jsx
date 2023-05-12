@@ -8,9 +8,8 @@ import {
 	Typography,
 	Autocomplete,
 } from '@mui/material';
-import { CREATE_AREA } from '../queries';
-import { useMutation } from '@apollo/client';
 import theme from '../style/theme';
+import { CreateArea } from '../graphql/functions';
 
 const styles = {
 	subText: {
@@ -58,7 +57,7 @@ const CreateAreaForm = ({
 	const [areaCityError, setAreaCityError] = useState('');
 	const [errorAlert, setErrorAlert] = useState(false);
 	const [successAlert, setSuccessAlert] = useState(false);
-	const [createArea] = useMutation(CREATE_AREA);
+	const [createArea] = CreateArea();
 
 	useEffect(() => {
 		if (layer === layerContext) {
@@ -114,12 +113,8 @@ const CreateAreaForm = ({
 					quarter: quarterName,
 					misc: miscInfo,
 				},
-				onError: (e) => {
-					console.log(e);
-				},
 				onCompleted: () => {
 					setLayerContext(null);
-					refetch({ cityName: cityFilter });
 				},
 			});
 		}

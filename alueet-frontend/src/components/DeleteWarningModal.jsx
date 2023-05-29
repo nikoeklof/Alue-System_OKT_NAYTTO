@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Modal, Button } from '@mui/material';
-
+import { useTheme } from '@mui/material/styles';
 import theme from '../style/theme';
 
 const styles = {
@@ -12,30 +12,33 @@ const styles = {
 		top: '50%',
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
-		width: '50%',
+		width: '40%',
 		backgroundColor: theme.bgColor.default,
-		borderRadius: 2,
 		boxShadow: 24,
+		borderRadius: 2,
 		px: 4,
 		py: 3,
 	},
 	header: {
 		mb: 2,
-	},
-	button: {
-		float: 'right',
-		m: 0.5,
+		textAlign: 'center',
 		fontFamily: 'Poppins',
 	},
+	button: (theme) => ({
+		m: 1,
+		color: theme.palette.mode === 'dark' ? '#000000' : theme.palette.text.secondary,
+		backgroundColor: theme.palette.mode === 'dark' ? theme.palette.secondary.main : theme.palette.primary.main,
+		fontFamily: 'Poppins',
+	  }),
 };
 
-const ReturnAreaModal = ({ ...returnProps }) => {
-	const handleClose = () => returnProps.handleCloseReturnModal();
-
+const DeleteWarningModal = ({ ...delProps }) => {
+	const handleClose = () => delProps.handleCloseDelModal();
+	const theme = useTheme();
 	return (
 		<Modal
 			component='div'
-			open={returnProps.openReturn}
+			open={delProps.openDel}
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
@@ -44,21 +47,27 @@ const ReturnAreaModal = ({ ...returnProps }) => {
 					component='h2'
 					sx={styles.header}
 				>
-					Haluatko varmasti palauttaa alueen?
+					{delProps.warningText}
 				</Typography>
 				<Box>
 					<Button
-						sx={styles.button}
+						sx={styles.button(theme)}
 						variant='contained'
 						onClick={() => handleClose()}
 					>
 						Peruuta
 					</Button>
 					<Button
-						sx={styles.button}
+						sx={styles.button(theme)}
 						variant='contained'
+						onClick={() => {
+							delProps.handleConfirm()
+							.then(() => {
+								handleClose();
+							});
+						}}
 					>
-						Palauta
+						Kyllä
 					</Button>
 				</Box>
 			</Box>
@@ -66,4 +75,4 @@ const ReturnAreaModal = ({ ...returnProps }) => {
 	);
 };
 
-export default ReturnAreaModal;
+export default DeleteWarningModal;

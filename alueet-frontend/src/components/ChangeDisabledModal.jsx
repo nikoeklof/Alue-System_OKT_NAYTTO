@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Modal, Button } from '@mui/material';
 
 import theme from '../style/theme';
@@ -12,15 +12,17 @@ const styles = {
 		top: '50%',
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
-		width: '50%',
+		width: '40%',
 		backgroundColor: theme.bgColor.default,
-		borderRadius: 2,
 		boxShadow: 24,
+		borderRadius: 2,
 		px: 4,
 		py: 3,
 	},
 	header: {
 		mb: 2,
+		textAlign: 'center',
+		fontFamily: 'Poppins',
 	},
 	button: {
 		float: 'right',
@@ -29,13 +31,18 @@ const styles = {
 	},
 };
 
-const ReturnAreaModal = ({ ...returnProps }) => {
-	const handleClose = () => returnProps.handleCloseReturnModal();
+const ChangeDisabledModal = ({ ...changeDisabledProps }) => {
+	const [disabled, setDisabled] = useState(
+		changeDisabledProps.originalUser.disabled
+	);
+
+	const handleClose = () =>
+		changeDisabledProps.handleCloseChangeDisabledModal();
 
 	return (
 		<Modal
 			component='div'
-			open={returnProps.openReturn}
+			open={changeDisabledProps.openChangeDisabled}
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
@@ -44,7 +51,7 @@ const ReturnAreaModal = ({ ...returnProps }) => {
 					component='h2'
 					sx={styles.header}
 				>
-					Haluatko varmasti palauttaa alueen?
+					Vaihda käyttäjä aktiiviseksi?
 				</Typography>
 				<Box>
 					<Button
@@ -57,8 +64,15 @@ const ReturnAreaModal = ({ ...returnProps }) => {
 					<Button
 						sx={styles.button}
 						variant='contained'
+						onClick={() => {
+							setDisabled(!disabled);
+							changeDisabledProps.updateUserDisabled(
+								changeDisabledProps.originalUser
+							);
+							handleClose();
+						}}
 					>
-						Palauta
+						Vaihda
 					</Button>
 				</Box>
 			</Box>
@@ -66,4 +80,4 @@ const ReturnAreaModal = ({ ...returnProps }) => {
 	);
 };
 
-export default ReturnAreaModal;
+export default ChangeDisabledModal;

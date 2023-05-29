@@ -6,10 +6,10 @@ import {
 	Button,
 	FormGroup,
 	FormControl,
-	TextField
+	TextField,
 } from '@mui/material';
 
-import theme from '../theme';
+import theme from '../style/theme';
 
 const styles = {
 	modal: {
@@ -22,13 +22,14 @@ const styles = {
 		boxShadow: 24,
 		borderRadius: 2,
 		px: 4,
-		py: 3
+		py: 3,
 	},
 	header: {
 		mb: 2,
 		pb: 1,
 		borderBottom: '1px solid',
-		borderColor: theme.color.primary
+		borderColor: theme.color.primary,
+		fontFamily: 'Poppins',
 	},
 	input: {
 		m: 0.5,
@@ -36,12 +37,12 @@ const styles = {
 	button: {
 		float: 'right',
 		m: 0.5,
-		mt: 2
-	}
+		mt: 2,
+		fontFamily: 'Poppins',
+	},
 };
 
-const LendAreaModal = ({...lendProps}) => {
-
+const LendAreaModal = ({ ...lendProps }) => {
 	const handleClose = () => lendProps.handleCloseLendModal();
 
 	return (
@@ -51,9 +52,9 @@ const LendAreaModal = ({...lendProps}) => {
 			onClose={handleClose}
 		>
 			<Box sx={styles.modal}>
-				<Typography 
-					variant='h6' 
-					component='h2' 
+				<Typography
+					variant='h6'
+					component='h2'
 					sx={styles.header}
 				>
 					Lainaa alue
@@ -62,28 +63,28 @@ const LendAreaModal = ({...lendProps}) => {
 					<FormControl>
 						<TextField
 							label='Lainaaja'
-							variant='outlined' 
+							variant='outlined'
 							sx={styles.input}
 						/>
 					</FormControl>
 				</FormGroup>
-				
-				<Button 
-					sx={styles.button} 
+
+				<Button
+					sx={styles.button}
 					variant='contained'
 					onClick={() => handleClose()}
 				>
 					Peruuta
 				</Button>
-				<Button 
-					sx={styles.button} 
+				<Button
+					sx={styles.button}
 					variant='contained'
 				>
 					Lainaa
 				</Button>
 			</Box>
 		</Modal>
-	)
+	);
 };
 
 export default LendAreaModal;

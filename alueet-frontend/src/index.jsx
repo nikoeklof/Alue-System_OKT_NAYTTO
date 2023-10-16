@@ -16,7 +16,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
 const httpLink = new HttpLink({
-	uri: 'http://localhost:3001',
+	uri: 'https://aluesystem.adaptable.app/localhost',
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
